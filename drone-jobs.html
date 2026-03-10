@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Jobs | iQdrone Academy</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- QR Code library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <style>
+        /* ========== GLOBAL STYLES (from main site) ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --saffron: #F59E0B;
+            --saffron-light: #FBBF24;
+            --saffron-dark: #D97706;
+            --black: #000000;
+            --dark-gray: #1A1A1A;
+            --warm-dark: #2A1C00;
+            --light-gray: #2D2D2D;
+            --white: #FFFFFF;
+            --off-white: #F5F5F5;
+            --partner-blue: #1e40af;
+            --partner-light: #3b82f6;
+            --lime: #BFFF00;
+        }
+
+        /* Drone cursor */
+        #drone-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate3d(var(--x), var(--y), 0);
+            will-change: transform;
+        }
+        #drone-model {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: rotateX(var(--tiltX)) rotateY(var(--tiltY));
+            transform-style: preserve-3d;
+        }
+        .propeller {
+            transform-origin: center;
+            animation: spin 0.1s linear infinite;
+        }
+        .moving .propeller {
+            animation-duration: 0.03s;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        body {
+            cursor: none;
+        }
+        .trail-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #FF9933;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            box-shadow: 0 0 8px #FF9933;
+            transition: opacity 0.2s;
+        }
+
+        /* Background / Mission Planner */
+        body {
+            background: var(--black);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+            animation: moveGrid 40s linear infinite;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, 
+                transparent, 
+                transparent 25px, 
+                rgba(255, 153, 51, 0.02) 25px, 
+                rgba(255, 153, 51, 0.02) 50px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .container-custom {
+            max-width: 1214px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--saffron), var(--saffron-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--saffron);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            max-width: 1214px;
+            height: 85px;
+            background: rgba(26, 26, 26, 0.95);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(245,158,11,0.3);
+        }
+        .logo { font-size: 28px; font-weight: bold; color: var(--saffron); }
+        nav ul { list-style: none; display: flex; gap: 25px; }
+        .nav-link { color: white; text-decoration: none; font-size: 16px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--saffron); text-decoration: underline; }
+        .hamburger { display: none; font-size: 28px; cursor: pointer; color: var(--saffron); }
+
+        /* Unified buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.2;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .btn-primary {
+            background: var(--saffron);
+            color: var(--black);
+        }
+        .btn-primary:hover {
+            background: var(--saffron-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(245,158,11,0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--saffron);
+        }
+        .btn-secondary:hover {
+            background: var(--saffron);
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(245,158,11,0.4);
+        }
+        .btn-small { padding: 8px 16px; font-size: 0.9rem; border-radius: 30px; }
+        .btn-large { padding: 16px 40px; font-size: 1.2rem; }
+        .btn-text {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+        }
+        .btn-text:hover {
+            color: var(--saffron);
+            background: rgba(245,158,11,0.1);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Consultation modal (kept for other uses, but Apply Now now uses WhatsApp) */
+        .consultation-modal {
+            display: none;
+            position: fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.9);
+            justify-content:center;
+            align-items:center;
+            z-index:3000;
+        }
+        .consultation-modal.show { display: flex; }
+        .modal-container { background: var(--dark-gray); width: 90%; max-width: 1000px; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
+        .modal-left { flex:1; padding: 40px; }
+        .modal-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            height: 100%;
+        }
+        .modal-logo { font-size: 2.5rem; font-weight: 800; color: var(--saffron); margin-bottom: 30px; line-height: 1.2; }
+        .contact-info { color: white; font-size: 1rem; line-height: 1.8; margin-bottom: 20px; width: 100%; }
+        .contact-info p { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0; word-break: break-word; }
+        .contact-info i { color: var(--saffron); width: 20px; font-size: 1.1rem; }
+        .modal-step { display: none; }
+        .modal-step.active { display: block; }
+        .modal-title { font-size: 2rem; color: var(--saffron); margin-bottom: 20px; }
+        .calendar-container { margin-bottom: 20px; }
+        .time-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 20px 0; }
+        .time-slot { background: rgba(255,255,255,0.1); padding: 10px; text-align: center; border-radius: 5px; cursor: pointer; }
+        .time-slot.selected { background: var(--saffron); color: black; }
+        .modal-form input, .modal-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; color: white; }
+        .modal-actions { display: flex; gap: 15px; }
+        .modal-btn { padding: 12px 30px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; }
+        .modal-btn.primary { background: var(--saffron); color: black; }
+        .modal-btn.secondary { background: transparent; color: white; border: 1px solid var(--saffron); }
+        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 1.5rem; cursor: pointer; z-index: 10; }
+        .calendar-container input {background: rgba(255, 255, 255, 0.1);border: 1px solid rgba(255, 255, 255, 0.2);color: white;padding: 12px 15px;border-radius: 5px;width: 100%;font-family: 'Orbitron', sans-serif;font-size: 1rem;outline: none;transition: border 0.3s;}
+        .calendar-container input:focus { border-color: var(--saffron); }
+
+        /* Back to top */
+        .back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--saffron); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: black; cursor: pointer; opacity: 0; transform: translateY(20px); transition: 0.3s; z-index: 100; }
+        .back-to-top.show { opacity: 1; transform: translateY(0); }
+
+        /* Footer */
+        .footer-content { background: #0f172a; padding: 60px 20px 30px; }
+        .footer-container { max-width: 1214px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 40px; }
+        .footer-logo { font-size: 2rem; color: var(--saffron); }
+        .footer-about { color: #9CA3AF; margin: 15px 0; }
+        .social-icons { display: flex; gap: 15px; }
+        .social-icons a { color: var(--saffron); font-size: 1.3rem; }
+        .footer-title { color: white; font-size: 1.3rem; margin-bottom: 20px; }
+        .footer-links a { display: block; color: #9CA3AF; text-decoration: none; margin-bottom: 10px; }
+        .footer-links a:hover { color: var(--saffron); }
+        .copyright { text-align: center; color: #6B7280; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; }
+
+        /* Consultation sidebar */
+        .consultation-sidebar { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .consultation-sidebar.show { opacity: 1; pointer-events: all; }
+        .sidebar-btn { background: var(--saffron); color: black; border: none; border-radius: 50px; padding: 15px 10px; writing-mode: vertical-lr; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        /* WhatsApp chat button */
+        .whatsapp-chat {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 2001;
+            transition: transform 0.3s;
+        }
+        .whatsapp-chat:hover {
+            transform: scale(1.1);
+            background: #20b859;
+        }
+
+        /* ===== QR GATEWAY SECTION ===== */
+        .qr-gateway {
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #0A192F, #1e3a5f);
+            border-bottom: 2px dashed var(--saffron);
+        }
+        .gateway-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 10px;
+            color: white;
+        }
+        .gateway-sub {
+            text-align: center;
+            color: #ccc;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+        }
+        .gateway-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .qr-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            border: 2px dashed var(--saffron);
+            transition: transform 0.3s;
+        }
+        .qr-card:hover {
+            transform: translateY(-5px);
+        }
+        .qr-card h3 {
+            color: var(--saffron-light);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .qr-wrapper {
+            display: inline-block;
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+        .qr-wrapper img {
+            display: block;
+            width: 180px;
+            height: 180px;
+        }
+        .qr-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--saffron);
+            color: black;
+            font-weight: 800;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+        .qr-footer {
+            color: #ddd;
+            font-size: 0.9rem;
+        }
+
+        /* ===== JOBS PAGE STYLES ===== */
+        .hero {
+            position: relative;
+            min-height: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 0px;
+            background-position: center;
+             background-size: cover;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1581094794329-71f4eed45a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') center/cover fixed;
+        }
+        .hero-content {
+            max-width: 900px;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--saffron), var(--saffron-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero .hero-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1;
+}
+
+.hero .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 20px;
+    max-width: 800px;
+    color: white;
+}
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #ddd;
+            margin-bottom: 30px;
+        }
+        .hero-search {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            padding: 5px;
+        }
+        .hero-search input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 15px 20px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        .hero-search input::placeholder {
+            color: #aaa;
+        }
+        .hero-search button {
+            background: var(--saffron);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .hero-search button:hover {
+            background: var(--saffron-light);
+        }
+
+        .filters {
+            background: rgba(0,0,0,0.3);
+        }
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .filter-btn {
+            background: transparent;
+            border: 2px solid var(--saffron);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--saffron);
+            color: black;
+        }
+
+        .jobs {
+            padding: 60px 20px;
+        }
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .job-card {
+            background: rgba(26,26,26,0.7);
+            border: 2px dashed var(--saffron);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(5px);
+            transition: all 0.4s;
+        }
+        .job-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--saffron-light);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.6), 0 0 20px rgba(245,158,11,0.3);
+        }
+        .job-tag {
+            display: inline-block;
+            background: rgba(245,158,11,0.2);
+            color: var(--saffron);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .job-card h3 {
+            font-size: 1.5rem;
+            color: var(--saffron-light);
+            margin-bottom: 10px;
+        }
+        .job-company {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+        .job-company i {
+            color: var(--saffron);
+        }
+        .job-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .job-details i {
+            color: var(--saffron);
+            width: 18px;
+        }
+        .job-desc {
+            color: #ccc;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+        .job-card .btn {
+            width: 100%;
+        }
+
+        .how-it-works {
+            padding: 60px 20px;
+            background: rgba(0,0,0,0.3);
+            position: relative;
+            background-image: url('how-ir-works-drone-job.jpeg'); /* your image path */
+            background-size: cover;
+            aspect-ratio: 16 / 8; 
+            background-position: center;
+            background-attachment: fixed; /* optional parallax effect */
+            isolation: isolate; /* creates a stacking context */
+
+        }
+
+        /* --- HUD STYLE FOR HOW IT WORKS (from standalone) --- */
+.how-it-works .step-icon {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 30px auto;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    border: 2px solid rgba(255,255,255,0.05);
+    overflow: hidden;
+}
+
+/* The spinning ray (conic gradient) */
+.how-it-works .step-icon::before {
+    content: "";
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: conic-gradient(
+        transparent 70%,
+        rgba(255,153,51,0.05) 80%,
+        var(--saffron) 90%,
+        transparent 100%
+    );
+    border-radius: 50%;
+    animation: clock-spin 3s linear infinite;
+    filter: blur(4px);
+}
+
+/* The pulsing neon border */
+.how-it-works .step-icon::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--saffron);
+    border-left-color: var(--saffron);
+    opacity: 0.1;
+    animation: neon-pulse 4s ease-in-out infinite alternate;
+}
+
+/* Icon inside */
+.how-it-works .step-icon i {
+    font-size: 2.5rem;
+    color: white;
+    z-index: 10;
+}
+
+/* Keyframes */
+@keyframes clock-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes neon-pulse {
+    0% { opacity: 0.1; box-shadow: 0 0 10px transparent; }
+    100% { opacity: 0.3; box-shadow: 0 0 20px var(--neon-glow); }
+}
+
+/* Ensure cards are wide enough and text styles match */
+.how-it-works .steps-grid {
+    display: flex;
+    gap: 40px;               /* ← change this */
+    justify-content: center;
+    align-items: center;
+}
+.how-it-works .step-card {
+    width: 250px;               /* adjust if needed */
+    text-align: center;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.how-it-works .step-card:hover {
+    transform: translateY(-10px);
+}
+
+.how-it-works h4 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--saffron-light); /* or keep white, your choice */
+}
+
+.how-it-works p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.7);
+}
+
+        /* Dark overlay */
+.how-it-works::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* adjust opacity (0.5–0.8) */
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Ensure content sits above the overlay */
+.how-it-works .container-custom {
+    position: relative;
+    z-index: 2;
+}
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .step-card {
+            text-align: center;
+        }
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(245,158,11,0.1);
+            border: 2px dashed var(--saffron);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: var(--saffron);
+        }
+        .step-card h4 {
+            font-size: 1.3rem;
+            color: var(--saffron-light);
+            margin-bottom: 10px;
+        }
+        .step-card p {
+            color: #ccc;
+        }
+
+        .employer-cta {
+            padding: 60px 20px;
+            text-align: center;
+            background: linear-gradient(rgba(30,58,138,0.8), rgba(59,130,246,0.8));
+        }
+        .employer-cta h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .employer-cta p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: #f0f0f0;
+        }
+
+        .testimonials {
+            padding: 60px 20px;
+        }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .testimonial-card {
+            background: rgba(26,26,26,0.7);
+            border: 2px dashed var(--saffron);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .testimonial-card i {
+            font-size: 2rem;
+            color: var(--saffron);
+            opacity: 0.3;
+        }
+        .testimonial-text {
+            font-style: italic;
+            color: #ddd;
+        }
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--saffron-light);
+            text-align: right;
+        }
+
+        /* Newsletter section with background image */
+.newsletter {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    isolation: isolate;
+    padding: 80px 20px;  /* adjust as needed */
+}
+
+.newsletter .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* dark overlay – adjust opacity */
+    z-index: 1;
+    pointer-events: none;
+}
+
+.newsletter .container-custom {
+    position: relative;
+    z-index: 2;
+}
+
+/* Newsletter form layout – adjust if you want inline fields */
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.newsletter-form input[type="email"] {
+    flex: 1;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    padding: 15px 20px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    width: 100%;
+}
+
+.newsletter-form input[type="email"]:focus {
+    border-color: var(--saffron);
+}
+
+.newsletter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    color: #ccc;
+    margin: 5px 0;
+    justify-content: center;
+}
+
+.newsletter-checkbox input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.newsletter-checkbox a {
+    color: var(--saffron);
+    text-decoration: underline;
+}
+
+.newsletter-form button {
+    background: var(--saffron);
+    border: none;
+    border-radius: 50px;
+    padding: 15px 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: black;
+    font-size: 1rem;
+    width: 200px
+}
+
+.newsletter-form button:hover {
+    background: var(--saffron-light);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(245,158,11,0.4);
+}
+
+        .newsletter-box {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.05);
+            border: 2px dashed var(--saffron);
+            border-radius: 60px;
+            padding: 10px;
+            display: flex;
+        }
+        .newsletter-box input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 15px 20px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+        .newsletter-box button {
+            background: var(--saffron);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .newsletter-box button:hover {
+            background: var(--saffron-light);
+        }
+
+        @media (min-width: 600px) {
+    .newsletter-form {
+        width: 100%;
+    }
+}
+        @media (max-width: 1000px) {
+            .jobs-grid, .steps-grid, .testimonial-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .gateway-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .jobs-grid, .steps-grid, .testimonial-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+        .modal-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.modal-checkbox input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+.modal-checkbox label {
+    color: white;
+    margin: 0;
+}
+.modal-checkbox a {
+    color: var(--saffron);
+}
+/* Optional: if you want the original inline style, you can use a media query for larger screens */
+@media (min-width: 600px) {
+    .newsletter-form {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .newsletter-form input[type="email"] {
+        width: auto;
+        flex: 1;
+    }
+    .newsletter-form button {
+        width: auto;
+    }
+    .newsletter-checkbox {
+        width: 100%;
+        justify-content: center;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Drone cursor -->
+    <div id="drone-wrapper" style="--x: 0px; --y: 0px;">
+        <div id="drone-model" style="--tiltX: 0deg; --tiltY: 0deg;">
+            <svg viewBox="0 0 100 100" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 20 L80 80 M80 20 L20 80" stroke="#FF9933" stroke-width="12" stroke-linecap="round"/>
+                <rect x="38" y="32" width="24" height="36" rx="6" fill="#1a1a1a" stroke="#FF9933" stroke-width="2"/>
+                <circle cx="50" cy="40" r="3" fill="#FF9933">
+                    <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite" />
+                </circle>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="20" r="6" fill="#333"/>
+                    <rect x="5" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="20" r="6" fill="#333"/>
+                    <rect x="65" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="80" r="6" fill="#333"/>
+                    <rect x="5" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="80" r="6" fill="#333"/>
+                    <rect x="65" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">iQdrone</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="drone-service.html" class="nav-link">Service</a></li>
+                <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
+                <li><a href="drone-workshops.html" class="nav-link">Workshops</a></li>
+                <li><a href="drone-jobs.html" class="nav-link active">Jobs</a></li>
+                <li><a href="about-us.html" class="nav-link">About Us</a></li>
+                <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-text" id="loginBtn">Login</button>
+            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
+                <i class="fas fa-calendar-check"></i> Free Consultation
+            </button>
+        </div>
+        <div class="hamburger">☰</div>
+    </header>
+     <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container-custom">
+            <h2 class="section-title" data-aos="fade-up">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-icon"><i class="fas fa-user-plus"></i></div>
+                    <h4>Create Profile</h4>
+                    <p>Sign up and upload your resume, certifications, and skills.</p>
+                </div>
+                <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-icon"><i class="fas fa-search"></i></div>
+                    <h4>Browse Jobs</h4>
+                    <p>Filter opportunities by role, location, or experience level.</p>
+                </div>
+                <div class="step-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                    <h4>Apply & Get Hired</h4>
+                    <p>Apply directly and connect with top employers in the drone industry.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QR Gateway Section -->
+    <section class="qr-gateway">
+        <div class="container-custom">
+            <h2 class="gateway-title">📢 Post a Job · 🧑‍✈️ Submit Profile</h2>
+            <p class="gateway-sub">Scan the QR code to send your vacancy or portfolio directly via WhatsApp (fake entries will be ignored)</p>
+            <div class="gateway-grid">
+                <div class="qr-card" id="providerCard">
+                    <h3><i class="fas fa-building"></i> EMPLOYERS</h3>
+                    <p class="qr-footer">IQDrone:Scan and Post job for Right Cnadidates </p>
+                    <div class="qr-wrapper" id="qrProvider"></div>
+                    <div class="qr-logo">iQ</div>
+                    <p class="qr-footer">We’ll review and post your job within 24h</p>
+                </div>
+                <div class="qr-card" id="seekerCard">
+                    <h3><i class="fas fa-user-tie"></i> PILOTS</h3>
+                    <p class="qr-footer">IQDrone:Scan your profile & resume link to get Right job </p>
+                    <div class="qr-wrapper" id="qrSeeker"></div>
+                    <div class="qr-logo">iQ</div>
+                    <p class="qr-footer">We’ll match you with relevant openings</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    
+    </section>
+        <!-- Filters -->
+    <section class="filters"><section class="hero" style="background-image: url('');">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="hero-title">Your Drone Career Starts Here</h1>
+        <p class="hero-subtitle">Explore job opportunities for drone pilots, technicians, instructors, and more.</p>
+        <div class="hero-search">
+            <input type="text" id="searchInput" placeholder="Job title, keyword, or company">
+            <button id="searchButton"><i class="fas fa-search"></i> Search</button>
+        </div>
+    </div>
+</section>
+        <div class="container-custom">
+            <div class="filter-container">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="Pilot">Pilot</button>
+                <button class="filter-btn" data-filter="Technician">Technician</button>
+                <button class="filter-btn" data-filter="Instructor">Instructor</button>
+                <button class="filter-btn" data-filter="Surveyor">Surveyor</button>
+                <button class="filter-btn" data-filter="Freelance">Freelance</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jobs Grid -->
+    <section class="jobs">
+        <div class="container-custom">
+            <h2 class="section-title" data-aos="fade-up">Featured Jobs</h2>
+            <div class="jobs-grid" id="jobsGrid">
+                <div class="job-card" data-tags="Pilot Full‑time" data-aos="fade-up" data-aos-delay="100">
+                    <span class="job-tag">Full‑time</span>
+                    <h3 class="job-title">Drone Pilot</h3>
+                    <div class="job-company"><i class="fas fa-building"></i> SkyWorks Ltd.</div>
+                    <div class="job-details">
+                        <span><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                        <span><i class="fas fa-briefcase"></i> 2‑5 yrs exp.</span>
+                    </div>
+                    <p class="job-desc">Conduct aerial surveys and inspections for infrastructure projects. DGCA license required.</p>
+                    <button class="btn btn-primary btn-small apply-btn" data-job="Drone Pilot">Apply Now</button>
+                </div>
+                <div class="job-card" data-tags="Freelance" data-aos="fade-up" data-aos-delay="200">
+                    <span class="job-tag">Freelance</span>
+                    <h3 class="job-title">Aerial Videographer</h3>
+                    <div class="job-company"><i class="fas fa-building"></i> MediaCopter</div>
+                    <div class="job-details">
+                        <span><i class="fas fa-map-marker-alt"></i> Remote</span>
+                        <span><i class="fas fa-briefcase"></i> 1‑3 yrs exp.</span>
+                    </div>
+                    <p class="job-desc">Capture cinematic footage for events and commercials. Own drone preferred.</p>
+                    <button class="btn btn-primary btn-small apply-btn" data-job="Aerial Videographer">Apply Now</button>
+                </div>
+                <div class="job-card" data-tags="Technician Full‑time" data-aos="fade-up" data-aos-delay="300">
+                    <span class="job-tag">Full‑time</span>
+                    <h3 class="job-title">Drone Technician</h3>
+                    <div class="job-company"><i class="fas fa-building"></i> AeroFix</div>
+                    <div class="job-details">
+                        <span><i class="fas fa-map-marker-alt"></i> Delhi NCR</span>
+                        <span><i class="fas fa-briefcase"></i> 0‑2 yrs exp.</span>
+                    </div>
+                    <p class="job-desc">Repair and maintain various drone models. Repair course graduates preferred.</p>
+                    <button class="btn btn-primary btn-small apply-btn" data-job="Drone Technician">Apply Now</button>
+                </div>
+                <div class="job-card" data-tags="Internship" data-aos="fade-up" data-aos-delay="400">
+                    <span class="job-tag">Internship</span>
+                    <h3 class="job-title">Junior Drone Pilot</h3>
+                    <div class="job-company"><i class="fas fa-building"></i> AgriDrones</div>
+                    <div class="job-details">
+                        <span><i class="fas fa-map-marker-alt"></i> Pune</span>
+                        <span><i class="fas fa-briefcase"></i> Fresher</span>
+                    </div>
+                    <p class="job-desc">Assist in agricultural spraying and mapping operations. Training provided.</p>
+                    <button class="btn btn-primary btn-small apply-btn" data-job="Junior Drone Pilot">Apply Now</button>
+                </div>
+                <div class="job-card" data-tags="Part‑time" data-aos="fade-up" data-aos-delay="500">
+                    <span class="job-tag">Part‑time</span>
+                    <h3 class="job-title">FPV Racing Coach</h3>
+                    <div class="job-company"><i class="fas fa-building"></i> Drone Academy</div>
+                    <div class="job-details">
+                        <span><i class="fas fa-map-marker-alt"></i> Bangalore</span>
+                        <span><i class="fas fa-briefcase"></i> 1+ yr exp.</span>
+                    </div>
+                    <p class="job-desc">Teach FPV racing techniques to enthusiasts. Weekend availability required.</p>
+                    <button class="btn btn-primary btn-small apply-btn" data-job="FPV Racing Coach">Apply Now</button>
+                </div>
+                <div class="job-card" data-tags="Full‑time Surveyor" data-aos="fade-up" data-aos-delay="600">
+                    <span class="job-tag">Full‑time</span>
+                    <h3 class="job-title">Survey & Mapping Specialist</h3>
+                    <div class="job-company"><i class="fas fa-building"></i> GeoScan</div>
+                    <div class="job-details">
+                        <span><i class="fas fa-map-marker-alt"></i> Hyderabad</span>
+                        <span><i class="fas fa-briefcase"></i> 2‑4 yrs exp.</span>
+                    </div>
+                    <p class="job-desc">Process drone data and generate 2D/3D models. GIS knowledge a plus.</p>
+                    <button class="btn btn-primary btn-small apply-btn" data-job="Survey & Mapping Specialist">Apply Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+    <!-- Employer CTA -->
+    <section class="employer-cta">
+        <div class="container-custom">
+            <h2>Looking to Hire Drone Professionals?</h2>
+            <p>Post your job openings and connect with our network of certified pilots, technicians, and specialists.</p>
+            <button class="btn btn-primary btn-large" id="postJobBtn"><i class="fas fa-bullhorn"></i> Post a Job</button>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container-custom">
+            <h2 class="section-title" data-aos="fade-up">Success Stories</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card" data-aos="fade-right" data-aos-delay="100">
+                    <i class="fas fa-quote-left"></i>
+                    <p class="testimonial-text">"I found my dream job as a drone pilot through this portal within two weeks of completing my training!"</p>
+                    <div class="testimonial-author">– Rahul Sharma, Pilot</div>
+                </div>
+                <div class="testimonial-card" data-aos="fade-left" data-aos-delay="200">
+                    <i class="fas fa-quote-left"></i>
+                    <p class="testimonial-text">"As an employer, we've hired three excellent technicians from iQdrone. The candidates were well‑trained and ready to work."</p>
+                    <div class="testimonial-author">– Priya Singh, HR Manager</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Job Alerts Newsletter -->
+<section class="newsletter" style="background-image: url('JOB_PAGE.jpg');">
+    <div class="overlay"></div>
+    <div class="container-custom">
+        <h2 class="section-title" data-aos="fade-up">Get Job Alerts</h2>
+        <p style="margin-bottom: 30px; color: #ccc;text-align: center;">Subscribe to receive new job postings directly in your inbox.</p>
+        <div class="newsletter-box">
+            <form class="newsletter-form" action="https://formspree.io/f/YOUR_NEWSLETTER_ENDPOINT" method="POST">
+                <input type="hidden" name="_subject" value="New Job Alert Subscription">
+                <input type="hidden" name="_next" value="thank-you.html">
+
+                <input type="email" name="_replyto" placeholder="Your email address" required>
+
+                <!-- Terms checkbox -->
+                <div class="newsletter-checkbox">
+                    <input type="checkbox" id="job-terms" name="agreeTerms" required>
+                    <label for="job-terms">
+                        I agree to the <a href="terms.html" target="_blank">Terms</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+    
+
+    <!-- Footer -->
+    <footer class="footer-content">
+    <div class="footer-container">
+        <div class="footer-column">
+            <div class="footer-logo"><i class="fas fa-drone-alt"></i> iQdrone Academy</div>
+            <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3 class="footer-title">Quick Links</h3>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="courses.html">Courses</a>
+                <a href="drone-service.html">Service</a>
+                <a href="drone-lab.html">Drone Lab</a>
+                <a href="drone-workshops.html">Workshops</a>
+                <a href="drone-jobs.html">Jobs</a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3 class="footer-title">More</h3>
+            <div class="footer-links">
+                <a href="partner.html">Partner With Us</a>
+                <a href="about-us.html">About Us</a>
+                <a href="contact-us.html">Contact Us</a>
+                <a href="blog.html">Blog</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3 class="footer-title">Contact</h3>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-map-marker-alt"></i> 123 Drone Avenue, Tech City</a>
+                <a href="tel:+911234567890"><i class="fas fa-phone"></i> +91 12345 67890</a>
+                <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
+</footer>
+
+    <!-- Consultation Sidebar -->
+    <div class="consultation-sidebar" id="consultationSidebar">
+        <button class="sidebar-btn consultation-trigger"><i class="fas fa-calendar-check"></i><span>Free Consultation</span></button>
+    </div>
+
+    <!-- WhatsApp Chat Button -->
+    <a href="https://wa.me/911234567890?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20jobs%20portal" class="whatsapp-chat" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Consultation Modal (Final) -->
+<div class="consultation-modal" id="consultationModal">
+    <div class="modal-container">
+        <div class="close-modal"><i class="fas fa-times"></i></div>
+        <div class="modal-left">
+            <!-- Step 1: Date & Time -->
+            <div class="modal-step active" id="step1">
+                <h3 class="modal-title">Schedule Your Consultation</h3>
+                <div class="calendar-container">
+                    <input type="text" id="date" placeholder="Select Date">
+                </div>
+                <div class="time-slots" id="timeSlots">
+                    <div class="time-slot">9:00 AM</div>
+                    <div class="time-slot">10:00 AM</div>
+                    <div class="time-slot">11:00 AM</div>
+                    <div class="time-slot">1:00 PM</div>
+                    <div class="time-slot">2:00 PM</div>
+                    <div class="time-slot">3:00 PM</div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn secondary" id="cancelBtn">Cancel</button>
+                    <button class="modal-btn" id="nextStepBtn">Next</button>
+                </div>
+            </div>
+            <!-- Step 2: Personal Details Form -->
+            <div class="modal-step" id="step2">
+                <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
+                    <input type="hidden" name="_subject" value="New Consultation Request">
+                    <input type="hidden" name="_next" value="thank-you.html">
+
+                    <input type="text" name="fullName" placeholder="Full Name *" required>
+                    <input type="email" name="_replyto" placeholder="Email Address *" required>
+                    <input type="tel" name="phone" placeholder="Phone Number *" required>
+                    <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
+
+                    <!-- Terms Checkbox -->
+                    <div class="modal-checkbox">
+                        <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
+                        <label for="consultAgreeTerms">
+                            I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
+                            and <a href="privacy.html" target="_blank">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
+                        <button type="submit" class="modal-btn">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-right">
+            <div class="modal-logo">iQdrone Academy</div>
+            <div class="contact-info">
+                <p><i class="fas fa-phone"></i> +91 12345 67890</p>
+                <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
+                <p>We'll contact you within 24h</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Back to Top -->
+    <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            AOS.init({ duration: 800, once: true, offset: 100 });
+
+            // Drone cursor
+            const wrapper = document.getElementById('drone-wrapper');
+            const model = document.getElementById('drone-model');
+            let lastX = window.innerWidth / 2, lastY = window.innerHeight / 2;
+            let stopTimeout;
+            window.addEventListener('mousemove', (e) => {
+                const x = e.clientX, y = e.clientY;
+                wrapper.style.setProperty('--x', `${x}px`);
+                wrapper.style.setProperty('--y', `${y}px`);
+                const dx = x - lastX, dy = y - lastY;
+                const tiltY = Math.min(Math.max(dx * 2.5, -60), 60);
+                const tiltX = Math.min(Math.max(dy * -2.5, -60), 60);
+                model.style.setProperty('--tiltX', `${tiltX}deg`);
+                model.style.setProperty('--tiltY', `${tiltY}deg`);
+                wrapper.classList.add('moving');
+                lastX = x; lastY = y;
+                clearTimeout(stopTimeout);
+                stopTimeout = setTimeout(() => {
+                    model.style.setProperty('--tiltX', `0deg`);
+                    model.style.setProperty('--tiltY', `0deg`);
+                    wrapper.classList.remove('moving');
+                }, 150);
+            });
+            // Trail dots
+            for (let i = 0; i < 3; i++) {
+                let dot = document.createElement('div');
+                dot.className = 'trail-dot';
+                document.body.appendChild(dot);
+            }
+            const trailDots = document.querySelectorAll('.trail-dot');
+            let trailIndex = 0;
+            setInterval(() => {
+                if (trailDots[trailIndex]) {
+                    trailDots[trailIndex].style.left = (lastX - 2) + 'px';
+                    trailDots[trailIndex].style.top = (lastY - 2) + 'px';
+                    trailDots[trailIndex].style.opacity = '0.5';
+                    setTimeout(() => trailDots[trailIndex].style.opacity = '0', 100);
+                }
+                trailIndex = (trailIndex + 1) % trailDots.length;
+            }, 50);
+
+            // Consultation modal
+const modal = document.getElementById('consultationModal');
+const triggers = document.querySelectorAll('.consultation-trigger');
+const closeModal = document.querySelector('.close-modal');
+const cancelBtn = document.getElementById('cancelBtn');
+const nextStepBtn = document.getElementById('nextStepBtn');
+const backBtn = document.getElementById('backBtn');
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const timeSlots = document.querySelectorAll('.time-slot');
+
+triggers.forEach(t => t.addEventListener('click', () => {
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}));
+
+function hideModal() {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+}
+closeModal?.addEventListener('click', hideModal);
+cancelBtn?.addEventListener('click', hideModal);
+nextStepBtn?.addEventListener('click', () => {
+    step1.classList.remove('active');
+    step2.classList.add('active');
+});
+backBtn?.addEventListener('click', () => {
+    step2.classList.remove('active');
+    step1.classList.add('active');
+});
+timeSlots.forEach(s => s.addEventListener('click', function() {
+    timeSlots.forEach(s => s.classList.remove('selected'));
+    this.classList.add('selected');
+}));
+
+// Remove or comment out the old consultForm listener (if present)
+// document.getElementById('consultForm')?.addEventListener('submit', (e) => { ... });
+
+flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => date.getDay() === 0 || date.getDay() === 6 ] });
+            // Hamburger menu
+            document.querySelector('.hamburger')?.addEventListener('click', () => document.querySelector('nav ul').classList.toggle('active'));
+
+            // Scroll events (sidebar & back to top)
+            const sidebar = document.getElementById('consultationSidebar');
+            const backTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) sidebar.classList.add('show'); else sidebar.classList.remove('show');
+                if (window.scrollY > 500) backTop.classList.add('show'); else backTop.classList.remove('show');
+            });
+            backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            // ========== SEARCH & FILTER FUNCTIONALITY ==========
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const jobCards = document.querySelectorAll('.job-card');
+
+            function filterJobs() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                const activeFilter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'all';
+
+                jobCards.forEach(card => {
+                    const title = card.querySelector('.job-title')?.innerText.toLowerCase() || '';
+                    const company = card.querySelector('.job-company')?.innerText.toLowerCase() || '';
+                    const desc = card.querySelector('.job-desc')?.innerText.toLowerCase() || '';
+                    const tags = card.getAttribute('data-tags')?.toLowerCase() || '';
+
+                    const matchesSearch = searchTerm === '' || title.includes(searchTerm) || company.includes(searchTerm) || desc.includes(searchTerm);
+                    const matchesFilter = activeFilter === 'all' || tags.includes(activeFilter.toLowerCase());
+
+                    card.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
+                });
+            }
+
+            searchInput.addEventListener('input', filterJobs);
+            searchButton.addEventListener('click', filterJobs);
+
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    filterJobs();
+                });
+            });
+
+            // ========== APPLY NOW BUTTONS ==========
+            const WHATSAPP_NUMBER = "918889122261"; // <-- REPLACE WITH YOUR WHATSAPP NUMBER
+
+            document.querySelectorAll('.apply-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const jobTitle = this.getAttribute('data-job') || 'this position';
+                    const message = `👋 I'm interested in the *${jobTitle}* position.\n\n👤 Name: \n📱 Phone: \n📄 Resume link: \n✉️ Email: \n\n(Please fill in your details)`;
+                    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+                    window.open(url, '_blank');
+                });
+            });
+
+            // ========== POST A JOB BUTTON ==========
+            document.getElementById('postJobBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                const message = `🏢 *JOB VACANCY | iQdrone*\n━━━━━━━━━━━━━━\n• COMPANY: \n• JOB TITLE: \n• LOCATION: \n• SALARY: \n•Mobile Num: \n━━━━━━━━━━━━━━\n📝 *NEXT STEPS:*\n1. Fill in the details above.\n2. Hit 'SEND'.\n3. Our team will verify and post within 24 hours.`;
+                const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+                window.open(url, '_blank');
+            });
+
+            // ========== QR CODES ==========
+            const giverForm = `🏢 *JOB VACANCY | iQdrone*\n━━━━━━━━━━━━━━\n• COMPANY: \n• JOB TITLE: \n• LOCATION: \n• SALARY: \n•Mobile Num: \n━━━━━━━━━━━━━━\n📝 *NEXT STEPS:*\n1. Fill in the details above.\n2. Hit 'SEND'.\n3. Our team will verify and post within 24 hours.\n\n⚠️ *Fake entries will be ignored.*`;
+
+            const seekerForm = `🆔 *PILOT PROFILE | iQdrone*\n━━━━━━━━━━━━━━\n👤 *NAME:* \n📍 *LOCATION:* \n📜 *LICENSE NO:* \n📄 *RESUME LINK:* \n━━━━━━━━━━━━━━\n🚀 *GUIDE:*\n1. Fill details & paste your Google Drive/Resume link.\n2. Hit 'SEND' to register.\n3. We'll contact you if your profile matches a job.\n\n⚠️ *Fake entries will be ignored.*`;
+
+            function drawQR(text, containerId) {
+                const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+                const qr = qrcode(0, 'H');
+                qr.addData(url);
+                qr.make();
+                const imgTag = qr.createImgTag(8, 0);
+                document.getElementById(containerId).innerHTML = imgTag;
+            }
+
+            drawQR(giverForm, 'qrProvider');
+            drawQR(seekerForm, 'qrSeeker');
+        });
+    </script>
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; justify-content: space-between; align-items: center; gap: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.95rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <button onclick="acceptCookies()" class="btn btn-primary btn-small" style="white-space: nowrap;">Accept</button>
+</div>
+
+<script>
+    function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+    if (localStorage.getItem('cookiesAccepted')) {
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+</script>
+
+<!-- ===== IQDRONE CHATBOT (Full version – ready to paste) ===== -->
+<style>
+    .iqdrone-chat {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 380px;
+        height: 500px;
+        background: rgba(10, 11, 14, 0.95);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--saffron);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 10000;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        transform: translateY(calc(100% - 70px));
+        opacity: 0.9;
+    }
+    .iqdrone-chat.expanded {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .chat-header {
+        background: var(--dark-gray);
+        padding: 12px 20px;
+        border-bottom: 2px solid var(--saffron);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        position: relative;
+    }
+    .chat-header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+    }
+    .chat-avatar {
+        width: 50px;
+        height: 50px;
+    }
+    .chat-avatar svg {
+        width: 100%;
+        height: 100%;
+    }
+    .chat-avatar .prop-group {
+        transform-origin: center;
+        transform-box: fill-box;
+        transition: animation 0.2s;
+    }
+    .chat-avatar.spin .prop-group {
+        animation: prop-spin 0.2s linear infinite;
+    }
+    @keyframes prop-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .chat-title {
+        color: var(--saffron-light);
+        font-weight: bold;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+    .chat-status {
+        font-size: 0.8rem;
+        color: #0f0;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .status-led {
+        width: 8px;
+        height: 8px;
+        background: #0f0;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #0f0;
+        animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+    #minimizeChat {
+        color: var(--saffron);
+        font-size: 1.2rem;
+        padding: 5px;
+        cursor: pointer;
+        transition: 0.2s;
+        z-index: 10;
+    }
+    #minimizeChat:hover {
+        color: white;
+    }
+    .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: rgba(0,0,0,0.3);
+        font-family: 'Courier New', monospace;
+    }
+    .message {
+        display: flex;
+        max-width: 85%;
+    }
+    .message.user {
+        align-self: flex-end;
+    }
+    .message.bot {
+        align-self: flex-start;
+    }
+    .message-content {
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        word-break: break-word;
+    }
+    .user .message-content {
+        background: var(--saffron);
+        color: black;
+        border-bottom-right-radius: 4px;
+    }
+    .bot .message-content {
+        background: rgba(30, 30, 35, 0.9);
+        border: 1px solid var(--saffron);
+        color: #eee;
+        border-bottom-left-radius: 4px;
+    }
+    .quick-replies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+    }
+    .quick-reply-btn {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid var(--saffron);
+        border-radius: 30px;
+        padding: 8px 15px;
+        color: white;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .quick-reply-btn:hover {
+        background: var(--saffron);
+        color: black;
+    }
+    .thinking .message-content {
+        border-color: #888;
+    }
+    .thinking-dots {
+        display: inline-flex;
+        gap: 3px;
+    }
+    .thinking-dots span {
+        width: 6px;
+        height: 6px;
+        background: #aaa;
+        border-radius: 50%;
+        animation: thinkingPulse 1.4s infinite;
+    }
+    .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes thinkingPulse {
+        0%, 60%, 100% { transform: scale(1); opacity: 0.6; }
+        30% { transform: scale(1.4); opacity: 1; }
+    }
+    .chat-input {
+        padding: 15px;
+        background: var(--dark-gray);
+        border-top: 1px solid var(--saffron);
+        display: flex;
+        gap: 10px;
+    }
+    .chat-input input {
+        flex: 1;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid var(--saffron);
+        border-radius: 30px;
+        padding: 12px 18px;
+        color: white;
+        font-family: 'Courier New', monospace;
+        font-size: 0.95rem;
+        outline: none;
+        transition: box-shadow 0.2s;
+    }
+    .chat-input input:focus {
+        border-color: var(--saffron-light);
+        box-shadow: 0 0 12px var(--saffron);
+    }
+    .chat-input button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--saffron);
+        border: none;
+        color: black;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .chat-input button:hover {
+        background: var(--saffron-light);
+        transform: scale(1.1);
+    }
+    .chat-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+    .chat-messages::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.3);
+    }
+    .chat-messages::-webkit-scrollbar-thumb {
+        background: var(--saffron);
+        border-radius: 3px;
+    }
+    .contact-form {
+        background: rgba(30,30,35,0.9);
+        border: 1px solid var(--saffron);
+        border-radius: 18px;
+        padding: 15px;
+        margin-top: 5px;
+    }
+    .contact-form input {
+        width: 100%;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid var(--saffron);
+        border-radius: 30px;
+        padding: 10px 15px;
+        color: white;
+        margin-bottom: 10px;
+        outline: none;
+        transition: box-shadow 0.2s;
+    }
+    .contact-form input:focus {
+        border-color: var(--saffron-light);
+        box-shadow: 0 0 12px var(--saffron);
+    }
+    .contact-form button {
+        background: var(--saffron);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 20px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        transition: 0.2s;
+    }
+    .contact-form button:hover {
+        background: var(--saffron-light);
+        transform: scale(1.02);
+    }
+</style>
+
+<div class="iqdrone-chat" id="iqdroneChat">
+    <div class="chat-header" id="chatHeader">
+        <div class="chat-header-left">
+            <div class="chat-avatar" id="chatAvatar">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="38" y="32" width="24" height="36" rx="6" fill="#1a1a1a" stroke="#FF9933" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="6" fill="#00ffff" opacity="0.9">
+                        <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                    <g transform="translate(20,20)">
+                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
+                        <g class="prop-group" style="transform-origin: center;">
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
+                        </g>
+                    </g>
+                    <g transform="translate(80,20)">
+                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
+                        <g class="prop-group" style="transform-origin: center;">
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
+                        </g>
+                    </g>
+                    <g transform="translate(20,80)">
+                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
+                        <g class="prop-group" style="transform-origin: center;">
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
+                        </g>
+                    </g>
+                    <g transform="translate(80,80)">
+                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
+                        <g class="prop-group" style="transform-origin: center;">
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+            <div>
+                <div class="chat-title">IQDRONE AI</div>
+                <div class="chat-status"><span class="status-led"></span> ONLINE</div>
+            </div>
+        </div>
+        <div id="minimizeChat"><i class="fas fa-minus"></i></div>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Enter message..." autocomplete="off">
+        <button id="sendChat"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const conversationFlow = {
+            greeting: "🛸 HI, I'M IQDRONE. WHICH LANDING PLATFORM WOULD YOU LIKE TO SELECT TO LAUNCH?",
+            options: [
+                { id: 'pilot', label: 'PILOT TRAINING', keywords: ['pilot', 'training', 'course'] },
+                { id: 'services', label: 'DRONE SERVICES', keywords: ['service', 'aerial', 'mapping'] },
+                { id: 'lab', label: 'DRONE LAB SETUP', keywords: ['lab', 'setup', 'rd'] },
+                { id: 'workshops', label: 'WORKSHOPS', keywords: ['workshop', 'hands-on'] },
+                { id: 'jobs', label: 'JOB OPPORTUNITIES', keywords: ['job', 'career', 'hiring'] }
+            ],
+            responses: {
+                pilot: "🛩️ PILOT TRAINING: We offer DGCA-certified courses from beginner to advanced. Would you like info on Basic (₹15k) or Advanced (₹45k)?",
+                services: "📡 DRONE SERVICES: Aerial surveying, mapping, inspection, and filming. Tell us your project type!",
+                lab: "🔬 DRONE LAB: We help set up drone R&D labs for educational institutions. Need a quote?",
+                workshops: "🔧 WORKSHOPS: Weekend hands-on sessions. Next: April 15-16 in Dwarka. Interested?",
+                jobs: "💼 JOBS: We're hiring instructors, pilots, and developers. Check our Jobs page or type 'resume'."
+            }
+        };
+
+        const chat = document.getElementById('iqdroneChat');
+        const header = document.getElementById('chatHeader');
+        const minimizeBtn = document.getElementById('minimizeChat');
+        const messagesDiv = document.getElementById('chatMessages');
+        const input = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendChat');
+        const avatar = document.getElementById('chatAvatar');
+
+        let expanded = false;
+        let lastActivity = Date.now();
+        let spinTimeout = null;
+
+        function setPropellerSpin(spin) {
+            if (spin) avatar.classList.add('spin');
+            else avatar.classList.remove('spin');
+        }
+
+        function resetInactivityTimer() {
+            lastActivity = Date.now();
+            setPropellerSpin(true);
+            if (spinTimeout) clearTimeout(spinTimeout);
+            spinTimeout = setTimeout(() => {
+                if (Date.now() - lastActivity > 5000) setPropellerSpin(false);
+            }, 5000);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>"]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                if (m === '"') return '&quot;';
+                return m;
+            });
+        }
+
+        function addBotMessage(text, quickReplies = []) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message bot';
+            let html = `<div class="message-content">${escapeHTML(text)}</div>`;
+            if (quickReplies.length) {
+                html += `<div class="quick-replies">`;
+                quickReplies.forEach(qr => {
+                    html += `<span class="quick-reply-btn" data-value="${qr.id}">${qr.label}</span>`;
+                });
+                html += `</div>`;
+            }
+            msgDiv.innerHTML = html;
+            messagesDiv.appendChild(msgDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            msgDiv.querySelectorAll('.quick-reply-btn').forEach(btn => {
+                btn.addEventListener('click', () => handleQuickReply(btn.dataset.value));
+            });
+        }
+
+        function addUserMessage(text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message user';
+            msgDiv.innerHTML = `<div class="message-content">${escapeHTML(text)}</div>`;
+            messagesDiv.appendChild(msgDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showThinking() {
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'message bot thinking';
+            thinkingDiv.id = 'thinkingIndicator';
+            thinkingDiv.innerHTML = `<div class="message-content"><span class="thinking-dots"><span></span><span></span><span></span></span></div>`;
+            messagesDiv.appendChild(thinkingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function removeThinking() {
+            const thinking = document.getElementById('thinkingIndicator');
+            if (thinking) thinking.remove();
+        }
+
+        function showContactForm() {
+            const savedName = localStorage.getItem('iqdrone_name') || '';
+            const savedPhone = localStorage.getItem('iqdrone_phone') || '';
+
+            const formHTML = `
+                <div class="message bot">
+                    <div class="message-content">
+                        <strong>Please share your details so we can connect you with an expert:</strong>
+                        <div class="contact-form">
+                            <input type="text" id="chatName" placeholder="Your Name" value="${escapeHTML(savedName)}">
+                            <input type="tel" id="chatPhone" placeholder="Mobile Number" value="${escapeHTML(savedPhone)}">
+                            <button id="submitContact">SUBMIT</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            messagesDiv.insertAdjacentHTML('beforeend', formHTML);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            document.getElementById('submitContact').addEventListener('click', () => {
+                const name = document.getElementById('chatName').value.trim();
+                const phone = document.getElementById('chatPhone').value.trim();
+                if (name && phone) {
+                    localStorage.setItem('iqdrone_name', name);
+                    localStorage.setItem('iqdrone_phone', phone);
+                    addBotMessage(`✅ Thanks ${name}! An expert will contact you at ${phone} within 24 hours.`);
+                } else {
+                    alert('Please enter both name and mobile number.');
+                }
+            });
+        }
+
+        function handleQuickReply(optionId) {
+            if (optionId === 'connect') {
+                showContactForm();
+                return;
+            }
+            const option = conversationFlow.options.find(o => o.id === optionId);
+            addUserMessage(option ? option.label : optionId);
+            showThinking();
+            setTimeout(() => {
+                removeThinking();
+                const reply = conversationFlow.responses[optionId] || "Please contact us for more details.";
+                addBotMessage(reply);
+                addBotMessage("Would you like an expert to contact you?", [
+                    { id: 'connect', label: '📞 CONNECT NOW' }
+                ]);
+                resetInactivityTimer();
+            }, 800);
+        }
+
+        function processUserInput(text) {
+            const lower = text.toLowerCase();
+            const matched = conversationFlow.options.find(opt => opt.keywords.some(k => lower.includes(k)));
+            if (matched) {
+                handleQuickReply(matched.id);
+            } else if (lower.includes('contact') || lower.includes('call') || lower.includes('expert')) {
+                showContactForm();
+            } else {
+                addBotMessage("I'm not sure. Please select: Pilot Training, Services, Lab, Workshops, or Jobs.", conversationFlow.options);
+            }
+        }
+
+        function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+
+            if (!expanded) {
+                chat.classList.add('expanded');
+                expanded = true;
+            }
+
+            addUserMessage(text);
+            input.value = '';
+            showThinking();
+
+            setTimeout(() => {
+                removeThinking();
+                processUserInput(text);
+                resetInactivityTimer();
+            }, 1000);
+        }
+
+        function initChat() {
+            addBotMessage(conversationFlow.greeting, conversationFlow.options);
+            resetInactivityTimer();
+
+            setTimeout(() => {
+                if (!expanded && !chat.classList.contains('expanded')) {
+                    chat.classList.add('expanded');
+                    expanded = true;
+                    addBotMessage("Need help? I'm here to assist with courses, services, and more!", conversationFlow.options);
+                }
+            }, 10000);
+        }
+
+        header.addEventListener('click', (e) => {
+            if (e.target.closest('#minimizeChat')) return;
+            chat.classList.toggle('expanded');
+            expanded = chat.classList.contains('expanded');
+            if (expanded) resetInactivityTimer();
+        });
+
+        minimizeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chat.classList.remove('expanded');
+            expanded = false;
+        });
+
+        sendBtn.addEventListener('click', sendMessage);
+        input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+        initChat();
+    })();
+</script></body>
+<!-- ===== END IQDRONE CHATBOT ===== -->
+</html>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms and Conditions | iQdrone Academy</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flatpickr (if needed, kept for consistency) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* ========== GLOBAL STYLES (same as main site) ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --saffron: #F59E0B;
+            --saffron-light: #FBBF24;
+            --saffron-dark: #D97706;
+            --black: #000000;
+            --dark-gray: #1A1A1A;
+            --warm-dark: #2A1C00;
+            --light-gray: #2D2D2D;
+            --white: #FFFFFF;
+            --off-white: #F5F5F5;
+            --partner-blue: #1e40af;
+            --partner-light: #3b82f6;
+            --lime: #BFFF00;
+        }
+
+        /* Drone cursor */
+        #drone-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate3d(var(--x), var(--y), 0);
+            will-change: transform;
+        }
+        #drone-model {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: rotateX(var(--tiltX)) rotateY(var(--tiltY));
+            transform-style: preserve-3d;
+        }
+        .propeller {
+            transform-origin: center;
+            animation: spin 0.1s linear infinite;
+        }
+        .moving .propeller {
+            animation-duration: 0.03s;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        body {
+            cursor: none;
+        }
+        .trail-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #FF9933;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            box-shadow: 0 0 8px #FF9933;
+            transition: opacity 0.2s;
+        }
+
+        /* Background / Mission Planner */
+        body {
+            background: var(--black);
+            font-family: sans-serif;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+            animation: moveGrid 40s linear infinite;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, 
+                transparent, 
+                transparent 25px, 
+                rgba(255, 153, 51, 0.02) 25px, 
+                rgba(255, 153, 51, 0.02) 50px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .container-custom {
+            max-width: 1214px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--saffron), var(--saffron-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--saffron);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            max-width: 1214px;
+            height: 85px;
+            background: rgba(26, 26, 26, 0.95);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(245,158,11,0.3);
+        }
+        .logo { font-size: 28px; font-weight: bold; color: var(--saffron); }
+        nav ul { list-style: none; display: flex; gap: 25px; }
+        .nav-link { color: white; text-decoration: none; font-size: 16px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--saffron); text-decoration: underline; }
+        .hamburger { display: none; font-size: 28px; cursor: pointer; color: var(--saffron); }
+
+        /* Unified buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.2;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .btn-primary {
+            background: var(--saffron);
+            color: var(--black);
+        }
+        .btn-primary:hover {
+            background: var(--saffron-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(245,158,11,0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--saffron);
+        }
+        .btn-secondary:hover {
+            background: var(--saffron);
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(245,158,11,0.4);
+        }
+        .btn-small { padding: 8px 16px; font-size: 0.9rem; border-radius: 30px; }
+        .btn-large { padding: 16px 40px; font-size: 1.2rem; }
+        .btn-text {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+        }
+        .btn-text:hover {
+            color: var(--saffron);
+            background: rgba(245,158,11,0.1);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Consultation modal */
+        .consultation-modal {
+            display: none;
+            position: fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.9);
+            justify-content:center;
+            align-items:center;
+            z-index:3000;
+        }
+        .consultation-modal.show { display: flex; }
+        .modal-container { background: var(--dark-gray); width: 90%; max-width: 1000px; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
+        .modal-left { flex:1; padding: 40px; }
+        .modal-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            height: 100%;
+        }
+        .modal-logo { font-size: 2.5rem; font-weight: 800; color: var(--saffron); margin-bottom: 30px; line-height: 1.2; }
+        .contact-info { color: white; font-size: 1rem; line-height: 1.8; margin-bottom: 20px; width: 100%; }
+        .contact-info p { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0; word-break: break-word; }
+        .contact-info i { color: var(--saffron); width: 20px; font-size: 1.1rem; }
+        .modal-step { display: none; }
+        .modal-step.active { display: block; }
+        .modal-title { font-size: 2rem; color: var(--saffron); margin-bottom: 20px; }
+        .calendar-container { margin-bottom: 20px; }
+        .time-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 20px 0; }
+        .time-slot { background: rgba(255,255,255,0.1); padding: 10px; text-align: center; border-radius: 5px; cursor: pointer; }
+        .time-slot.selected { background: var(--saffron); color: black; }
+        .modal-form input, .modal-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; color: white; }
+        .modal-actions { display: flex; gap: 15px; }
+        .modal-btn { padding: 12px 30px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; }
+        .modal-btn.primary { background: var(--saffron); color: black; }
+        .modal-btn.secondary { background: transparent; color: white; border: 1px solid var(--saffron); }
+        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 1.5rem; cursor: pointer; z-index: 10; }
+        .calendar-container input {background: rgba(255, 255, 255, 0.1);border: 1px solid rgba(255, 255, 255, 0.2);color: white;padding: 12px 15px;border-radius: 5px;width: 100%;font-family: 'Orbitron', sans-serif;font-size: 1rem;outline: none;transition: border 0.3s;}
+        .calendar-container input:focus { border-color: var(--saffron); }
+
+        /* Back to top */
+        .back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--saffron); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: black; cursor: pointer; opacity: 0; transform: translateY(20px); transition: 0.3s; z-index: 100; }
+        .back-to-top.show { opacity: 1; transform: translateY(0); }
+
+        /* Footer */
+        .footer-content { background: #0f172a; padding: 60px 20px 30px; }
+        .footer-container { max-width: 1214px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 40px; }
+        .footer-logo { font-size: 2rem; color: var(--saffron); }
+        .footer-about { color: #9CA3AF; margin: 15px 0; }
+        .social-icons { display: flex; gap: 15px; }
+        .social-icons a { color: var(--saffron); font-size: 1.3rem; }
+        .footer-title { color: white; font-size: 1.3rem; margin-bottom: 20px; }
+        .footer-links a { display: block; color: #9CA3AF; text-decoration: none; margin-bottom: 10px; }
+        .footer-links a:hover { color: var(--saffron); }
+        .copyright { text-align: center; color: #6B7280; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; }
+
+        /* Consultation sidebar */
+        .consultation-sidebar { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .consultation-sidebar.show { opacity: 1; pointer-events: all; }
+        .sidebar-btn { background: var(--saffron); color: black; border: none; border-radius: 50px; padding: 15px 10px; writing-mode: vertical-lr; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        /* ===== TERMS AND CONDITIONS PAGE STYLES ===== */
+        .terms-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 40px;
+            background: rgba(26,26,26,0.9);
+            border: 2px dashed var(--saffron);
+            border-radius: 20px;
+            color: #e0e0e0;
+            line-height: 1.8;
+        }
+        .terms-container h1 {
+            font-size: 2.8rem;
+            color: var(--saffron);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .terms-container h2 {
+            font-size: 1.8rem;
+            color: var(--saffron-light);
+            margin: 30px 0 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+        }
+        .terms-container h3 {
+            font-size: 1.3rem;
+            color: #fff;
+            margin: 20px 0 10px;
+        }
+        .terms-container p, .terms-container li {
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+        .terms-container ul, .terms-container ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        .terms-container li {
+            margin-bottom: 5px;
+        }
+        .last-updated {
+            text-align: right;
+            font-style: italic;
+            color: #999;
+            margin-bottom: 30px;
+        }
+        .highlight {
+            background: rgba(245,158,11,0.1);
+            padding: 15px;
+            border-left: 4px solid var(--saffron);
+            margin: 20px 0;
+        }
+        .disclaimer-banner {
+            background: rgba(255, 68, 68, 0.1);
+            border-left: 4px solid #ff4444;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .note {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .terms-container { padding: 20px; }
+            .header nav { display: none; }
+            .hamburger { display: block; }
+        }
+        .modal-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.modal-checkbox input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+.modal-checkbox label {
+    color: white;
+    margin: 0;
+}
+.modal-checkbox a {
+    color: var(--saffron);
+}
+    </style>
+</head>
+<body>
+    <!-- Drone cursor -->
+    <div id="drone-wrapper" style="--x: 0px; --y: 0px;">
+        <div id="drone-model" style="--tiltX: 0deg; --tiltY: 0deg;">
+            <svg viewBox="0 0 100 100" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 20 L80 80 M80 20 L20 80" stroke="#FF9933" stroke-width="12" stroke-linecap="round"/>
+                <rect x="38" y="32" width="24" height="36" rx="6" fill="#1a1a1a" stroke="#FF9933" stroke-width="2"/>
+                <circle cx="50" cy="40" r="3" fill="#FF9933">
+                    <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite" />
+                </circle>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="20" r="6" fill="#333"/>
+                    <rect x="5" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="20" r="6" fill="#333"/>
+                    <rect x="65" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="80" r="6" fill="#333"/>
+                    <rect x="5" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="80" r="6" fill="#333"/>
+                    <rect x="65" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">iQdrone</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="drone-service.html" class="nav-link">Service</a></li>
+                <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
+                <li><a href="drone-workshops.html" class="nav-link">Workshops</a></li>
+                <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
+                <li><a href="about-us.html" class="nav-link">About Us</a></li>
+                <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-text" id="loginBtn">Login</button>
+            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
+                <i class="fas fa-calendar-check"></i> Free Consultation
+            </button>
+        </div>
+        <div class="hamburger">☰</div>
+    </header>
+
+    <!-- Main Terms Content -->
+    <div class="container-custom">
+        <div class="terms-container">
+            <h1>Terms and Conditions</h1>
+            <div class="last-updated">Last Updated: March 5, 2026</div>
+
+            <!-- DISCLAIMER BANNER -->
+            <div class="disclaimer-banner">
+                <p><strong>Important:</strong> iQdrone Academy is a training provider and <strong>not a DGCA‑approved RTO</strong>. We prepare students for DGCA certification, which is conducted by our partner RPTOs. Please read Section 12 for details.</p>
+            </div>
+
+            <!-- INSTRUCTIONS FOR CUSTOMIZATION (as HTML comments) -->
+            <!-- ===================================================== -->
+            <!-- 1. Replace [Your Legal Entity Name] with your actual registered company name. -->
+            <!-- 2. Replace all [placeholders] like [contact@iqdrone.com] with your actual details. -->
+            <!-- 3. Adjust the refund/cancellation policy to match your actual business practices. -->
+            <!-- 4. Consider adding a separate section for "Simulator Usage" if needed. -->
+            <!-- ===================================================== -->
+
+            <div class="highlight">
+                <p><strong>Please read these Terms and Conditions carefully before using our website or enrolling in any courses.</strong> By accessing or using the services of iQdrone Academy, you agree to be bound by these Terms. If you disagree with any part, you may not access our services.</p>
+            </div>
+
+            <h2>1. Introduction</h2>
+            <p>These Terms and Conditions ("Terms") govern your use of the iQdrone Academy website, courses, workshops, simulator, and all related services (collectively, "Services"). iQdrone Academy is operated by <strong>[Your Legal Entity Name]</strong>, having its registered office at <strong>[Your Office Address]</strong>.</p>
+            <p>By using our Services, you agree to comply with these Terms and all applicable Indian laws, including the Information Technology Act, 2000, and the Consumer Protection Act, 2019.</p>
+
+            <h2>2. Definitions</h2>
+            <ul>
+                <li><strong>"Academy", "we", "us", "our"</strong> – refers to iQdrone Academy.</li>
+                <li><strong>"User", "you", "your"</strong> – refers to the individual accessing our website or enrolling in our Services.</li>
+                <li><strong>"Student"</strong> – a user who has enrolled in a course or workshop.</li>
+                <li><strong>"Course"</strong> – any training program, workshop, or simulator session offered by us.</li>
+                <li><strong>"Website"</strong> – <strong>[yourdomain.com]</strong> and all its subdomains.</li>
+                <li><strong>"RTO"</strong> – Remote Pilot Training Organization approved by DGCA.</li>
+            </ul>
+
+            <h2>3. Eligibility</h2>
+            <p>By using our Services, you represent and warrant that:</p>
+            <ul>
+                <li>You are at least 18 years of age (or have parental/guardian consent if under 18).</li>
+                <li>You possess the legal capacity to enter into a binding contract.</li>
+                <li>All information you provide is accurate and complete.</li>
+                <li>For courses leading to DGCA certification, you meet the medical and educational eligibility criteria prescribed by DGCA (see individual course pages).</li>
+            </ul>
+
+            <h2>4. Account Registration and Security</h2>
+            <p>To access certain features, you may need to create an account. You are responsible for maintaining the confidentiality of your login credentials and for all activities under your account. Notify us immediately of any unauthorized use.</p>
+
+            <h2>5. Course Enrollment and Payments</h2>
+            <h3>5.1 Enrollment</h3>
+            <p>Enrollment in any course is confirmed only after we receive full payment or the first installment as per the selected payment plan. We reserve the right to refuse enrollment to anyone without assigning any reason. <strong>By enrolling, you acknowledge that iQdrone Academy provides training only and that certification is granted by DGCA‑approved RPTOs after you successfully pass their examinations.</strong></p>
+            <h3>5.2 Fees and Payment</h3>
+            <p>All fees are in Indian Rupees (INR) and inclusive of applicable taxes unless stated otherwise. Payments can be made via the payment gateways available on our website. We do not store any payment card information; all transactions are securely processed by our payment partners.</p>
+            <h3>5.3 Cancellation and Refunds</h3>
+            <p>Our refund policy varies by course. Please refer to the specific course page for details. Generally:</p>
+            <ul>
+                <li>Cancellations made 7 days before course start: full refund minus processing fees.</li>
+                <li>Cancellations within 7 days: 50% refund.</li>
+                <li>No refunds after course commencement.</li>
+                <li>Simulator access purchases are non-refundable once activated.</li>
+            </ul>
+            <p>Refunds will be processed within 15 working days to the original payment method.</p>
+
+            <h2>6. User Conduct and Prohibited Activities</h2>
+            <p>You agree not to:</p>
+            <ul>
+                <li>Use our Services for any illegal purpose or violate any laws.</li>
+                <li>Impersonate any person or entity.</li>
+                <li>Interfere with the security or functionality of the website.</li>
+                <li>Upload or transmit viruses, malware, or harmful code.</li>
+                <li>Share your account credentials with others.</li>
+                <li>Copy, modify, or distribute course materials without written permission.</li>
+                <li>Use the simulator to practice unsafe or prohibited flight maneuvers.</li>
+            </ul>
+
+            <h2>7. Intellectual Property Rights</h2>
+            <p>All content on our website, including course materials, videos, graphics, logos, and software, is the property of iQdrone Academy or its licensors and is protected by Indian copyright and trademark laws. You may not reproduce, distribute, or create derivative works without our express written consent.</p>
+            <p>You are granted a limited, non-exclusive, non-transferable license to access course materials for personal, non-commercial use only.</p>
+
+            <h2>8. Simulator Usage</h2>
+            <p>The drone simulator is provided for training purposes only. While we strive for realism, it does not replicate all real-world conditions. We are not liable for any decisions or actions you take based on simulator experience. The simulator may be updated or taken offline without notice.</p>
+
+            <h2>9. Third-Party Links</h2>
+            <p>Our website may contain links to third-party websites (e.g., payment gateways, partner sites). We are not responsible for their content or privacy practices. Your use of such sites is at your own risk.</p>
+
+            <h2>10. Disclaimer of Warranties</h2>
+            <p>Our Services are provided on an "AS IS" and "AS AVAILABLE" basis. To the fullest extent permitted by law, we disclaim all warranties, express or implied, including but not limited to merchantability, fitness for a particular purpose, and non-infringement. We do not guarantee that our Services will be uninterrupted, error-free, or secure.</p>
+
+            <h2>11. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by Indian law, in no event shall iQdrone Academy, its directors, employees, or affiliates be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, arising out of or in connection with your use of our Services, even if advised of the possibility of such damages. Our total liability to you shall not exceed the amount you paid to us for the specific course or service giving rise to the claim.</p>
+
+            <h2>12. Certification and DGCA Compliance</h2>
+            <p>iQdrone Academy is a professional drone training provider that prepares students for DGCA (Directorate General of Civil Aviation) certification examinations. <strong>We are not ourselves a DGCA‑approved RTO (Remote Pilot Training Organization).</strong> Instead, we have partnered with multiple DGCA‑approved RPTOs across various locations to facilitate our students' certification process.</p>
+            <p>Upon successful completion of our training program, students are eligible to appear for the DGCA Remote Pilot Licence examination at our partner RPTOs. The issuance of the licence is solely at the discretion of the DGCA and the respective RTO, subject to the student passing the required theory and practical exams, meeting medical fitness criteria, and fulfilling all regulatory requirements.</p>
+            <p><strong>We do not guarantee that every student will obtain a licence.</strong> Any fees paid to us cover only our training services; examination and licence fees payable to the RTO/DGCA are separate and must be paid directly by the student.</p>
+
+            <h2>13. Indemnification</h2>
+            <p>You agree to indemnify, defend, and hold harmless iQdrone Academy and its affiliates from any claims, damages, liabilities, costs, and expenses (including legal fees) arising from your violation of these Terms or your use of our Services.</p>
+
+            <h2>14. Governing Law and Dispute Resolution</h2>
+            <p>These Terms shall be governed by and construed in accordance with the laws of India. Any disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts in <strong>[Your City, State]</strong>.</p>
+            <p>Before initiating legal proceedings, we encourage you to contact us to resolve the dispute amicably. If we cannot resolve it within 30 days, either party may pursue arbitration in accordance with the Arbitration and Conciliation Act, 1996. The arbitration shall be conducted in <strong>[Your City]</strong> and the language shall be English.</p>
+
+            <h2>15. Modifications to Terms</h2>
+            <p>We reserve the right to modify these Terms at any time. Changes will be effective immediately upon posting on this page, with the "Last Updated" date revised. Your continued use of our Services after changes constitutes acceptance of the new Terms.</p>
+
+            <h2>16. Termination</h2>
+            <p>We may suspend or terminate your access to our Services at any time, without prior notice, for conduct that we believe violates these Terms or is harmful to other users or us.</p>
+
+            <h2>17. Severability</h2>
+            <p>If any provision of these Terms is held to be invalid or unenforceable, the remaining provisions shall remain in full force and effect.</p>
+
+            <h2>18. Entire Agreement</h2>
+            <p>These Terms constitute the entire agreement between you and iQdrone Academy regarding your use of our Services and supersede any prior agreements.</p>
+
+            <h2>19. Contact Us</h2>
+            <p>If you have any questions about these Terms, please contact us at:</p>
+            <p><strong>iQdrone Academy</strong><br>
+            <strong>[Your Office Address]</strong><br>
+            Email: <strong>[contact@iqdrone.com]</strong><br>
+            Phone: <strong>[+91 12345 67890]</strong></p>
+
+            <div class="highlight" style="margin-top: 30px;">
+                <p><strong>By using our website or enrolling in any course, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-content">
+        <div class="footer-container">
+            <div class="footer-column">
+                <div class="footer-logo"><i class="fas fa-drone-alt"></i> iQdrone Academy</div>
+                <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="courses.html">Courses</a>
+                    <a href="drone-service.html">Service</a>
+                    <a href="drone-lab.html">Drone Lab</a>
+                    <a href="drone-workshops.html">Workshops</a>
+                    <a href="drone-jobs.html">Jobs</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">More</h3>
+                <div class="footer-links">
+                    <a href="about-us.html">About Us</a>
+                    <a href="partner.html">Partner With Us</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Contact</h3>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-map-marker-alt"></i> 123 Drone Avenue, Tech City</a>
+                    <a href="tel:+911234567890"><i class="fas fa-phone"></i> +91 12345 67890</a>
+                    <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
+    </footer>
+
+    <!-- Consultation Sidebar & Modal -->
+    <div class="consultation-sidebar" id="consultationSidebar">
+        <button class="sidebar-btn consultation-trigger"><i class="fas fa-calendar-check"></i><span>Free Consultation</span></button>
+    </div>
+    <!-- Consultation Modal (Final) -->
+<div class="consultation-modal" id="consultationModal">
+    <div class="modal-container">
+        <div class="close-modal"><i class="fas fa-times"></i></div>
+        <div class="modal-left">
+            <!-- Step 1: Date & Time -->
+            <div class="modal-step active" id="step1">
+                <h3 class="modal-title">Schedule Your Consultation</h3>
+                <div class="calendar-container">
+                    <input type="text" id="date" placeholder="Select Date">
+                </div>
+                <div class="time-slots" id="timeSlots">
+                    <div class="time-slot">9:00 AM</div>
+                    <div class="time-slot">10:00 AM</div>
+                    <div class="time-slot">11:00 AM</div>
+                    <div class="time-slot">1:00 PM</div>
+                    <div class="time-slot">2:00 PM</div>
+                    <div class="time-slot">3:00 PM</div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn secondary" id="cancelBtn">Cancel</button>
+                    <button class="modal-btn" id="nextStepBtn">Next</button>
+                </div>
+            </div>
+            <!-- Step 2: Personal Details Form -->
+            <div class="modal-step" id="step2">
+                <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
+                    <input type="hidden" name="_subject" value="New Consultation Request">
+                    <input type="hidden" name="_next" value="thank-you.html">
+
+                    <input type="text" name="fullName" placeholder="Full Name *" required>
+                    <input type="email" name="_replyto" placeholder="Email Address *" required>
+                    <input type="tel" name="phone" placeholder="Phone Number *" required>
+                    <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
+
+                    <!-- Terms Checkbox -->
+                    <div class="modal-checkbox">
+                        <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
+                        <label for="consultAgreeTerms">
+                            I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
+                            and <a href="privacy.html" target="_blank">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
+                        <button type="submit" class="modal-btn">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-right">
+            <div class="modal-logo">iQdrone Academy</div>
+            <div class="contact-info">
+                <p><i class="fas fa-phone"></i> +91 12345 67890</p>
+                <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
+                <p>We'll contact you within 24h</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Back to Top -->
+    <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // ========== Global scripts (cursor, modal, etc.) ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Drone cursor (same as main)
+            const wrapper = document.getElementById('drone-wrapper');
+            const model = document.getElementById('drone-model');
+            let lastX = window.innerWidth / 2, lastY = window.innerHeight / 2;
+            let stopTimeout;
+            window.addEventListener('mousemove', (e) => {
+                const x = e.clientX, y = e.clientY;
+                wrapper.style.setProperty('--x', `${x}px`);
+                wrapper.style.setProperty('--y', `${y}px`);
+                const dx = x - lastX, dy = y - lastY;
+                const tiltY = Math.min(Math.max(dx * 2.5, -60), 60);
+                const tiltX = Math.min(Math.max(dy * -2.5, -60), 60);
+                model.style.setProperty('--tiltX', `${tiltX}deg`);
+                model.style.setProperty('--tiltY', `${tiltY}deg`);
+                wrapper.classList.add('moving');
+                lastX = x; lastY = y;
+                clearTimeout(stopTimeout);
+                stopTimeout = setTimeout(() => {
+                    model.style.setProperty('--tiltX', `0deg`);
+                    model.style.setProperty('--tiltY', `0deg`);
+                    wrapper.classList.remove('moving');
+                }, 150);
+            });
+            // Trail dots
+            for (let i = 0; i < 3; i++) {
+                let dot = document.createElement('div');
+                dot.className = 'trail-dot';
+                document.body.appendChild(dot);
+            }
+            const trailDots = document.querySelectorAll('.trail-dot');
+            let trailIndex = 0;
+            setInterval(() => {
+                if (trailDots[trailIndex]) {
+                    trailDots[trailIndex].style.left = (lastX - 2) + 'px';
+                    trailDots[trailIndex].style.top = (lastY - 2) + 'px';
+                    trailDots[trailIndex].style.opacity = '0.5';
+                    setTimeout(() => trailDots[trailIndex].style.opacity = '0', 100);
+                }
+                trailIndex = (trailIndex + 1) % trailDots.length;
+            }, 50);
+
+           // Consultation modal
+const modal = document.getElementById('consultationModal');
+const triggers = document.querySelectorAll('.consultation-trigger');
+const closeModal = document.querySelector('.close-modal');
+const cancelBtn = document.getElementById('cancelBtn');
+const nextStepBtn = document.getElementById('nextStepBtn');
+const backBtn = document.getElementById('backBtn');
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const timeSlots = document.querySelectorAll('.time-slot');
+
+triggers.forEach(t => t.addEventListener('click', () => {
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}));
+
+function hideModal() {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+}
+closeModal?.addEventListener('click', hideModal);
+cancelBtn?.addEventListener('click', hideModal);
+nextStepBtn?.addEventListener('click', () => {
+    step1.classList.remove('active');
+    step2.classList.add('active');
+});
+backBtn?.addEventListener('click', () => {
+    step2.classList.remove('active');
+    step1.classList.add('active');
+});
+timeSlots.forEach(s => s.addEventListener('click', function() {
+    timeSlots.forEach(s => s.classList.remove('selected'));
+    this.classList.add('selected');
+}));
+
+// Remove or comment out the old consultForm listener (if present)
+// document.getElementById('consultForm')?.addEventListener('submit', (e) => { ... });
+
+flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => date.getDay() === 0 || date.getDay() === 6 ] });
+
+            // Hamburger menu
+            document.querySelector('.hamburger')?.addEventListener('click', () => document.querySelector('nav').classList.toggle('active'));
+
+            // Scroll events (sidebar & back to top)
+            const sidebar = document.getElementById('consultationSidebar');
+            const backTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) sidebar.classList.add('show'); else sidebar.classList.remove('show');
+                if (window.scrollY > 500) backTop.classList.add('show'); else backTop.classList.remove('show');
+            });
+            backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        });
+    </script>
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; justify-content: space-between; align-items: center; gap: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.95rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <button onclick="acceptCookies()" class="btn btn-primary btn-small" style="white-space: nowrap;">Accept</button>
+</div>
+
+<script>
+    function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+    if (localStorage.getItem('cookiesAccepted')) {
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

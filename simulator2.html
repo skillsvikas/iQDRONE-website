@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iQdrone Pro Sim</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; color: white; font-family: 'Orbitron', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+
+        .simulator-wrapper {
+            width: 98%; max-width: 1100px; height: 420px; 
+            display: flex; border: 2px solid #F59E0B; border-radius: 15px; 
+            overflow: hidden; background: #050a15;
+        }
+
+        /* LEFT PANEL */
+        .sim-left { width: 220px; background: #0a0f1a; padding: 15px; display: flex; flex-direction: column; border-right: 2px solid #F59E0B; justify-content: space-between; align-items: center;}
+        .sim-main-heading { font-size: 0.8rem; color: #FF9933; text-align: center; line-height: 1.2; }
+        
+        .joystick-container { display: flex; gap: 10px; justify-content: center; }
+        .stick { width: 85px; height: 85px; background: #111; border: 1px solid #333; border-radius: 50%; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); }
+        .btn { display: flex; align-items: center; justify-content: center; color: #FF9933; font-size: 18px; cursor: pointer; user-select: none; }
+        .btn:active { color: white; scale: 1.2; }
+
+ /* RIGHT AREA */
+.sim-right {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+    background-image: url('https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Dark overlay to make HUD and objects readable */
+.sim-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 1;
+}
+
+#flight-area {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+#path {
+    width: 4000px;
+    height: 100%;
+    position: relative;
+}
+
+/* HUD BAR (unchanged) */
+.hud-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 0.7rem;
+    color: #00CCFF;
+    z-index: 100;
+    border-bottom: 1px solid #F59E0B;
+}
+.hud-bar span { color: white; }
+#sound-toggle {
+    background: #FF9933;
+    border: none;
+    color: black;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Orbitron';
+    font-size: 10px;
+}
+
+/* DRONE & OBJECTS (unchanged) */
+#drone {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    top: 50%;
+    left: 80px;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+}
+.drone-frame {
+    position: absolute;
+    inset: 8px;
+    background: #111;
+    border: 2px solid currentColor;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    box-shadow: 0 0 10px currentColor;
+}
+.prop {
+    position: absolute;
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 10px;
+}
+.spinning .prop { animation: spin 0.05s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } 
+
+        /* VERTICAL CENTERING OF PATH OBJECTS */
+        .gate { position: absolute; top: 55%; transform: translateY(-50%); width: 140px; height: 200px; border: 4px solid; border-radius: 12px; display: flex; align-items: center; justify-content: center; text-align: center; background: rgba(5,10,21,0.5); font-size: 11px; transition: 0.5s; }
+        .gate.fade-out { opacity: 0; pointer-events: none; }
+        
+        .target-box { position: absolute; width: 100px; height: 55px; border: 3px solid; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); font-size: 10px; font-weight: bold; cursor: pointer; }
+
+        #message-banner { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); background: #FF9933; color: black; padding: 10px 25px; border-radius: 30px; font-weight: bold; z-index: 1000; display: none; }
+
+        /* SAFFRON GLOWING CARD (restored) */
+        #overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal {
+            background: #0a0f1a;
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid #F59E0B;
+            box-shadow: 0 0 40px #F59E0B;
+            text-align: center;
+            width: 360px;
+            color: white;
+        }
+        .modal h2 { color: #F59E0B; margin-bottom: 15px; font-size: 1.8rem; }
+        .modal p { color: #00CCFF; margin: 5px 0; font-size: 1rem; }
+        .modal .grade { font-size: 1.4rem; font-weight: bold; color: #F59E0B; }
+        .modal .pilot-id { background: #222; padding: 8px; border-radius: 8px; letter-spacing: 1px; margin: 10px 0; font-family: monospace; }
+        .modal input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: none;
+            background: #222;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            border: 1px solid #F59E0B;
+        }
+        .modal input:focus { outline: 2px solid #F59E0B; }
+        .modal button {
+            width: 100%;
+            padding: 15px;
+            background: #F59E0B;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            color: black;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            margin: 10px 0;
+            transition: 0.3s;
+        }
+        .modal #explore-btn {
+    background: transparent;
+    border: 2px solid #F59E0B;
+    color: #F59E0B;
+    margin-top: 5px;
+}
+.modal #explore-btn:hover {
+    background: #F59E0B;
+    color: black;
+}
+        .modal button:hover { background: #ffaa44; box-shadow: 0 0 20px #F59E0B; }
+        .modal .fly-again {
+            font-size: 0.9rem;
+            color: #F59E0B;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="simulator-wrapper">
+    <div class="sim-left">
+        <h2 class="sim-main-heading">iQDRONE<br>DREAM SIM</h2>
+        <div class="joystick-container">
+            <div class="stick">
+                <div class="btn" id="up" style="grid-area: 1/2">▲</div>
+                <div class="btn" id="down" style="grid-area: 3/2">▼</div>
+            </div>
+            <div class="stick">
+                <div class="btn" id="left" style="grid-area: 2/1">◀</div>
+                <div class="btn" id="right" style="grid-area: 2/3">▶</div>
+            </div>
+        </div>
+        <p style="font-size: 8px; opacity: 0.5;">TOUCH TO FLY</p>
+    </div>
+
+    <div class="sim-right">
+        <div class="hud-bar">
+            <div>BATT: <span id="batt-val">100</span>%</div>
+            <div>SPEED: <span id="speed-val">0</span></div>
+            <div>MODE: <span id="mode-val">STD</span></div>
+            <button id="sound-toggle">SOUND: ON</button>
+        </div>
+        <div id="message-banner"></div>
+        <div id="flight-area">
+            <div id="path">
+                <div id="drone">
+                    <div class="prop" style="top:-1px;left:-1px"></div>
+                    <div class="prop" style="top:-1px;right:-1px"></div>
+                    <div class="prop" style="bottom:-1px;left:-1px"></div>
+                    <div class="prop" style="bottom:-1px;right:-1px"></div>
+                    <div class="drone-frame">iQ</div>
+                </div>
+
+                <div class="gate" style="left:600px; border-color:#FFF; color:#FFF;" data-msg="✨ DREAM TO FLY — START"><b>DREAM</b></div>
+                <div class="gate" style="left:1400px; border-color:#FF9933; color:#FF9933;" data-msg="🚁 POWER UP — iQDRONE"><b>iQDRONE</b></div>
+                <div class="gate" style="left:2200px; border-color:#00CCFF; color:#00CCFF;" data-msg="📜 LICENSE — ALTITUDE UNLOCKED"><b>LICENSE</b></div>
+
+                <!-- FOUR LANDING TARGETS -->
+                <div style="position:absolute; left:3200px; height:100%; width:400px;">
+                    <div class="target-box" style="top:15%; border-color:#FF9933;" data-course="Agriculture">AGRI</div>
+                    <div class="target-box" style="top:35%; border-color:#00FF66;" data-course="Cinematography">CINE</div>
+                    <div class="target-box" style="top:55%; border-color:#FFF;" data-course="Survey">SURVEY</div>
+                    <div class="target-box" style="top:75%; border-color:#00CCFF;" data-course="Mapping">MAP</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SAFFRON GLOWING CARD with new button -->
+<div id="overlay">
+    <div class="modal">
+        <h2 id="res-course">MISSION SUCCESS</h2>
+        <p class="grade" id="grade-display">Grade: Ace Pilot</p>
+        <p class="pilot-id" id="pilot-id-display">Pilot ID: IQ-1234</p>
+        <input type="text" id="uname" placeholder="Your Name">
+        <input type="tel" id="uphone" placeholder="WhatsApp Number">
+        <button id="wa-btn">📱 SEND VIA WHATSAPP</button>
+        <button id="explore-btn">EXPLORE COURSE DETAILS</button>
+        <p class="fly-again" id="fly-again">FLY AGAIN</p>
+    </div>
+</div>
+
+<script>
+    const drone = document.getElementById('drone'), area = document.getElementById('flight-area'), banner = document.getElementById('message-banner'), soundBtn = document.getElementById('sound-toggle');
+    let x = 80, y = 210, battery = 100, active = true, engine = false, canUp = false, keys = {}, soundMuted = false;
+    let audioCtx, osc, gainNode;
+    let remainingBattery = 100;
+    let landedCourse = '';
+
+    // ---------- AUDIO ----------
+    function initAudio() {
+        if(audioCtx) return;
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        osc = audioCtx.createOscillator(); gainNode = audioCtx.createGain();
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(50, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(soundMuted ? 0 : 0.02, audioCtx.currentTime);
+        osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+        osc.start(); engine = true; drone.classList.add('spinning');
+    }
+
+    soundBtn.onclick = () => {
+        soundMuted = !soundMuted;
+        soundBtn.innerText = soundMuted ? "SOUND: OFF" : "SOUND: ON";
+        if (gainNode) gainNode.gain.setValueAtTime(soundMuted ? 0 : 0.02, audioCtx.currentTime);
+    };
+
+    // ---------- CONTROLS ----------
+    const bind = (id, k) => {
+        const el = document.getElementById(id);
+        el.onmousedown = el.ontouchstart = (e) => { e.preventDefault(); initAudio(); keys[k] = true; };
+        el.onmouseup = el.onmouseleave = el.ontouchend = () => keys[k] = false;
+    };
+    bind('up','ArrowUp'); bind('down','ArrowDown'); bind('left','ArrowLeft'); bind('right','ArrowRight');
+    window.onkeydown = (e) => { if(e.target.tagName !== 'INPUT') { initAudio(); keys[e.code] = true; } };
+    window.onkeyup = (e) => keys[e.code] = false;
+    drone.onclick = initAudio;
+
+    // ---------- HELPERS ----------
+    function generatePilotId() {
+        return 'IQ-' + Math.floor(1000 + Math.random() * 9000);
+    }
+
+    function getGrade(batteryLeft) {
+        if (batteryLeft >= 80) return 'Ace Pilot';
+        if (batteryLeft >= 50) return 'Skilled Pilot';
+        if (batteryLeft >= 20) return 'Trainee';
+        return 'Need Practice';
+    }
+
+    function resetGame() {
+        active = true;
+        canUp = false;
+        battery = 100;
+        x = 80; y = 210;
+        document.getElementById('batt-val').innerText = '100';
+        document.getElementById('mode-val').innerText = 'STD';
+        drone.style.color = '#888';
+        document.querySelectorAll('.gate').forEach(g => g.classList.remove('fade-out'));
+        document.getElementById('overlay').style.display = 'none';
+        document.getElementById('uname').value = '';
+        document.getElementById('uphone').value = '';
+        // restart sound if needed (optional)
+        if (soundMuted) soundMuted = false; 
+    }
+
+    // ---------- GAME LOOP ----------
+    function loop() {
+        if (active && engine) {
+            let spd = 0, rol = 0, pit = 0;
+            if (keys['ArrowRight'] || keys['KeyD']) { x += 17; spd = 50; rol = 15; }
+            else if (keys['ArrowLeft'] || keys['KeyA']) { x -= 8; spd = 20; rol = -15; }
+            
+            if (canUp) {
+                if (keys['ArrowUp'] || keys['KeyW']) { y -= 8; pit = -10; }
+                else if (keys['ArrowDown'] || keys['KeyS']) { y += 8; pit = 10; }
+            }
+            
+            x = Math.max(50, Math.min(3800, x)); y = Math.max(60, Math.min(370, y));
+            if (x % 100 === 0 && battery > 0) {
+                battery--;
+                document.getElementById('batt-val').innerText = battery;
+            }
+            
+            drone.style.left = x + 'px'; drone.style.top = y + 'px';
+            drone.style.transform = `translate(-50%, -50%) rotateZ(${rol}deg) rotateX(${pit}deg)`;
+            area.scrollLeft = x - 200;
+            document.getElementById('speed-val').innerText = spd;
+
+            // Gates
+            document.querySelectorAll('.gate').forEach((g, i) => {
+                if (!g.classList.contains('fade-out') && x > g.offsetLeft && x < g.offsetLeft + 140) {
+                    banner.innerText = g.dataset.msg; banner.style.display = 'block'; setTimeout(() => banner.style.display='none', 2000);
+                    drone.style.color = g.style.borderColor; g.classList.add('fade-out');
+                    if (i === 2) { canUp = true; document.getElementById('mode-val').innerText = "PRO"; }
+                }
+            });
+
+            // Target landing (four boxes)
+            document.querySelectorAll('.target-box').forEach(t => {
+                // Bounding box collision detection (more accurate)
+                const targetX = 3200; // left edge of final zone
+                const targetY = t.offsetTop;
+                const droneLeft = x - 22;
+                const droneRight = x + 22;
+                const droneTop = y - 22;
+                const droneBottom = y + 22;
+                const targetLeft = targetX;
+                const targetRight = targetX + 100;
+                const targetTop = targetY;
+                const targetBottom = targetY + 55;
+
+                if (droneRight > targetLeft && droneLeft < targetRight && droneBottom > targetTop && droneTop < targetBottom) {
+                    active = false;
+                    if (osc) osc.stop();
+                    landedCourse = t.dataset.course;
+                    remainingBattery = battery;
+                    const pilotId = generatePilotId();
+                    const grade = getGrade(remainingBattery);
+                    
+                    document.getElementById('res-course').innerText = landedCourse;
+                    document.getElementById('grade-display').innerText = `Grade: ${grade}`;
+                    document.getElementById('pilot-id-display').innerText = `Pilot ID: ${pilotId}`;
+                    document.getElementById('overlay').style.display = 'flex';
+                    
+                    window.landingData = { course: landedCourse, grade, pilotId, battery: remainingBattery };
+                }
+            });
+
+            if (battery <= 0) {
+                alert('Battery dead! Restarting...');
+                resetGame();
+            }
+        }
+        requestAnimationFrame(loop);
+    }
+    loop();
+
+    // ---------- FINAL CARD BUTTONS ----------
+    document.getElementById('wa-btn').onclick = () => {
+        const name = document.getElementById('uname').value || 'Pilot';
+        const phone = document.getElementById('uphone').value || '9999999999';
+        const data = window.landingData || { course: 'Unknown', grade: 'Trainee', pilotId: 'IQ-0000' };
+        const message = `My name is ${name}, WhatsApp ${phone}. I completed the iQdrone simulator and landed on ${data.course} with grade ${data.grade}. My Pilot ID is ${data.pilotId}. I want to claim my scholarship.`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    };
+    document.getElementById('explore-btn').onclick = () => {
+    const course = window.landingData?.course || 'drone';
+    // Replace '#' with your actual course page URL, e.g., `/courses/${course.toLowerCase()}`
+    window.location.href = '#'; // placeholder
+};
+
+    document.getElementById('fly-again').onclick = resetGame;
+</script>
+</body>
+</html>

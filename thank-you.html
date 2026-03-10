@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You | iQdrone Academy</title>
+    <!-- Link to your main CSS file (if you have one) -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Copy your site header here (same as other pages) -->
+    <header class="header"> ... </header>
+
+    <div class="container-custom" style="text-align: center; padding: 100px 0;">
+        <h1 class="section-title">Thank You!</h1>
+        <p style="color: white; font-size: 1.2rem;">We have received your request and will contact you shortly.</p>
+        <a href="index.html" class="btn btn-primary">Return to Home</a>
+    </div>
+
+    <!-- Copy your site footer here -->
+    <footer class="footer-content"> ... </footer>
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; justify-content: space-between; align-items: center; gap: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.95rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <button onclick="acceptCookies()" class="btn btn-primary btn-small" style="white-space: nowrap;">Accept</button>
+</div>
+
+<script>
+    function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+    if (localStorage.getItem('cookiesAccepted')) {
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

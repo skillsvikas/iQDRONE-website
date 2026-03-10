@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>iQdrone 360° Partner Hub - Long Radius</title>
+    <style>
+        :root {
+            --saffron: #FF9933;
+            --bg: #050505;
+            /* LONGER RADIUS: Changed to cover full hero page */
+            --orbit-radius: 40vh; 
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 2000px; /* Essential for 3D drone depth */
+        }
+
+        /* --- THE ORBIT AXIS --- */
+        .universe {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- THE ROTATION ARM --- */
+        .rotation-arm {
+            position: absolute;
+            width: calc(var(--orbit-radius) * 2);
+            height: 2px;
+            /* PIVOT IN CENTER */
+            left: 50%;
+            top: 50%;
+            transform-origin: left center;
+            /* CLOCKWISE ORBIT */
+            animation: clockOrbit 12s infinite linear;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Places drone at end of radius */
+            pointer-events: none; /* Allows text selection in center */
+        }
+
+        /* --- THE 360° VISUAL RAY --- */
+        .ray-line {
+            position: absolute;
+            left: 0; /* Starts from center */
+            width: 100%; /* Reaches the drone */
+            height: 2px;
+            background: linear-gradient(to right, var(--saffron), transparent);
+            box-shadow: 0 0 15px var(--saffron);
+            opacity: 0.5;
+        }
+
+        /* --- CLOCKWISE ORBIT ANIMATION --- */
+        @keyframes clockOrbit {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* =========================================
+           3D DRONE (Constructed in CSS)
+           This replaces the static flat image
+           ========================================= */
+        .drone-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            transform-style: preserve-3d;
+            /* Faces Forward (90deg Right) along path */
+            transform: rotateX(15deg) rotateY(15deg) rotate(90deg);
+        }
+
+        /* Drone Body */
+        .drone-body {
+            position: absolute;
+            width: 80px;
+            height: 20px;
+            background: #222;
+            left: 20px;
+            top: 50px;
+            border-radius: 10px;
+            border: 1px solid var(--saffron);
+            box-shadow: 0 0 20px rgba(255, 153, 51, 0.4);
+        }
+
+        /* Propeller Arms */
+        .drone-body::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: #444;
+            left: 39px;
+            top: -40px;
+        }
+
+        .drone-body::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: #444;
+            left: -10px;
+            top: 9px;
+        }
+
+        /* SPINNING PROPELLERS (4 Units) */
+        .prop {
+            position: absolute;
+            width: 60px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform-origin: center;
+            box-shadow: 0 0 5px rgba(255,255,255,0.2);
+            /* Fast spinning animation */
+            animation: propellerSpin 0.3s infinite linear;
+        }
+
+        @keyframes propellerSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Propeller Positions */
+        .prop.front-left { top: -45px; left: 10px; }
+        .prop.front-right { top: -45px; left: 50px; }
+        .prop.back-left { top: 50px; left: 10px; }
+        .prop.back-right { top: 50px; left: 50px; }
+
+        /* LED Lights */
+        .led {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #444;
+            top: 57px;
+            left: 57px;
+            box-shadow: 0 0 10px #444;
+        }
+
+        .prop-center {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #333;
+            border: 1px solid var(--saffron);
+        }
+
+        /* =========================================
+           CENTER HERO CONTENT & FOOTER
+           ========================================= */
+        .center-branding {
+            position: absolute;
+            text-align: center;
+            pointer-events: all; /* Allows interacting with links */
+        }
+
+        .solution-tag {
+            font-size: 0.9rem;
+            letter-spacing: 5px;
+            color: var(--saffron);
+            background: rgba(255, 153, 51, 0.1);
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--saffron);
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            margin: 0;
+            font-weight: 900;
+        }
+
+        .state-info {
+            color: #888;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            margin-top: 15px;
+        }
+
+        /* Priority Business Highlight at the bottom */
+        .dimensions-footer {
+            position: absolute;
+            bottom: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .dim-card {
+            padding: 15px 30px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .priority {
+            border: 2px solid var(--saffron);
+            color: var(--saffron);
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 153, 51, 0.3);
+        }
+
+        /* Buttons on top left/right */
+        .top-nav {
+            position: absolute;
+            top: 20px;
+            width: calc(100% - 40px);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: all;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--saffron);
+            color: var(--saffron);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="universe">
+        <div class="rotation-arm">
+            <div class="ray-line"></div>
+            
+            <div class="drone-container">
+                <div class="drone-body"></div>
+                <div class="led"></div>
+                <div class="prop front-left"></div>
+                <div class="prop front-right"></div>
+                <div class="prop back-left"></div>
+                <div class="prop back-right"></div>
+            </div>
+        </div>
+
+        <div class="center-branding">
+            <div class="solution-tag">COMPLETE 360° SOLUTION</div>
+            <h1 class="main-title">iQdrone</h1>
+            <p style="font-size: 1.5rem; margin: 10px 0;">PARTNER WITH US</p>
+            <p style="color:white;">MP • CG • MAHARASHTRA</p>
+        </div>
+    </div>
+
+    <div class="dimensions-footer">
+        <div class="dim-card">DRONE ACADEMY</div>
+        <div class="dim-card priority">WORKSHOP BUSINESS<br><span style="font-size: 0.7rem; color: #aaa;">MOST IMPORTANT</span></div>
+        <div class="dim-card">DRONE SERVICES</div>
+        <div class="dim-card">AGRI-SPRAY / RENTAL</div>
+    </div>
+
+    <div class="top-nav">
+        <div style="font-weight:bold; color: var(--saffron); font-size:1.2rem;">iQdrone Hub</div>
+        <a href="#prospectus" class="nav-btn">Get complete Solution Data</a>
+    </div>
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; justify-content: space-between; align-items: center; gap: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.95rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <button onclick="acceptCookies()" class="btn btn-primary btn-small" style="white-space: nowrap;">Accept</button>
+</div>
+
+<script>
+    function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+    if (localStorage.getItem('cookiesAccepted')) {
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | iQdrone Academy</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* ========== GLOBAL STYLES (from main site) ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --saffron: #F59E0B;
+            --saffron-light: #FBBF24;
+            --saffron-dark: #D97706;
+            --black: #000000;
+            --dark-gray: #1A1A1A;
+            --warm-dark: #2A1C00;
+            --light-gray: #2D2D2D;
+            --white: #FFFFFF;
+            --off-white: #F5F5F5;
+            --partner-blue: #1e40af;
+            --partner-light: #3b82f6;
+            --lime: #BFFF00;
+        }
+
+        /* Drone cursor */
+        #drone-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate3d(var(--x), var(--y), 0);
+            will-change: transform;
+        }
+        #drone-model {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: rotateX(var(--tiltX)) rotateY(var(--tiltY));
+            transform-style: preserve-3d;
+        }
+        .propeller {
+            transform-origin: center;
+            animation: spin 0.1s linear infinite;
+        }
+        .moving .propeller {
+            animation-duration: 0.03s;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        body {
+            cursor: none;
+        }
+        .trail-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #FF9933;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            box-shadow: 0 0 8px #FF9933;
+            transition: opacity 0.2s;
+        }
+
+        /* Background / Mission Planner */
+        body {
+            background: var(--black);
+            font-family: sans-serif;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+            animation: moveGrid 40s linear infinite;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, 
+                transparent, 
+                transparent 25px, 
+                rgba(255, 153, 51, 0.02) 25px, 
+                rgba(255, 153, 51, 0.02) 50px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
+
+        .container-custom {
+            max-width: 1214px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--saffron), var(--saffron-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--saffron);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Header */
+        .header {
+            width: 100%;
+            max-width: 1214px;
+            height: 85px;
+            background: rgba(26, 26, 26, 0.95);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(245,158,11,0.3);
+        }
+        .logo { font-size: 28px; font-weight: bold; color: var(--saffron); }
+        nav ul { list-style: none; display: flex; gap: 25px; }
+        .nav-link { color: white; text-decoration: none; font-size: 16px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--saffron); text-decoration: underline; }
+        .hamburger { display: none; font-size: 28px; cursor: pointer; color: var(--saffron); }
+
+        /* Unified buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.2;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .btn-primary {
+            background: var(--saffron);
+            color: var(--black);
+        }
+        .btn-primary:hover {
+            background: var(--saffron-light);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(245,158,11,0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--saffron);
+        }
+        .btn-secondary:hover {
+            background: var(--saffron);
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(245,158,11,0.4);
+        }
+        .btn-small { padding: 8px 16px; font-size: 0.9rem; border-radius: 30px; }
+        .btn-large { padding: 16px 40px; font-size: 1.2rem; }
+        .btn-text {
+            background: transparent;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+        }
+        .btn-text:hover {
+            color: var(--saffron);
+            background: rgba(245,158,11,0.1);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Consultation modal */
+        .consultation-modal {
+            display: none;
+            position: fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.9);
+            justify-content:center;
+            align-items:center;
+            z-index:3000;
+        }
+        .consultation-modal.show { display: flex; }
+        .modal-container { background: var(--dark-gray); width: 90%; max-width: 1000px; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
+        .modal-left { flex:1; padding: 40px; }
+        .modal-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 1px solid rgba(255,255,255,0.1);
+            height: 100%;
+        }
+        .modal-logo { font-size: 2.5rem; font-weight: 800; color: var(--saffron); margin-bottom: 30px; line-height: 1.2; }
+        .contact-info { color: white; font-size: 1rem; line-height: 1.8; margin-bottom: 20px; width: 100%; }
+        .contact-info p { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0; word-break: break-word; }
+        .contact-info i { color: var(--saffron); width: 20px; font-size: 1.1rem; }
+        .modal-step { display: none; }
+        .modal-step.active { display: block; }
+        .modal-title { font-size: 2rem; color: var(--saffron); margin-bottom: 20px; }
+        .calendar-container { margin-bottom: 20px; }
+        .time-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 20px 0; }
+        .time-slot { background: rgba(255,255,255,0.1); padding: 10px; text-align: center; border-radius: 5px; cursor: pointer; }
+        .time-slot.selected { background: var(--saffron); color: black; }
+        .modal-form input, .modal-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; color: white; }
+        .modal-actions { display: flex; gap: 15px; }
+        .modal-btn { padding: 12px 30px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; }
+        .modal-btn.primary { background: var(--saffron); color: black; }
+        .modal-btn.secondary { background: transparent; color: white; border: 1px solid var(--saffron); }
+        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 1.5rem; cursor: pointer; z-index: 10; }
+        .calendar-container input {background: rgba(255, 255, 255, 0.1);border: 1px solid rgba(255, 255, 255, 0.2);color: white;padding: 12px 15px;border-radius: 5px;width: 100%;font-family: 'Orbitron', sans-serif;font-size: 1rem;outline: none;transition: border 0.3s;}
+        .calendar-container input:focus { border-color: var(--saffron); }
+
+        /* Back to top */
+        .back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--saffron); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: black; cursor: pointer; opacity: 0; transform: translateY(20px); transition: 0.3s; z-index: 100; }
+        .back-to-top.show { opacity: 1; transform: translateY(0); }
+
+        /* Footer */
+        .footer-content { background: #0f172a; padding: 60px 20px 30px; }
+        .footer-container { max-width: 1214px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 40px; }
+        .footer-logo { font-size: 2rem; color: var(--saffron); }
+        .footer-about { color: #9CA3AF; margin: 15px 0; }
+        .social-icons { display: flex; gap: 15px; }
+        .social-icons a { color: var(--saffron); font-size: 1.3rem; }
+        .footer-title { color: white; font-size: 1.3rem; margin-bottom: 20px; }
+        .footer-links a { display: block; color: #9CA3AF; text-decoration: none; margin-bottom: 10px; }
+        .footer-links a:hover { color: var(--saffron); }
+        .copyright { text-align: center; color: #6B7280; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; }
+
+        /* Consultation sidebar */
+        .consultation-sidebar { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .consultation-sidebar.show { opacity: 1; pointer-events: all; }
+        .sidebar-btn { background: var(--saffron); color: black; border: none; border-radius: 50px; padding: 15px 10px; writing-mode: vertical-lr; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+
+        /* ===== PRIVACY POLICY PAGE STYLES ===== */
+        .privacy-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 40px;
+            background: rgba(26,26,26,0.9);
+            border: 2px dashed var(--saffron);
+            border-radius: 20px;
+            color: #e0e0e0;
+            line-height: 1.8;
+        }
+        .privacy-container h1 {
+            font-size: 2.8rem;
+            color: var(--saffron);
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .privacy-container h2 {
+            font-size: 1.8rem;
+            color: var(--saffron-light);
+            margin: 30px 0 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 8px;
+        }
+        .privacy-container h3 {
+            font-size: 1.3rem;
+            color: #fff;
+            margin: 20px 0 10px;
+        }
+        .privacy-container p, .privacy-container li {
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+        .privacy-container ul, .privacy-container ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+        .privacy-container li {
+            margin-bottom: 5px;
+        }
+        .last-updated {
+            text-align: right;
+            font-style: italic;
+            color: #999;
+            margin-bottom: 30px;
+        }
+        .highlight {
+            background: rgba(245,158,11,0.1);
+            padding: 15px;
+            border-left: 4px solid var(--saffron);
+            margin: 20px 0;
+        }
+        .note {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .privacy-container { padding: 20px; }
+            .header nav { display: none; }
+            .hamburger { display: block; }
+        }
+        .modal-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+.modal-checkbox input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+.modal-checkbox label {
+    color: white;
+    margin: 0;
+}
+.modal-checkbox a {
+    color: var(--saffron);
+}
+    </style>
+</head>
+<body>
+    <!-- Drone cursor -->
+    <div id="drone-wrapper" style="--x: 0px; --y: 0px;">
+        <div id="drone-model" style="--tiltX: 0deg; --tiltY: 0deg;">
+            <svg viewBox="0 0 100 100" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 20 L80 80 M80 20 L20 80" stroke="#FF9933" stroke-width="12" stroke-linecap="round"/>
+                <rect x="38" y="32" width="24" height="36" rx="6" fill="#1a1a1a" stroke="#FF9933" stroke-width="2"/>
+                <circle cx="50" cy="40" r="3" fill="#FF9933">
+                    <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite" />
+                </circle>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="20" r="6" fill="#333"/>
+                    <rect x="5" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="20" r="6" fill="#333"/>
+                    <rect x="65" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="80" r="6" fill="#333"/>
+                    <rect x="5" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="80" r="6" fill="#333"/>
+                    <rect x="65" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">iQdrone</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="drone-service.html" class="nav-link">Service</a></li>
+                <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
+                <li><a href="drone-workshops.html" class="nav-link">Workshops</a></li>
+                <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
+                <li><a href="about-us.html" class="nav-link">About Us</a></li>
+                <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-text" id="loginBtn">Login</button>
+            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
+                <i class="fas fa-calendar-check"></i> Free Consultation
+            </button>
+        </div>
+        <div class="hamburger">☰</div>
+    </header>
+
+    <!-- Main Privacy Content -->
+    <div class="container-custom">
+        <div class="privacy-container">
+            <h1>Privacy Policy</h1>
+            <div class="last-updated">Last Updated: March 5, 2026</div>
+            
+            <div class="highlight">
+                <p><strong>Your privacy is critically important to us.</strong> iQdrone Academy is committed to protecting the personal data of our students, website visitors, and partners in accordance with the <strong>Information Technology Act, 2000</strong> and the <strong>Digital Personal Data Protection Act (DPDPA), 2023</strong>.</p>
+            </div>
+
+            <h2>1. Introduction and Scope</h2>
+            <p>This Privacy Policy applies to all personal data collected through the iQdrone Academy website (<strong>[yourdomain.com]</strong>), mobile applications, enrollment forms, consultation bookings, and any other digital services we provide. By using our website or services, you consent to the data practices described in this policy.</p>
+            <p>If you do not agree with this policy, please do not use our website or provide us with your personal information.</p>
+
+            <h2>2. Information We Collect</h2>
+            <p>We collect information to provide better services to our users. The categories of data we collect include:</p>
+            
+            <h3>2.1 Information You Provide Directly</h3>
+            <ul>
+                <li><strong>Identity Data:</strong> Full name, date of birth, gender, photograph (for ID cards).</li>
+                <li><strong>Contact Data:</strong> Email address, phone number, postal address.</li>
+                <li><strong>Educational Data:</strong> Qualifications, enrollment details, course progress, certifications.</li>
+                <li><strong>Financial Data:</strong> Payment details, bank account information (processed securely through payment gateways – we do not store card details).</li>
+                <li><strong>Communication Data:</strong> Messages you send via contact forms, emails, or consultation bookings.</li>
+            </ul>
+
+            <h3>2.2 Information Collected Automatically</h3>
+            <p>When you visit our website, we automatically collect :</p>
+            <ul>
+                <li><strong>Technical Data:</strong> IP address, browser type and version, device information, operating system.</li>
+                <li><strong>Usage Data:</strong> Pages visited, time spent, click patterns, referral sources.</li>
+                <li><strong>Cookie Data:</strong> We use cookies and similar tracking technologies (see Section 7 for details).</li>
+            </ul>
+
+            <div class="note">
+                <strong>Note:</strong> Under the DPDPA, even automatically collected data like IP addresses qualifies as "personal data" if it can be linked to an individual.
+            </div>
+
+            <h2>3. How We Use Your Information</h2>
+            <p>We process your personal data for the following purposes :</p>
+            <ul>
+                <li><strong>Service Delivery:</strong> To process enrollments, manage course access, issue certificates, and provide training.</li>
+                <li><strong>Communication:</strong> To respond to inquiries, send course updates, and schedule consultations.</li>
+                <li><strong>Improvement:</strong> To analyze website usage, enhance user experience, and develop new courses.</li>
+                <li><strong>Legal Compliance:</strong> To comply with DGCA regulations, maintain records, and fulfill statutory obligations.</li>
+                <li><strong>Marketing (with consent):</strong> To send promotional materials about new courses or workshops (you may opt out anytime).</li>
+            </ul>
+
+            <h2>4. Legal Basis for Processing</h2>
+            <p>We process your personal data only when we have a valid legal basis, including :</p>
+            <ul>
+                <li><strong>Consent:</strong> You have given clear consent for us to process your data for specific purposes.</li>
+                <li><strong>Contract:</strong> Processing is necessary for the performance of a contract (e.g., course enrollment).</li>
+                <li><strong>Legal Obligation:</strong> Processing is required to comply with Indian laws (e.g., DGCA training records).</li>
+                <li><strong>Legitimate Interests:</strong> Processing is necessary for our legitimate interests (e.g., improving website functionality) that do not override your privacy rights.</li>
+            </ul>
+
+            <h2>5. Data Sharing and Disclosure</h2>
+            <p>We respect your privacy and do not sell, rent, or trade your personal information. We may share data only in the following circumstances :</p>
+            <ul>
+                <li><strong>Service Providers:</strong> With trusted third-party vendors who assist us in operating our website, processing payments, or delivering courses (e.g., payment gateways, email services). These providers are contractually bound to protect your data.</li>
+                <li><strong>Legal Requirements:</strong> When required by law, court order, or government agency (e.g., DGCA, law enforcement).</li>
+                <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets, your data may be transferred with notice to you.</li>
+                <li><strong>With Your Consent:</strong> In any other circumstances with your explicit consent.</li>
+            </ul>
+
+            <h2>6. Data Security</h2>
+            <p>We implement reasonable security practices and procedures to protect your personal data from unauthorized access, loss, or misuse :</p>
+            <ul>
+                <li>SSL encryption for all data transmitted through our website.</li>
+                <li>Secure servers and firewalls.</li>
+                <li>Access controls limiting data access to authorized personnel only.</li>
+                <li>Regular security audits and monitoring.</li>
+            </ul>
+            <p>However, no method of transmission over the Internet is 100% secure. While we strive to protect your data, we cannot guarantee absolute security.</p>
+
+            <h2>7. Cookie Policy</h2>
+            <p>Our website uses cookies to enhance your browsing experience. Cookies are small text files stored on your device .</p>
+            <h3>Types of cookies we use:</h3>
+            <ul>
+                <li><strong>Essential Cookies:</strong> Required for website functionality (e.g., session management).</li>
+                <li><strong>Analytics Cookies:</strong> To understand how visitors interact with our site (e.g., Google Analytics).</li>
+                <li><strong>Preference Cookies:</strong> To remember your settings and preferences.</li>
+            </ul>
+            <p>When you first visit our site, you will see a cookie consent banner asking for your explicit consent before non-essential cookies are set. You can manage cookie preferences through your browser settings.</p>
+
+            <h2>8. Data Retention</h2>
+            <p>We retain your personal data only as long as necessary to fulfill the purposes for which it was collected, including legal, accounting, or reporting requirements .</p>
+            <ul>
+                <li><strong>Student Records:</strong> Retained for 5 years after course completion as required by DGCA regulations.</li>
+                <li><strong>Inquiry Data:</strong> Retained for 2 years after last contact.</li>
+                <li><strong>Website Logs:</strong> IP addresses and usage data retained for 6 months for security analysis.</li>
+            </ul>
+            <p>After the retention period, data is securely deleted or anonymized.</p>
+
+            <h2>9. Your Rights Under DPDPA</h2>
+            <p>Under the Digital Personal Data Protection Act, 2023, you have the following rights regarding your personal data :</p>
+            <ul>
+                <li><strong>Right to Access:</strong> Request a summary of personal data we hold about you.</li>
+                <li><strong>Right to Correction:</strong> Update or correct inaccurate data.</li>
+                <li><strong>Right to Erasure:</strong> Request deletion of your data (subject to legal retention requirements).</li>
+                <li><strong>Right to Withdraw Consent:</strong> Withdraw consent for processing at any time.</li>
+                <li><strong>Right to Nominate:</strong> Nominate a representative to exercise rights in case of death or incapacity.</li>
+                <li><strong>Right to Grievance Redressal:</strong> Lodge complaints about data processing.</li>
+            </ul>
+            <p>To exercise these rights, please contact our Grievance Officer using the details in Section 13.</p>
+
+            <h2>10. Children's Privacy</h2>
+            <p>Our courses and workshops are designed for students of all ages, including minors (under 18 years). Under the DPDPA, we require <strong>verifiable parental consent</strong> before collecting personal data from children .</p>
+            <p>For students under 18, a parent or guardian must complete the enrollment form and provide consent. We do not engage in tracking or targeted advertising aimed at children.</p>
+            <p>If you believe we have inadvertently collected data from a child without parental consent, please contact us immediately.</p>
+
+            <h2>11. Third-Party Links</h2>
+            <p>Our website may contain links to external websites (e.g., payment gateways, partner sites). We are not responsible for the privacy practices or content of these third-party sites. We encourage you to review their privacy policies before providing any data .</p>
+
+            <h2>12. Cross-Border Data Transfer</h2>
+            <p>Currently, we process and store all personal data within India. If we engage service providers who may process data outside India, we will ensure appropriate safeguards are in place and update this policy accordingly .</p>
+
+            <h2>13. Grievance Officer / Data Protection Contact</h2>
+            <p>As required under Rule 9 of the DPDP Rules, 2025, we have appointed a Grievance Officer to address any privacy-related concerns .</p>
+            <p><strong>Grievance Officer:</strong> [Name]<br>
+            <strong>Designation:</strong> [e.g., Compliance Officer]<br>
+            <strong>Email:</strong> [grievance@iqdrone.com]<br>
+            <strong>Phone:</strong> [+91 12345 67890]<br>
+            <strong>Address:</strong> [Your office address]</p>
+            <p>We acknowledge complaints within 24 hours and resolve them within 30 days . If you are not satisfied with our response, you may file a complaint with the Data Protection Board of India.</p>
+
+            <h2>14. Changes to This Privacy Policy</h2>
+            <p>We may update this Privacy Policy periodically to reflect changes in our practices or legal requirements. The updated version will be posted on this page with the "Last Updated" date. We encourage you to review this policy regularly .</p>
+
+            <h2>15. Contact Us</h2>
+            <p>If you have questions or concerns about this Privacy Policy or our data practices, please contact us:</p>
+            <p><strong>iQdrone Academy</strong><br>
+            [Full Address]<br>
+            Email: info@iqdrone.com<br>
+            Phone: +91 12345 67890</p>
+
+            <div class="highlight" style="margin-top: 30px;">
+                <p><strong>By using our website and services, you acknowledge that you have read and understood this Privacy Policy and agree to the collection and use of your information as described herein.</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-content">
+        <div class="footer-container">
+            <div class="footer-column">
+                <div class="footer-logo"><i class="fas fa-drone-alt"></i> iQdrone Academy</div>
+                <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="courses.html">Courses</a>
+                    <a href="drone-service.html">Service</a>
+                    <a href="drone-lab.html">Drone Lab</a>
+                    <a href="drone-workshops.html">Workshops</a>
+                    <a href="drone-jobs.html">Jobs</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">More</h3>
+                <div class="footer-links">
+                    <a href="about-us.html">About Us</a>
+                    <a href="partner.html">Partner With Us</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms</a>
+                    <a href="blog.html">Blog</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Contact</h3>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-map-marker-alt"></i> 123 Drone Avenue, Tech City</a>
+                    <a href="tel:+911234567890"><i class="fas fa-phone"></i> +91 12345 67890</a>
+                    <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
+    </footer>
+<!-- Consultation Modal (Final) -->
+<div class="consultation-modal" id="consultationModal">
+    <div class="modal-container">
+        <div class="close-modal"><i class="fas fa-times"></i></div>
+        <div class="modal-left">
+            <!-- Step 1: Date & Time -->
+            <div class="modal-step active" id="step1">
+                <h3 class="modal-title">Schedule Your Consultation</h3>
+                <div class="calendar-container">
+                    <input type="text" id="date" placeholder="Select Date">
+                </div>
+                <div class="time-slots" id="timeSlots">
+                    <div class="time-slot">9:00 AM</div>
+                    <div class="time-slot">10:00 AM</div>
+                    <div class="time-slot">11:00 AM</div>
+                    <div class="time-slot">1:00 PM</div>
+                    <div class="time-slot">2:00 PM</div>
+                    <div class="time-slot">3:00 PM</div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn secondary" id="cancelBtn">Cancel</button>
+                    <button class="modal-btn" id="nextStepBtn">Next</button>
+                </div>
+            </div>
+            <!-- Step 2: Personal Details Form -->
+            <div class="modal-step" id="step2">
+                <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
+                    <input type="hidden" name="_subject" value="New Consultation Request">
+                    <input type="hidden" name="_next" value="thank-you.html">
+
+                    <input type="text" name="fullName" placeholder="Full Name *" required>
+                    <input type="email" name="_replyto" placeholder="Email Address *" required>
+                    <input type="tel" name="phone" placeholder="Phone Number *" required>
+                    <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
+
+                    <!-- Terms Checkbox -->
+                    <div class="modal-checkbox">
+                        <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
+                        <label for="consultAgreeTerms">
+                            I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
+                            and <a href="privacy.html" target="_blank">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
+                        <button type="submit" class="modal-btn">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-right">
+            <div class="modal-logo">iQdrone Academy</div>
+            <div class="contact-info">
+                <p><i class="fas fa-phone"></i> +91 12345 67890</p>
+                <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
+                <p>We'll contact you within 24h</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Back to Top -->
+    <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // ========== Global scripts (cursor, modal, etc.) ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Drone cursor (same as main)
+            const wrapper = document.getElementById('drone-wrapper');
+            const model = document.getElementById('drone-model');
+            let lastX = window.innerWidth / 2, lastY = window.innerHeight / 2;
+            let stopTimeout;
+            window.addEventListener('mousemove', (e) => {
+                const x = e.clientX, y = e.clientY;
+                wrapper.style.setProperty('--x', `${x}px`);
+                wrapper.style.setProperty('--y', `${y}px`);
+                const dx = x - lastX, dy = y - lastY;
+                const tiltY = Math.min(Math.max(dx * 2.5, -60), 60);
+                const tiltX = Math.min(Math.max(dy * -2.5, -60), 60);
+                model.style.setProperty('--tiltX', `${tiltX}deg`);
+                model.style.setProperty('--tiltY', `${tiltY}deg`);
+                wrapper.classList.add('moving');
+                lastX = x; lastY = y;
+                clearTimeout(stopTimeout);
+                stopTimeout = setTimeout(() => {
+                    model.style.setProperty('--tiltX', `0deg`);
+                    model.style.setProperty('--tiltY', `0deg`);
+                    wrapper.classList.remove('moving');
+                }, 150);
+            });
+            // Trail dots
+            for (let i = 0; i < 3; i++) {
+                let dot = document.createElement('div');
+                dot.className = 'trail-dot';
+                document.body.appendChild(dot);
+            }
+            const trailDots = document.querySelectorAll('.trail-dot');
+            let trailIndex = 0;
+            setInterval(() => {
+                if (trailDots[trailIndex]) {
+                    trailDots[trailIndex].style.left = (lastX - 2) + 'px';
+                    trailDots[trailIndex].style.top = (lastY - 2) + 'px';
+                    trailDots[trailIndex].style.opacity = '0.5';
+                    setTimeout(() => trailDots[trailIndex].style.opacity = '0', 100);
+                }
+                trailIndex = (trailIndex + 1) % trailDots.length;
+            }, 50);
+
+            // Consultation modal
+const modal = document.getElementById('consultationModal');
+const triggers = document.querySelectorAll('.consultation-trigger');
+const closeModal = document.querySelector('.close-modal');
+const cancelBtn = document.getElementById('cancelBtn');
+const nextStepBtn = document.getElementById('nextStepBtn');
+const backBtn = document.getElementById('backBtn');
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const timeSlots = document.querySelectorAll('.time-slot');
+
+triggers.forEach(t => t.addEventListener('click', () => {
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}));
+
+function hideModal() {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+}
+closeModal?.addEventListener('click', hideModal);
+cancelBtn?.addEventListener('click', hideModal);
+nextStepBtn?.addEventListener('click', () => {
+    step1.classList.remove('active');
+    step2.classList.add('active');
+});
+backBtn?.addEventListener('click', () => {
+    step2.classList.remove('active');
+    step1.classList.add('active');
+});
+timeSlots.forEach(s => s.addEventListener('click', function() {
+    timeSlots.forEach(s => s.classList.remove('selected'));
+    this.classList.add('selected');
+}));
+
+// Remove or comment out the old consultForm listener (if present)
+// document.getElementById('consultForm')?.addEventListener('submit', (e) => { ... });
+
+flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => date.getDay() === 0 || date.getDay() === 6 ] });
+            
+// Hamburger menu
+            document.querySelector('.hamburger')?.addEventListener('click', () => document.querySelector('nav').classList.toggle('active'));
+
+            // Scroll events (sidebar & back to top)
+            const sidebar = document.getElementById('consultationSidebar');
+            const backTop = document.getElementById('backToTop');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) sidebar.classList.add('show'); else sidebar.classList.remove('show');
+                if (window.scrollY > 500) backTop.classList.add('show'); else backTop.classList.remove('show');
+            });
+            backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        });
+    </script>
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; justify-content: space-between; align-items: center; gap: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.95rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <button onclick="acceptCookies()" class="btn btn-primary btn-small" style="white-space: nowrap;">Accept</button>
+</div>
+
+<script>
+    function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+    if (localStorage.getItem('cookiesAccepted')) {
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
