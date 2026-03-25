@@ -412,9 +412,9 @@
             <ul>
                 <li><a href="index.html" class="nav-link">Home</a></li>
                 <li><a href="courses.html" class="nav-link">Courses</a></li>
-                <li><a href="drone-service.html" class="nav-link">Service</a></li>
+                <li><a href="service.html" class="nav-link">Service</a></li>
                 <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
-                <li><a href="drone-workshops.html" class="nav-link">Workshops</a></li>
+                <li><a href="drone-workshop.html" class="nav-link">Workshops</a></li>
                 <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
                 <li><a href="about-us.html" class="nav-link">About Us</a></li>
                 <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
@@ -550,7 +550,7 @@
             <p><strong>iQdrone Academy</strong><br>
             <strong>[Your Office Address]</strong><br>
             Email: <strong>[contact@iqdrone.com]</strong><br>
-            Phone: <strong>[+91 12345 67890]</strong></p>
+            Phone: <strong>[+918889122261]</strong></p>
 
             <div class="highlight" style="margin-top: 30px;">
                 <p><strong>By using our website or enrolling in any course, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</strong></p>
@@ -576,9 +576,9 @@
                 <div class="footer-links">
                     <a href="index.html">Home</a>
                     <a href="courses.html">Courses</a>
-                    <a href="drone-service.html">Service</a>
+                    <a href="service.html">Service</a>
                     <a href="drone-lab.html">Drone Lab</a>
-                    <a href="drone-workshops.html">Workshops</a>
+                    <a href="drone-workshop.html">Workshops</a>
                     <a href="drone-jobs.html">Jobs</a>
                 </div>
             </div>
@@ -595,8 +595,8 @@
             <div class="footer-column">
                 <h3 class="footer-title">Contact</h3>
                 <div class="footer-links">
-                    <a href="#"><i class="fas fa-map-marker-alt"></i> 123 Drone Avenue, Tech City</a>
-                    <a href="tel:+911234567890"><i class="fas fa-phone"></i> +91 12345 67890</a>
+                    <a href="#"><i class="fas fa-map-marker-alt"></i> Vijay Nagar, Indore, MP</a>
+                    <a href="tel:+918889122261"><i class="fas fa-phone"></i> +918889122261</a>
                     <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
                 </div>
             </div>
@@ -662,7 +662,7 @@
         <div class="modal-right">
             <div class="modal-logo">iQdrone Academy</div>
             <div class="contact-info">
-                <p><i class="fas fa-phone"></i> +91 12345 67890</p>
+                <p><i class="fas fa-phone"></i> +918889122261</p>
                 <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
                 <p>We'll contact you within 24h</p>
             </div>
@@ -773,7 +773,7 @@ flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => d
         });
     </script>
 <!-- Cookie Consent Banner -->
-<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; justify-content: space-between; align-items: center; gap: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+
     <p style="color: white; margin: 0; font-size: 0.95rem; line-height: 1.4;">
         <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
         We use cookies to enhance your experience. By continuing, you agree to our 
@@ -782,15 +782,20 @@ flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => d
     <button onclick="acceptCookies()" class="btn btn-primary btn-small" style="white-space: nowrap;">Accept</button>
 </div>
 
-<script>
-    function acceptCookies() {
-        localStorage.setItem('cookiesAccepted', 'true');
-        document.getElementById('cookie-banner').style.display = 'none';
-    }
-    if (localStorage.getItem('cookiesAccepted')) {
-        document.getElementById('cookie-banner').style.display = 'none';
-    }
-</script>
 
+
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.9rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <div style="display: flex; gap: 10px;">
+        <button onclick="rejectCookies()" class="btn btn-secondary btn-small" style="background: transparent; border: 1px solid var(--saffron);">Reject All</button>
+        <button onclick="acceptCookies()" class="btn btn-primary btn-small">Accept</button>
+    </div>
+</div>
 </body>
 </html>

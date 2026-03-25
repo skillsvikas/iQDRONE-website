@@ -1,0 +1,531 @@
+<!-- ===== IQDRONE CHATBOT (Full version – ready to paste) ===== -->
+<style>
+    .iqdrone-chat {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 380px;
+        height: 500px;
+        background: rgba(10, 11, 14, 0.95);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--saffron);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 10000;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        transform: translateY(calc(100% - 70px));
+        opacity: 0.9;
+    }
+    .iqdrone-chat.expanded {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .chat-header {
+        background: var(--dark-gray);
+        padding: 12px 20px;
+        border-bottom: 2px solid var(--saffron);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        position: relative;
+    }
+    .chat-header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+    }
+    .chat-avatar {
+        width: 50px;
+        height: 50px;
+    }
+    .chat-avatar svg {
+        width: 100%;
+        height: 100%;
+    }
+    .chat-avatar .prop-group {
+        transform-origin: center;
+        transform-box: fill-box;
+        transition: animation 0.2s;
+    }
+    .chat-avatar.spin .prop-group {
+        animation: prop-spin 0.2s linear infinite;
+    }
+    @keyframes prop-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .chat-title {
+        color: var(--saffron-light);
+        font-weight: bold;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+    .chat-status {
+        font-size: 0.8rem;
+        color: #0f0;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .status-led {
+        width: 8px;
+        height: 8px;
+        background: #0f0;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #0f0;
+        animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+    }
+    #minimizeChat {
+        color: var(--saffron);
+        font-size: 1.2rem;
+        padding: 5px;
+        cursor: pointer;
+        transition: 0.2s;
+        z-index: 10;
+    }
+    #minimizeChat:hover {
+        color: white;
+    }
+    .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: rgba(0,0,0,0.3);
+        font-family: 'Courier New', monospace;
+    }
+    .message {
+        display: flex;
+        max-width: 85%;
+    }
+    .message.user {
+        align-self: flex-end;
+    }
+    .message.bot {
+        align-self: flex-start;
+    }
+    .message-content {
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        word-break: break-word;
+    }
+    .user .message-content {
+        background: var(--saffron);
+        color: black;
+        border-bottom-right-radius: 4px;
+    }
+    .bot .message-content {
+        background: rgba(30, 30, 35, 0.9);
+        border: 1px solid var(--saffron);
+        color: #eee;
+        border-bottom-left-radius: 4px;
+    }
+    .quick-replies {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+    }
+    .quick-reply-btn {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid var(--saffron);
+        border-radius: 30px;
+        padding: 8px 15px;
+        color: white;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .quick-reply-btn:hover {
+        background: var(--saffron);
+        color: black;
+    }
+    .thinking .message-content {
+        border-color: #888;
+    }
+    .thinking-dots {
+        display: inline-flex;
+        gap: 3px;
+    }
+    .thinking-dots span {
+        width: 6px;
+        height: 6px;
+        background: #aaa;
+        border-radius: 50%;
+        animation: thinkingPulse 1.4s infinite;
+    }
+    .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes thinkingPulse {
+        0%, 60%, 100% { transform: scale(1); opacity: 0.6; }
+        30% { transform: scale(1.4); opacity: 1; }
+    }
+    .chat-input {
+        padding: 15px;
+        background: var(--dark-gray);
+        border-top: 1px solid var(--saffron);
+        display: flex;
+        gap: 10px;
+    }
+    .chat-input input {
+        flex: 1;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid var(--saffron);
+        border-radius: 30px;
+        padding: 12px 18px;
+        color: white;
+        font-family: 'Courier New', monospace;
+        font-size: 0.95rem;
+        outline: none;
+        transition: box-shadow 0.2s;
+    }
+    .chat-input input:focus {
+        border-color: var(--saffron-light);
+        box-shadow: 0 0 12px var(--saffron);
+    }
+    .chat-input button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--saffron);
+        border: none;
+        color: black;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .chat-input button:hover {
+        background: var(--saffron-light);
+        transform: scale(1.1);
+    }
+    .chat-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+    .chat-messages::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.3);
+    }
+    .chat-messages::-webkit-scrollbar-thumb {
+        background: var(--saffron);
+        border-radius: 3px;
+    }
+    .contact-form {
+        background: rgba(30,30,35,0.9);
+        border: 1px solid var(--saffron);
+        border-radius: 18px;
+        padding: 15px;
+        margin-top: 5px;
+    }
+    .contact-form input {
+        width: 100%;
+        background: rgba(0,0,0,0.5);
+        border: 1px solid var(--saffron);
+        border-radius: 30px;
+        padding: 10px 15px;
+        color: white;
+        margin-bottom: 10px;
+        outline: none;
+        transition: box-shadow 0.2s;
+    }
+    .contact-form input:focus {
+        border-color: var(--saffron-light);
+        box-shadow: 0 0 12px var(--saffron);
+    }
+    .contact-form button {
+        background: var(--saffron);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 20px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        transition: 0.2s;
+    }
+    .contact-form button:hover {
+        background: var(--saffron-light);
+        transform: scale(1.02);
+    }
+</style>
+
+<div class="iqdrone-chat" id="iqdroneChat">
+    <div class="chat-header" id="chatHeader">
+        <div class="chat-header-left">
+            <div class="chat-avatar" id="chatAvatar">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="38" y="32" width="24" height="36" rx="6" fill="#1a1a1a" stroke="#FF9933" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="6" fill="#00ffff" opacity="0.9">
+                        <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                    <g transform="translate(20,20)">
+                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
+                        <g class="prop-group" style="transform-origin: center;">
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
+                        </g>
+                    </g>
+                    <g transform="translate(80,20)">
+                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
+                        <g class="prop-group" style="transform-origin: center;">
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
+                        </g>
+                    </g>
+                    <g transform="translate(20,80)">
+                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
+                        <g class="prop-group" style="transform-origin: center;">
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
+                        </g>
+                    </g>
+                    <g transform="translate(80,80)">
+                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
+                        <g class="prop-group" style="transform-origin: center;">
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
+                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+            <div>
+                <div class="chat-title">IQDRONE AI</div>
+                <div class="chat-status"><span class="status-led"></span> ONLINE</div>
+            </div>
+        </div>
+        <div id="minimizeChat"><i class="fas fa-minus"></i></div>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Enter message..." autocomplete="off">
+        <button id="sendChat"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const conversationFlow = {
+            greeting: "🛸 HI, I'M IQDRONE. WHICH LANDING PLATFORM WOULD YOU LIKE TO SELECT TO LAUNCH?",
+            options: [
+                { id: 'pilot', label: 'PILOT TRAINING', keywords: ['pilot', 'training', 'course'] },
+                { id: 'services', label: 'DRONE SERVICES', keywords: ['service', 'aerial', 'mapping'] },
+                { id: 'lab', label: 'DRONE LAB SETUP', keywords: ['lab', 'setup', 'rd'] },
+                { id: 'workshops', label: 'WORKSHOPS', keywords: ['workshop', 'hands-on'] },
+                { id: 'jobs', label: 'JOB OPPORTUNITIES', keywords: ['job', 'career', 'hiring'] }
+            ],
+            responses: {
+                pilot: "🛩️ PILOT TRAINING: We offer DGCA-certified courses from beginner to advanced. Would you like info on Basic (₹15k) or Advanced (₹45k)?",
+                services: "📡 DRONE SERVICES: Aerial surveying, mapping, inspection, and filming. Tell us your project type!",
+                lab: "🔬 DRONE LAB: We help set up drone R&D labs for educational institutions. Need a quote?",
+                workshops: "🔧 WORKSHOPS: Weekend hands-on sessions. Next: April 15-16 in Dwarka. Interested?",
+                jobs: "💼 JOBS: We're hiring instructors, pilots, and developers. Check our Jobs page or type 'resume'."
+            }
+        };
+
+        const chat = document.getElementById('iqdroneChat');
+        const header = document.getElementById('chatHeader');
+        const minimizeBtn = document.getElementById('minimizeChat');
+        const messagesDiv = document.getElementById('chatMessages');
+        const input = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendChat');
+        const avatar = document.getElementById('chatAvatar');
+
+        let expanded = false;
+        let lastActivity = Date.now();
+        let spinTimeout = null;
+
+        function setPropellerSpin(spin) {
+            if (spin) avatar.classList.add('spin');
+            else avatar.classList.remove('spin');
+        }
+
+        function resetInactivityTimer() {
+            lastActivity = Date.now();
+            setPropellerSpin(true);
+            if (spinTimeout) clearTimeout(spinTimeout);
+            spinTimeout = setTimeout(() => {
+                if (Date.now() - lastActivity > 5000) setPropellerSpin(false);
+            }, 5000);
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>"]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                if (m === '"') return '&quot;';
+                return m;
+            });
+        }
+
+        function addBotMessage(text, quickReplies = []) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message bot';
+            let html = `<div class="message-content">${escapeHTML(text)}</div>`;
+            if (quickReplies.length) {
+                html += `<div class="quick-replies">`;
+                quickReplies.forEach(qr => {
+                    html += `<span class="quick-reply-btn" data-value="${qr.id}">${qr.label}</span>`;
+                });
+                html += `</div>`;
+            }
+            msgDiv.innerHTML = html;
+            messagesDiv.appendChild(msgDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            msgDiv.querySelectorAll('.quick-reply-btn').forEach(btn => {
+                btn.addEventListener('click', () => handleQuickReply(btn.dataset.value));
+            });
+        }
+
+        function addUserMessage(text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message user';
+            msgDiv.innerHTML = `<div class="message-content">${escapeHTML(text)}</div>`;
+            messagesDiv.appendChild(msgDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showThinking() {
+            const thinkingDiv = document.createElement('div');
+            thinkingDiv.className = 'message bot thinking';
+            thinkingDiv.id = 'thinkingIndicator';
+            thinkingDiv.innerHTML = `<div class="message-content"><span class="thinking-dots"><span></span><span></span><span></span></span></div>`;
+            messagesDiv.appendChild(thinkingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function removeThinking() {
+            const thinking = document.getElementById('thinkingIndicator');
+            if (thinking) thinking.remove();
+        }
+
+        function showContactForm() {
+            const savedName = localStorage.getItem('iqdrone_name') || '';
+            const savedPhone = localStorage.getItem('iqdrone_phone') || '';
+
+            const formHTML = `
+                <div class="message bot">
+                    <div class="message-content">
+                        <strong>Please share your details so we can connect you with an expert:</strong>
+                        <div class="contact-form">
+                            <input type="text" id="chatName" placeholder="Your Name" value="${escapeHTML(savedName)}">
+                            <input type="tel" id="chatPhone" placeholder="Mobile Number" value="${escapeHTML(savedPhone)}">
+                            <button id="submitContact">SUBMIT</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            messagesDiv.insertAdjacentHTML('beforeend', formHTML);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            document.getElementById('submitContact').addEventListener('click', () => {
+                const name = document.getElementById('chatName').value.trim();
+                const phone = document.getElementById('chatPhone').value.trim();
+                if (name && phone) {
+                    localStorage.setItem('iqdrone_name', name);
+                    localStorage.setItem('iqdrone_phone', phone);
+                    addBotMessage(`✅ Thanks ${name}! An expert will contact you at ${phone} within 24 hours.`);
+                } else {
+                    alert('Please enter both name and mobile number.');
+                }
+            });
+        }
+
+        function handleQuickReply(optionId) {
+            if (optionId === 'connect') {
+                showContactForm();
+                return;
+            }
+            const option = conversationFlow.options.find(o => o.id === optionId);
+            addUserMessage(option ? option.label : optionId);
+            showThinking();
+            setTimeout(() => {
+                removeThinking();
+                const reply = conversationFlow.responses[optionId] || "Please contact us for more details.";
+                addBotMessage(reply);
+                addBotMessage("Would you like an expert to contact you?", [
+                    { id: 'connect', label: '📞 CONNECT NOW' }
+                ]);
+                resetInactivityTimer();
+            }, 800);
+        }
+
+        function processUserInput(text) {
+            const lower = text.toLowerCase();
+            const matched = conversationFlow.options.find(opt => opt.keywords.some(k => lower.includes(k)));
+            if (matched) {
+                handleQuickReply(matched.id);
+            } else if (lower.includes('contact') || lower.includes('call') || lower.includes('expert')) {
+                showContactForm();
+            } else {
+                addBotMessage("I'm not sure. Please select: Pilot Training, Services, Lab, Workshops, or Jobs.", conversationFlow.options);
+            }
+        }
+
+        function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+
+            if (!expanded) {
+                chat.classList.add('expanded');
+                expanded = true;
+            }
+
+            addUserMessage(text);
+            input.value = '';
+            showThinking();
+
+            setTimeout(() => {
+                removeThinking();
+                processUserInput(text);
+                resetInactivityTimer();
+            }, 1000);
+        }
+
+        function initChat() {
+            addBotMessage(conversationFlow.greeting, conversationFlow.options);
+            resetInactivityTimer();
+
+            setTimeout(() => {
+                if (!expanded && !chat.classList.contains('expanded')) {
+                    chat.classList.add('expanded');
+                    expanded = true;
+                    addBotMessage("Need help? I'm here to assist with courses, services, and more!", conversationFlow.options);
+                }
+            }, 10000);
+        }
+
+        header.addEventListener('click', (e) => {
+            if (e.target.closest('#minimizeChat')) return;
+            chat.classList.toggle('expanded');
+            expanded = chat.classList.contains('expanded');
+            if (expanded) resetInactivityTimer();
+        });
+
+        minimizeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            chat.classList.remove('expanded');
+            expanded = false;
+        });
+
+        sendBtn.addEventListener('click', sendMessage);
+        input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+        initChat();
+    })();
+</script>
+<!-- ===== END IQDRONE CHATBOT ===== -->

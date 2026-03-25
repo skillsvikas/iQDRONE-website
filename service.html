@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Drone Services | iQdrone</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- external custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Drone cursor -->
+    <div id="drone-wrapper" style="--x: 0px; --y: 0px;">
+        <div id="drone-model" style="--tiltX: 0deg; --tiltY: 0deg;">
+            <svg viewBox="0 0 100 100" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 20 L80 80 M80 20 L20 80" stroke="#FF9933" stroke-width="12" stroke-linecap="round"/>
+                <rect x="38" y="32" width="24" height="36" rx="6" fill="#1a1a1a" stroke="#FF9933" stroke-width="2"/>
+                <circle cx="50" cy="40" r="3" fill="#FF9933">
+                    <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite" />
+                </circle>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="20" r="6" fill="#333"/>
+                    <rect x="5" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="20" r="6" fill="#333"/>
+                    <rect x="65" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="80" r="6" fill="#333"/>
+                    <rect x="5" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="80" r="6" fill="#333"/>
+                    <rect x="65" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">iQdrone</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="service.html" class="nav-link active">Service</a></li>
+                <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
+                <li><a href="drone-workshop.html" class="nav-link">Workshops</a></li>
+                <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
+                <li><a href="about-us.html" class="nav-link">About Us</a></li>
+                <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-text" id="loginBtn">Login</button>
+            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
+                <i class="fas fa-calendar-check"></i> Free Consultation
+            </button>
+        </div>
+        <div class="hamburger">☰</div>
+    </header>
+
+    <!-- Hero Section -->
+   <section class="services-hero">
+    <!-- Video Background -->
+    <video autoplay muted loop class="hero-video">
+        <source src="service_video/drone-services.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <!-- Dark Overlay -->
+    <div class="overlay"></div>
+    <!-- Content -->
+    <div class="hero-content container-custom">
+        <h1 class="hero-title">Driving Business Growth with Professional Drone Services</h1>
+        <p class="hero-subtitle">Precision aerial solutions for agriculture, construction, defence, logistics, property and environmental management across India.</p>
+        <div class="hero-stats">
+            <div class="stat-item"><span class="stat-number">50+</span> <span class="stat-label">Projects Completed</span></div>
+            <div class="stat-item"><span class="stat-number">99%</span> <span class="stat-label">Client Satisfaction</span></div>
+            <div class="stat-item"><span class="stat-number">24/7</span> <span class="stat-label">Emergency Support</span></div>
+        </div>
+        <div class="hero-buttons">
+            <a href="#services" class="btn btn-primary btn-large">Explore Services</a>
+            <button class="btn btn-secondary btn-large consultation-trigger">Talk to Expert</button>
+        </div>
+    </div>
+</section>
+
+    <!-- Services Grid (clickable cards) -->
+    <div class="container-custom" id="services">
+        <h2 class="section-title">Professional Drone Services</h2>
+        <p style="text-align: center; margin-bottom: 40px; color: #ccc;">From aerial photography to industrial inspection – we deliver data, insights, and visuals that drive decisions.</p>
+        <div class="services-grid">
+            <!-- Card 1: Aerial Photography -->
+            <a href="#" class="service-card" data-service="Aerial Photography and Videography" data-aos="fade-up" data-aos-delay="100">
+    <div class="service-image">
+        <img src="service_images/aireal-photography.webp" alt="Best Airel vidiography services given by iqdrone" loading="lazy">
+    </div>
+                <div class="service-icon"><i class="fas fa-camera"></i></div>
+                <h3>Aerial Photography & Videography</h3>
+                <p>Cinematic shots for events, real estate, and media production. Capture perspectives that ground cameras can't reach.</p>
+                <ul class="service-includes">
+                    <li><i class="fas fa-check-circle"></i> DGCA‑certified pilots</li>
+                    <li><i class="fas fa-check-circle"></i> 4K & thermal imaging</li>
+                    <li><i class="fas fa-check-circle"></i> 24x7 availability</li>
+                </ul>
+            </a>
+            <!-- Card 2: Precision Agriculture -->
+            <a href="#" class="service-card" data-service="Precision Agriculture" data-aos="fade-up" data-aos-delay="200">
+    <div class="service-image">
+        <img src="service_images/precision-agriculture.webp" alt="world class Drone agirculture services " loading="lazy">
+    </div>
+                <div class="service-icon"><i class="fas fa-tractor"></i></div>
+                <h3>Precision Agriculture</h3>
+                <p>Boost yields with multispectral crop health maps, pest detection, and variable‑rate application planning.</p>
+                <ul class="service-includes">
+                    <li><i class="fas fa-check-circle"></i> NDVI & thermal analysis</li>
+                    <li><i class="fas fa-check-circle"></i> Soil moisture mapping</li>
+                    <li><i class="fas fa-check-circle"></i> Spray drone integration</li>
+                </ul>
+            </a>
+            <!-- Card 3: Infrastructure Inspection -->
+            <a href="#" class="service-card" data-service="Construction and Infrastructure Inspection" data-aos="fade-up" data-aos-delay="300">
+    <div class="service-image">
+        <img src="service_images/infrastructure-inspection.webp" alt="infrastructure develpment survey by Drone iqdroen services" loading="lazy">
+    </div>
+                <div class="service-icon"><i class="fas fa-hard-hat"></i></div>
+                <h3>Infrastructure Inspection</h3>
+                <p>Safe, fast inspections of bridges, towers, pipelines, and construction sites with high‑resolution cameras and LiDAR.</p>
+                <ul class="service-includes">
+                    <li><i class="fas fa-check-circle"></i> 3D modelling</li>
+                    <li><i class="fas fa-check-circle"></i> Thermal leak detection</li>
+                    <li><i class="fas fa-check-circle"></i> Progress monitoring</li>
+                </ul>
+            </a>
+            <!-- Card 4: Surveying & Mapping -->
+            <a href="#" class="service-card" data-service="Surveying and Mapping" data-aos="fade-up" data-aos-delay="400">
+    <div class="service-image">
+        <img src="service_images/droen-survey.webp" alt="survey and mapping of land" loading="lazy">
+    </div>
+                <div class="service-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <h3>Surveying & Mapping</h3>
+                <p>Accurate topographic surveys, contour maps, and volume calculations for mining, construction, and land development.</p>
+                <ul class="service-includes">
+                    <li><i class="fas fa-check-circle"></i> RTK/PPK accuracy</li>
+                    <li><i class="fas fa-check-circle"></i> 2D/3D modelling</li>
+                    <li><i class="fas fa-check-circle"></i> CAD/GIS deliverables</li>
+                </ul>
+            </a>
+            <!-- Card 5: Search & Rescue -->
+            <a href="#" class="service-card" data-service="Search and Rescue Operations" data-aos="fade-up" data-aos-delay="500">
+    <div class="service-image">
+        <img src="service_images/rescue-operation-iqdrone.webp" alt="in every difficulty serch done by drone " loading="lazy">
+    </div>
+                <div class="service-icon"><i class="fas fa-heartbeat"></i></div>
+                <h3>Search & Rescue</h3>
+                <p>Thermal‑equipped drones locate missing persons, assess disaster zones, and support emergency response teams.</p>
+                <ul class="service-includes">
+                    <li><i class="fas fa-check-circle"></i> Thermal cameras</li>
+                    <li><i class="fas fa-check-circle"></i> 24/7 rapid deployment</li>
+                    <li><i class="fas fa-check-circle"></i> Real‑time video feed</li>
+                </ul>
+            </a>
+            <!-- Card 6: Environmental Monitoring -->
+            <a href="#" class="service-card" data-service="Environmental Monitoring" data-aos="fade-up" data-aos-delay="600">
+    <div class="service-image">
+        <img src="service_images/environmental_monitiring.webp" alt="water monitiring, air quality monitring , diesase outbreak moniting done by drone" loading="lazy">
+    </div>
+                <div class="service-icon"><i class="fas fa-leaf"></i></div>
+                <h3>Environmental Monitoring</h3>
+                <p>Track wildlife, measure air/water quality, and assess deforestation or coastal erosion with specialised sensors.</p>
+                <ul class="service-includes">
+                    <li><i class="fas fa-check-circle"></i> Gas & multi‑spectral</li>
+                    <li><i class="fas fa-check-circle"></i> Change detection</li>
+                    <li><i class="fas fa-check-circle"></i> Long‑term data sets</li>
+                </ul>
+            </a>
+        </div>
+    </div>
+
+    <!-- Why Choose Us (with blue overlay) -->
+    <div class="why-section">
+        <div class="container-custom">
+            <h2 class="section-title">Why Choose Our Services?</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: #f0f0f0;">Professional expertise, cutting‑edge technology, and commitment to excellence in every project.</p>
+            <div class="why-grid">
+                <div class="why-card" data-aos="fade-up" data-aos-delay="100"><i class="fas fa-id-card why-icon"></i><h4>Certified Operators</h4><p>All pilots hold DGCA certification with extensive field experience.</p></div>
+                <div class="why-card" data-aos="fade-up" data-aos-delay="200"><i class="fas fa-microchip why-icon"></i><h4>Advanced Equipment</h4><p>Latest drones with RTK, LiDAR, thermal, and multi‑spectral sensors.</p></div>
+                <div class="why-card" data-aos="fade-up" data-aos-delay="300"><i class="fas fa-clock why-icon"></i><h4>Quick Turnaround</h4><p>Same‑day or next‑day data delivery for time‑sensitive projects.</p></div>
+                <div class="why-card" data-aos="fade-up" data-aos-delay="400"><i class="fas fa-shield-alt why-icon"></i><h4>Fully Insured</h4><p>Comprehensive coverage for every mission – your peace of mind.</p></div>
+                <div class="why-card" data-aos="fade-up" data-aos-delay="500"><i class="fas fa-cogs why-icon"></i><h4>Custom Solutions</h4><p>Tailored workflows to match your exact requirements and budget.</p></div>
+                <div class="why-card" data-aos="fade-up" data-aos-delay="600"><i class="fas fa-chart-line why-icon"></i><h4>Professional Reports</h4><p>Clear, actionable reports with maps, models, and analysis.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Carousel -->
+    <div class="testimonial-section">
+        <div class="container-custom">
+            <h2 class="section-title">Client Testimonials</h2>
+            <div class="testimonial-carousel">
+                <div class="testimonial-track" id="testimonialTrack">
+                    <div class="testimonial-card">
+                        <div class="testimonial-image"><img src="https://via.placeholder.com/80x80?text=Vikash" alt="Vikash" loading="lazy"></div>
+                        <div>
+                            <p class="testimonial-text">"Great value for money. The aerial shots looked professional without breaking our event budget."</p>
+                            <div class="testimonial-author">Vikash</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-image"><img src="https://via.placeholder.com/80x80?text=Vijay" alt="Vijay" loading="lazy"></div>
+                        <div>
+                            <p class="testimonial-text">"The farmland survey data was spot‑on. It helped us plan irrigation and crop rotation much better."</p>
+                            <div class="testimonial-author">Vijay</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-image"><img src="https://via.placeholder.com/80x80?text=Deepak" alt="Deepak" loading="lazy"></div>
+                        <div>
+                            <p class="testimonial-text">"Quick turnaround and professional team. The drone inspection saved us weeks of manual work."</p>
+                            <div class="testimonial-author">Deepak</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-image"><img src="https://via.placeholder.com/80x80?text=Pooja" alt="Pooja" loading="lazy"></div>
+                        <div>
+                            <p class="testimonial-text">"Outstanding experience! The drone team captured breathtaking aerial shots for our project."</p>
+                            <div class="testimonial-author">Pooja</div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-image"><img src="https://via.placeholder.com/80x80?text=Suraj" alt="Suraj" loading="lazy"></div>
+                        <div>
+                            <p class="testimonial-text">"Excellent service, professional team, quick delivery. Exceeded our expectations."</p>
+                            <div class="testimonial-author">Suraj</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn prev" id="prevTestimonial">❮</button>
+                <button class="carousel-btn next" id="nextTestimonial">❯</button>
+                <div class="carousel-dots" id="testimonialDots"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blog Insights -->
+    <div class="container-custom">
+        <h2 class="section-title">Industry Insights</h2>
+        <div class="blog-grid">
+            <div class="blog-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="blog-date">29 Dec 2025</div>
+                <h4>Early Drone Failures – Lessons for Engineers</h4>
+                <p class="blog-excerpt">How early setbacks shaped today's reliable drone technology and what it means for modern operations.</p>
+                <a href="#" class="blog-link">Read More →</a>
+            </div>
+            <div class="blog-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="blog-date">08 Oct 2025</div>
+                <h4>Drones in Infrastructure Inspection</h4>
+                <p class="blog-excerpt">Why asset owners are switching from manual checks to drone‑based thermal and LiDAR surveys.</p>
+                <a href="#" class="blog-link">Read More →</a>
+            </div>
+            <div class="blog-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="blog-date">01 Oct 2025</div>
+                <h4>How Drones Are Changing Insurance Claims</h4>
+                <p class="blog-excerpt">Faster, more accurate damage assessment after floods, fires, and natural disasters.</p>
+                <a href="#" class="blog-link">Read More →</a>
+            </div>
+        </div>
+        <div style="text-align: center; margin: 20px 0 60px;">
+            <a href="#" class="btn btn-primary">View All Articles</a>
+        </div>
+    </div>
+
+    <!-- Final CTA -->
+    <div class="container-custom">
+        <div class="cta-section">
+            <h2>Not Sure Which Service Fits Your Project?</h2>
+            <p>Tell us about your goals – we'll recommend the right drone solution and provide a free consultation.</p>
+            <button class="btn btn-primary btn-large consultation-trigger">Talk to a Service Expert</button>
+        </div>
+    </div>
+
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer-content">
+    <div class="footer-container">
+        <div class="footer-column">
+            <div class="footer-logo"><i class="fas fa-drone-alt"></i> iQdrone Academy</div>
+            <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3 class="footer-title">Quick Links</h3>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="courses.html">Courses</a>
+                <a href="drone_service.html">Service</a>
+                <a href="drone-lab.html">Drone Lab</a>
+                <a href="drone-workshop.html">Workshops</a>
+                <a href="drone-jobs.html">Jobs</a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3 class="footer-title">More</h3>
+            <div class="footer-links">
+                <a href="partner.html">Partner With Us</a>
+                <a href="about-us.html">About Us</a>
+                <a href="contact-us.html">Contact Us</a>
+                <a href="blog.html">Blog</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms</a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3 class="footer-title">Contact</h3>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-map-marker-alt"></i> Vijay Nagar, Indore, MP</a>
+                <a href="tel:+918889122261"><i class="fas fa-phone"></i> +918889122261</a>
+                <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
+</footer>
+
+    <!-- Consultation Sidebar -->
+    <div class="consultation-sidebar" id="consultationSidebar">
+        <button class="sidebar-btn consultation-trigger"><i class="fas fa-calendar-check"></i><span>Free Consultation</span></button>
+    </div>
+
+    <!-- WhatsApp Chat Button -->
+    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20services" class="whatsapp-chat" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Consultation Modal (with hidden service field) -->
+    <div class="consultation-modal" id="consultationModal">
+        <div class="modal-container">
+            <div class="close-modal"><i class="fas fa-times"></i></div>
+            <div class="modal-left">
+                <div class="modal-step active" id="step1">
+                    <h3 class="modal-title">Schedule Your Consultation</h3>
+                    <input type="hidden" id="serviceSelected" name="service" value="">
+                    <div class="calendar-container"><input type="text" id="date" placeholder="Select Date"></div>
+                    <div class="time-slots" id="timeSlots">
+                        <div class="time-slot">9:00 AM</div><div class="time-slot">10:00 AM</div><div class="time-slot">11:00 AM</div>
+                        <div class="time-slot">1:00 PM</div><div class="time-slot">2:00 PM</div><div class="time-slot">3:00 PM</div>
+                    </div>
+                    <div class="modal-actions"><button class="modal-btn secondary" id="cancelBtn">Cancel</button><button class="modal-btn" id="nextModalBtn">Next</button></div>
+                </div>
+                <div class="modal-step" id="step2">
+                    <h3 class="modal-title">Your Information</h3>
+                    <form class="modal-form" id="consultForm">
+                        <input type="text" placeholder="Full Name" required>
+                        <input type="email" placeholder="Email Address" required>
+                        <input type="tel" placeholder="Phone Number" required>
+                        <textarea placeholder="Questions?" rows="2"></textarea>
+                        <div class="modal-actions"><button type="button" class="modal-btn secondary" id="backBtn">Back</button><button type="submit" class="modal-btn">Submit</button></div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-right">
+                <div class="modal-logo">iQdrone Academy</div>
+                <div class="contact-info"><p><i class="fas fa-phone"></i> +918889122261</p><p><i class="fas fa-envelope"></i> info@iqdrone.com</p><p>We'll contact you within 24h</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
+
+    
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+    <script src="global.js"></script>
+    <script src="service.js"></script>
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.9rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <div style="display: flex; gap: 10px;">
+        <button onclick="rejectCookies()" class="btn btn-secondary btn-small" style="background: transparent; border: 1px solid var(--saffron);">Reject All</button>
+        <button onclick="acceptCookies()" class="btn btn-primary btn-small">Accept</button>
+    </div>
+</div>
+</body>
+</html>

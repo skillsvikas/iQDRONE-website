@@ -1,0 +1,510 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>iQDRONE Project Dashboard</title>
+        <style>
+            body { font-family: "Segoe UI", sans-serif; background: #f0f2f5; margin: 0; padding: 0; }
+            .nav-header { background: #1a237e; color: white; padding: 15px 20px; position: sticky; top: 0; z-index: 2000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+            .search-box { margin-top: 10px; width: 100%; padding: 8px; border-radius: 4px; border: none; font-size: 14px; }
+            
+            .table-header { display: flex; background: #cfd8dc; font-weight: bold; padding: 10px 20px; border-bottom: 2px solid #b0bec5; font-size: 12px; position: sticky; top: 95px; z-index: 1000; }
+            .content { padding: 0 20px 20px 20px; }
+            .row-container { display: flex; border-bottom: 1px solid #ddd; background: white; min-height: 45px; }
+            .row-container:hover { background: #f8f9fa; }
+            
+            .col { padding: 8px; border-right: 1px solid #eee; }
+            .tree-col { flex: 1.2; white-space: pre; font-family: "Consolas", monospace; color: #333; font-size: 13px; }
+            .html-col { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+            .img-col { flex: 1.8; display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; }
+            
+            .file-item, .img-wrapper { display: flex; align-items: center; gap: 5px; background: #f1f3f4; padding: 2px 6px; border-radius: 4px; border: 1px solid #dadce0; }
+            
+            a { text-decoration: none; font-size: 11px; color: #333; font-family: monospace; }
+            .html-col a { color: #1b5e20; font-weight: bold; }
+            .img-col a { color: #e65100; }
+            
+            .copy-btn { font-size: 9px; cursor: pointer; border: none; background: #333; color: white; padding: 2px 4px; border-radius: 3px; }
+            .copy-btn:hover { background: #4caf50; }
+
+            .preview { 
+                display: none; position: absolute; z-index: 3000; bottom: 30px; left: 0;
+                max-width: 200px; border: 3px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.4); background: white;
+            }
+            .img-wrapper { position: relative; }
+            .img-wrapper:hover .preview { display: block; }
+            
+            .hidden { display: none !important; }
+        </style>
+        <script>
+            function copyPath(path) {
+                navigator.clipboard.writeText(path);
+                // Optional: visual feedback
+                const b = event.target;
+                const oldText = b.innerText;
+                b.innerText = "COPIED!";
+                setTimeout(() => b.innerText = oldText, 1000);
+            }
+
+            function filterFiles() {
+                let input = document.getElementById('searchBar').value.toLowerCase();
+                let items = document.getElementsByClassName('searchable');
+                let rows = document.getElementsByClassName('row-container');
+
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].getAttribute('data-name').includes(input)) {
+                        items[i].classList.remove('hidden');
+                    } else {
+                        items[i].classList.add('hidden');
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="nav-header">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <strong>iQDRONE Academy Structure</strong>
+                <span>🌐 37 Pages | 🖼️ 53 Assets</span>
+            </div>
+            <input type="text" id="searchBar" onkeyup="filterFiles()" placeholder="Search for files (e.g. 'lesson', 'agri', 'png')... " class="search-box">
+        </div>
+        
+        <div class="table-header">
+            <div style="flex: 1.2;">HIERARCHY</div>
+            <div style="flex: 1;">WEB PAGES (HTML)</div>
+            <div style="flex: 1.8;">ASSETS (IMAGES)</div>
+        </div>
+
+        <div class="content">
+            <div class="row-container">  <div class="col tree-col">└── 📁 <b>drone/</b></div>  <div class="col html-col">
+                <div class="file-item searchable" data-name="formspree.io.html">
+                    <a href="Formspree.io.html" target="_blank">📄 Formspree.io.html</a>
+                    <button class="copy-btn" onclick="copyPath('Formspree.io.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="about-us.html">
+                    <a href="about-us.html" target="_blank">📄 about-us.html</a>
+                    <button class="copy-btn" onclick="copyPath('about-us.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="blog.html">
+                    <a href="blog.html" target="_blank">📄 blog.html</a>
+                    <button class="copy-btn" onclick="copyPath('blog.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="contact-us.html">
+                    <a href="contact-us.html" target="_blank">📄 contact-us.html</a>
+                    <button class="copy-btn" onclick="copyPath('contact-us.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="courses.html">
+                    <a href="courses.html" target="_blank">📄 courses.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="drone-jobs.html">
+                    <a href="drone-jobs.html" target="_blank">📄 drone-jobs.html</a>
+                    <button class="copy-btn" onclick="copyPath('drone-jobs.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="drone-lab.html">
+                    <a href="drone-lab.html" target="_blank">📄 drone-lab.html</a>
+                    <button class="copy-btn" onclick="copyPath('drone-lab.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="service.html">
+                    <a href="service.html" target="_blank">📄 service.html</a>
+                    <button class="copy-btn" onclick="copyPath('service.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="drone-workshop.html">
+                    <a href="drone-workshop.html" target="_blank">📄 drone-workshop.html</a>
+                    <button class="copy-btn" onclick="copyPath('drone-workshop.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="drone_chatboat.html">
+                    <a href="drone_chatboat.html" target="_blank">📄 drone_chatboat.html</a>
+                    <button class="copy-btn" onclick="copyPath('drone_chatboat.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="drone_service.html">
+                    <a href="drone_service.html" target="_blank">📄 drone_service.html</a>
+                    <button class="copy-btn" onclick="copyPath('drone_service.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="dronemove1.html">
+                    <a href="dronemove1.html" target="_blank">📄 dronemove1.html</a>
+                    <button class="copy-btn" onclick="copyPath('dronemove1.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="dronemovment.html">
+                    <a href="dronemovment.html" target="_blank">📄 dronemovment.html</a>
+                    <button class="copy-btn" onclick="copyPath('dronemovment.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="finaldrone.html">
+                    <a href="finaldrone.html" target="_blank">📄 finaldrone.html</a>
+                    <button class="copy-btn" onclick="copyPath('finaldrone.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="finaldrone2.html">
+                    <a href="finaldrone2.html" target="_blank">📄 finaldrone2.html</a>
+                    <button class="copy-btn" onclick="copyPath('finaldrone2.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="finaldrone3.html">
+                    <a href="finaldrone3.html" target="_blank">📄 finaldrone3.html</a>
+                    <button class="copy-btn" onclick="copyPath('finaldrone3.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="finaldrone4.html">
+                    <a href="finaldrone4.html" target="_blank">📄 finaldrone4.html</a>
+                    <button class="copy-btn" onclick="copyPath('finaldrone4.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="index.html">
+                    <a href="index.html" target="_blank">📄 index.html</a>
+                    <button class="copy-btn" onclick="copyPath('index.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="jobhtmlconvertor.html">
+                    <a href="jobhtmlconvertor.html" target="_blank">📄 jobhtmlconvertor.html</a>
+                    <button class="copy-btn" onclick="copyPath('jobhtmlconvertor.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="jobportal.html">
+                    <a href="jobportal.html" target="_blank">📄 jobportal.html</a>
+                    <button class="copy-btn" onclick="copyPath('jobportal.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="masterpile.html">
+                    <a href="masterpile.html" target="_blank">📄 masterpile.html</a>
+                    <button class="copy-btn" onclick="copyPath('masterpile.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="partner.html">
+                    <a href="partner.html" target="_blank">📄 partner.html</a>
+                    <button class="copy-btn" onclick="copyPath('partner.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="privacy.html">
+                    <a href="privacy.html" target="_blank">📄 privacy.html</a>
+                    <button class="copy-btn" onclick="copyPath('privacy.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="privacy1.html">
+                    <a href="privacy1.html" target="_blank">📄 privacy1.html</a>
+                    <button class="copy-btn" onclick="copyPath('privacy1.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="simulator2.html">
+                    <a href="simulator2.html" target="_blank">📄 simulator2.html</a>
+                    <button class="copy-btn" onclick="copyPath('simulator2.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="terms.html">
+                    <a href="terms.html" target="_blank">📄 terms.html</a>
+                    <button class="copy-btn" onclick="copyPath('terms.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="thank-you.html">
+                    <a href="thank-you.html" target="_blank">📄 thank-you.html</a>
+                    <button class="copy-btn" onclick="copyPath('thank-you.html')">copy</button>
+                </div>  </div>  <div class="col img-col">
+                <div class="img-wrapper searchable" data-name="course_hero.jpg">
+                    <a href="Course_Hero.jpg" target="_blank">🖼️ Course_Hero.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('Course_Hero.jpg')">copy</button>
+                    <img src="Course_Hero.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="job_page.jpg">
+                    <a href="JOB_PAGE.jpg" target="_blank">🖼️ JOB_PAGE.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('JOB_PAGE.jpg')">copy</button>
+                    <img src="JOB_PAGE.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="logo.png">
+                    <a href="LOGO.png" target="_blank">🖼️ LOGO.png</a>
+                    <button class="copy-btn" onclick="copyPath('LOGO.png')">copy</button>
+                    <img src="LOGO.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="logo2.png">
+                    <a href="LOGO2.png" target="_blank">🖼️ LOGO2.png</a>
+                    <button class="copy-btn" onclick="copyPath('LOGO2.png')">copy</button>
+                    <img src="LOGO2.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="logo3.png">
+                    <a href="LOGO3.png" target="_blank">🖼️ LOGO3.png</a>
+                    <button class="copy-btn" onclick="copyPath('LOGO3.png')">copy</button>
+                    <img src="LOGO3.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="logomini.png">
+                    <a href="LOGOMINI.png" target="_blank">🖼️ LOGOMINI.png</a>
+                    <button class="copy-btn" onclick="copyPath('LOGOMINI.png')">copy</button>
+                    <img src="LOGOMINI.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="agri1.png">
+                    <a href="agri1.png" target="_blank">🖼️ agri1.png</a>
+                    <button class="copy-btn" onclick="copyPath('agri1.png')">copy</button>
+                    <img src="agri1.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="comefly.png">
+                    <a href="comefly.png" target="_blank">🖼️ comefly.png</a>
+                    <button class="copy-btn" onclick="copyPath('comefly.png')">copy</button>
+                    <img src="comefly.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="comefly1.png">
+                    <a href="comefly1.png" target="_blank">🖼️ comefly1.png</a>
+                    <button class="copy-btn" onclick="copyPath('comefly1.png')">copy</button>
+                    <img src="comefly1.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="done.technician.jpg">
+                    <a href="done.technician.jpg" target="_blank">🖼️ done.technician.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('done.technician.jpg')">copy</button>
+                    <img src="done.technician.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-lab-table.jpg">
+                    <a href="drone-lab-table.jpg" target="_blank">🖼️ drone-lab-table.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('drone-lab-table.jpg')">copy</button>
+                    <img src="drone-lab-table.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-lab-table.png">
+                    <a href="drone-lab-table.png" target="_blank">🖼️ drone-lab-table.png</a>
+                    <button class="copy-btn" onclick="copyPath('drone-lab-table.png')">copy</button>
+                    <img src="drone-lab-table.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-lab-workbench.jpg">
+                    <a href="drone-lab-workbench.jpg" target="_blank">🖼️ drone-lab-workbench.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('drone-lab-workbench.jpg')">copy</button>
+                    <img src="drone-lab-workbench.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-lab2.jpg">
+                    <a href="drone-lab2.jpg" target="_blank">🖼️ drone-lab2.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('drone-lab2.jpg')">copy</button>
+                    <img src="drone-lab2.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-roll-movment.gif">
+                    <a href="drone-roll-movment.gif" target="_blank">🖼️ drone-roll-movment.gif</a>
+                    <button class="copy-btn" onclick="copyPath('drone-roll-movment.gif')">copy</button>
+                    <img src="drone-roll-movment.gif" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-workshop.gif">
+                    <a href="drone-workshop.gif" target="_blank">🖼️ drone-workshop.gif</a>
+                    <button class="copy-btn" onclick="copyPath('drone-workshop.gif')">copy</button>
+                    <img src="drone-workshop.gif" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="droneback.jpg">
+                    <a href="droneback.jpg" target="_blank">🖼️ droneback.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('droneback.jpg')">copy</button>
+                    <img src="droneback.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="droneback2.jpg">
+                    <a href="droneback2.jpg" target="_blank">🖼️ droneback2.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('droneback2.jpg')">copy</button>
+                    <img src="droneback2.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="droneblog.jpg">
+                    <a href="droneblog.jpg" target="_blank">🖼️ droneblog.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('droneblog.jpg')">copy</button>
+                    <img src="droneblog.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="dronecomp.jpg">
+                    <a href="dronecomp.jpg" target="_blank">🖼️ dronecomp.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('dronecomp.jpg')">copy</button>
+                    <img src="dronecomp.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="dronelab-slider1.png">
+                    <a href="dronelab-slider1.png" target="_blank">🖼️ dronelab-slider1.png</a>
+                    <button class="copy-btn" onclick="copyPath('dronelab-slider1.png')">copy</button>
+                    <img src="dronelab-slider1.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="dronelab-slider2.png">
+                    <a href="dronelab-slider2.png" target="_blank">🖼️ dronelab-slider2.png</a>
+                    <button class="copy-btn" onclick="copyPath('dronelab-slider2.png')">copy</button>
+                    <img src="dronelab-slider2.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="dronelab-slider3.png">
+                    <a href="dronelab-slider3.png" target="_blank">🖼️ dronelab-slider3.png</a>
+                    <button class="copy-btn" onclick="copyPath('dronelab-slider3.png')">copy</button>
+                    <img src="dronelab-slider3.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="dronelab-slider4.png">
+                    <a href="dronelab-slider4.png" target="_blank">🖼️ dronelab-slider4.png</a>
+                    <button class="copy-btn" onclick="copyPath('dronelab-slider4.png')">copy</button>
+                    <img src="dronelab-slider4.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="dronephoto.jpg">
+                    <a href="dronephoto.jpg" target="_blank">🖼️ dronephoto.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('dronephoto.jpg')">copy</button>
+                    <img src="dronephoto.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="dronework2.jpg">
+                    <a href="dronework2.jpg" target="_blank">🖼️ dronework2.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('dronework2.jpg')">copy</button>
+                    <img src="dronework2.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="g1.jpeg">
+                    <a href="g1.jpeg" target="_blank">🖼️ g1.jpeg</a>
+                    <button class="copy-btn" onclick="copyPath('g1.jpeg')">copy</button>
+                    <img src="g1.jpeg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="g2.jpeg">
+                    <a href="g2.jpeg" target="_blank">🖼️ g2.jpeg</a>
+                    <button class="copy-btn" onclick="copyPath('g2.jpeg')">copy</button>
+                    <img src="g2.jpeg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="g3.jpeg">
+                    <a href="g3.jpeg" target="_blank">🖼️ g3.jpeg</a>
+                    <button class="copy-btn" onclick="copyPath('g3.jpeg')">copy</button>
+                    <img src="g3.jpeg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="g4.jpeg">
+                    <a href="g4.jpeg" target="_blank">🖼️ g4.jpeg</a>
+                    <button class="copy-btn" onclick="copyPath('g4.jpeg')">copy</button>
+                    <img src="g4.jpeg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="g5.jpeg">
+                    <a href="g5.jpeg" target="_blank">🖼️ g5.jpeg</a>
+                    <button class="copy-btn" onclick="copyPath('g5.jpeg')">copy</button>
+                    <img src="g5.jpeg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="g6.jpeg">
+                    <a href="g6.jpeg" target="_blank">🖼️ g6.jpeg</a>
+                    <button class="copy-btn" onclick="copyPath('g6.jpeg')">copy</button>
+                    <img src="g6.jpeg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="g7.jpeg">
+                    <a href="g7.jpeg" target="_blank">🖼️ g7.jpeg</a>
+                    <button class="copy-btn" onclick="copyPath('g7.jpeg')">copy</button>
+                    <img src="g7.jpeg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="girl1.png">
+                    <a href="girl1.png" target="_blank">🖼️ girl1.png</a>
+                    <button class="copy-btn" onclick="copyPath('girl1.png')">copy</button>
+                    <img src="girl1.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="girl2.png">
+                    <a href="girl2.png" target="_blank">🖼️ girl2.png</a>
+                    <button class="copy-btn" onclick="copyPath('girl2.png')">copy</button>
+                    <img src="girl2.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="how-ir-works-drone-job.jpeg">
+                    <a href="how-ir-works-drone-job.jpeg" target="_blank">🖼️ how-ir-works-drone-job.jpeg</a>
+                    <button class="copy-btn" onclick="copyPath('how-ir-works-drone-job.jpeg')">copy</button>
+                    <img src="how-ir-works-drone-job.jpeg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="in.jpg">
+                    <a href="in.jpg" target="_blank">🖼️ in.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('in.jpg')">copy</button>
+                    <img src="in.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="iq1.jpeg">
+                    <a href="iq1.jpeg" target="_blank">🖼️ iq1.jpeg</a>
+                    <button class="copy-btn" onclick="copyPath('iq1.jpeg')">copy</button>
+                    <img src="iq1.jpeg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="iqdrone-top-instructor.jpg">
+                    <a href="iqdrone-top-instructor.jpg" target="_blank">🖼️ iqdrone-top-instructor.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('iqdrone-top-instructor.jpg')">copy</button>
+                    <img src="iqdrone-top-instructor.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="iqdrone-top-instructor.png">
+                    <a href="iqdrone-top-instructor.png" target="_blank">🖼️ iqdrone-top-instructor.png</a>
+                    <button class="copy-btn" onclick="copyPath('iqdrone-top-instructor.png')">copy</button>
+                    <img src="iqdrone-top-instructor.png" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="pilot.jpg">
+                    <a href="pilot.jpg" target="_blank">🖼️ pilot.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('pilot.jpg')">copy</button>
+                    <img src="pilot.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="text.jpg">
+                    <a href="text.jpg" target="_blank">🖼️ text.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('text.jpg')">copy</button>
+                    <img src="text.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="worksho.webp">
+                    <a href="worksho.webp" target="_blank">🖼️ worksho.webp</a>
+                    <button class="copy-btn" onclick="copyPath('worksho.webp')">copy</button>
+                    <img src="worksho.webp" class="preview">
+                </div>  </div></div><div class="row-container">  <div class="col tree-col">    └── 📁 <b>course_image/</b></div>  <div class="col html-col">  </div>  <div class="col img-col">
+                <div class="img-wrapper searchable" data-name="fpv.jpg">
+                    <a href="course_image/Fpv.jpg" target="_blank">🖼️ Fpv.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/Fpv.jpg')">copy</button>
+                    <img src="course_image/Fpv.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="kisan-agriculture.jpg">
+                    <a href="course_image/Kisan-Agriculture.jpg" target="_blank">🖼️ Kisan-Agriculture.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/Kisan-Agriculture.jpg')">copy</button>
+                    <img src="course_image/Kisan-Agriculture.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-ariel.jpg">
+                    <a href="course_image/drone-ariel.jpg" target="_blank">🖼️ drone-ariel.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/drone-ariel.jpg')">copy</button>
+                    <img src="course_image/drone-ariel.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-instruct.jpg">
+                    <a href="course_image/drone-instruct.jpg" target="_blank">🖼️ drone-instruct.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/drone-instruct.jpg')">copy</button>
+                    <img src="course_image/drone-instruct.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-mapping.jpg">
+                    <a href="course_image/drone-mapping.jpg" target="_blank">🖼️ drone-mapping.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/drone-mapping.jpg')">copy</button>
+                    <img src="course_image/drone-mapping.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-picture.jpg">
+                    <a href="course_image/drone-picture.jpg" target="_blank">🖼️ drone-picture.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/drone-picture.jpg')">copy</button>
+                    <img src="course_image/drone-picture.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="drone-tech.jpg">
+                    <a href="course_image/drone-tech.jpg" target="_blank">🖼️ drone-tech.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/drone-tech.jpg')">copy</button>
+                    <img src="course_image/drone-tech.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="medium-rpc.jpg">
+                    <a href="course_image/medium-rpc.jpg" target="_blank">🖼️ medium-rpc.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/medium-rpc.jpg')">copy</button>
+                    <img src="course_image/medium-rpc.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="precision-farming.jpg">
+                    <a href="course_image/precision-farming.jpg" target="_blank">🖼️ precision-farming.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/precision-farming.jpg')">copy</button>
+                    <img src="course_image/precision-farming.jpg" class="preview">
+                </div>
+                <div class="img-wrapper searchable" data-name="small-rpc.jpg">
+                    <a href="course_image/small-rpc.jpg" target="_blank">🖼️ small-rpc.jpg</a>
+                    <button class="copy-btn" onclick="copyPath('course_image/small-rpc.jpg')">copy</button>
+                    <img src="course_image/small-rpc.jpg" class="preview">
+                </div>  </div></div><div class="row-container">  <div class="col tree-col">    └── 📁 <b>courses/</b></div>  <div class="col html-col">
+                <div class="file-item searchable" data-name="agrikisan_drone_operator.html">
+                    <a href="courses/Agrikisan_drone_operator.html" target="_blank">📄 Agrikisan_drone_operator.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses/Agrikisan_drone_operator.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="ariel-content-creation-course.html">
+                    <a href="courses/Ariel-content-creation-course.html" target="_blank">📄 Ariel-content-creation-course.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses/Ariel-content-creation-course.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="drone_mapping_survey_course.html">
+                    <a href="courses/Drone_Mapping_Survey_course.html" target="_blank">📄 Drone_Mapping_Survey_course.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses/Drone_Mapping_Survey_course.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="drone_repair_maintainance_course.html">
+                    <a href="courses/Drone_Repair_Maintainance_course.html" target="_blank">📄 Drone_Repair_Maintainance_course.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses/Drone_Repair_Maintainance_course.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="train_trainer_course.html">
+                    <a href="courses/Train_Trainer_course.html" target="_blank">📄 Train_Trainer_course.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses/Train_Trainer_course.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="advance-agriculture.html">
+                    <a href="courses/advance-agriculture.html" target="_blank">📄 advance-agriculture.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses/advance-agriculture.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="fpv-droen-racing-course.html">
+                    <a href="courses/fpv-droen-racing-course.html" target="_blank">📄 fpv-droen-racing-course.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses/fpv-droen-racing-course.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="medium_pilot_licence_course.html">
+                    <a href="courses/medium_pilot_licence_course.html" target="_blank">📄 medium_pilot_licence_course.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses/medium_pilot_licence_course.html')">copy</button>
+                </div>
+                <div class="file-item searchable" data-name="remot_pilot_licence-course.html">
+                    <a href="courses/remot_pilot_licence-course.html" target="_blank">📄 remot_pilot_licence-course.html</a>
+                    <button class="copy-btn" onclick="copyPath('courses/remot_pilot_licence-course.html')">copy</button>
+                </div>  </div>  <div class="col img-col">  </div></div><div class="row-container">  <div class="col tree-col">    └── 📁 <b>service-images/</b></div>  <div class="col html-col">
+                <div class="file-item searchable" data-name="drone_service.html">
+                    <a href="service-images/drone_service.html" target="_blank">📄 drone_service.html</a>
+                    <button class="copy-btn" onclick="copyPath('service-images/drone_service.html')">copy</button>
+                </div>  </div>  <div class="col img-col">  </div></div>
+        </div>
+    
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.9rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <div style="display: flex; gap: 10px;">
+        <button onclick="rejectCookies()" class="btn btn-secondary btn-small" style="background: transparent; border: 1px solid var(--saffron);">Reject All</button>
+        <button onclick="acceptCookies()" class="btn btn-primary btn-small">Accept</button>
+    </div>
+</div>
+</body>
+    </html>
+    

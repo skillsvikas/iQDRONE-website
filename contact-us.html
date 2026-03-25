@@ -10,597 +10,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!-- AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        /* ========== GLOBAL STYLES ========== */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --saffron: #F59E0B;
-            --saffron-light: #FBBF24;
-            --saffron-dark: #D97706;
-            --black: #000000;
-            --dark-gray: #1A1A1A;
-            --warm-dark: #2A1C00;
-            --light-gray: #2D2D2D;
-            --white: #FFFFFF;
-            --off-white: #F5F5F5;
-            --partner-blue: #1e40af;
-            --partner-light: #3b82f6;
-            --lime: #BFFF00;
-        }
-
-        /* Drone cursor */
-        #drone-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 50px;
-            height: 50px;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate3d(var(--x), var(--y), 0);
-            will-change: transform;
-        }
-        #drone-model {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
-            transform: rotateX(var(--tiltX)) rotateY(var(--tiltY));
-            transform-style: preserve-3d;
-        }
-        .propeller {
-            transform-origin: center;
-            animation: spin 0.1s linear infinite;
-        }
-        .moving .propeller {
-            animation-duration: 0.03s;
-        }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        body {
-            cursor: none;
-        }
-        .trail-dot {
-            position: fixed;
-            width: 4px;
-            height: 4px;
-            background: #FF9933;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            opacity: 0;
-            box-shadow: 0 0 8px #FF9933;
-            transition: opacity 0.2s;
-        }
-
-        /* Background / Mission Planner */
-        body {
-            background: var(--black);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
-            overflow-x: hidden;
-            position: relative;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 60px 60px;
-            pointer-events: none;
-            z-index: 0;
-            animation: moveGrid 40s linear infinite;
-        }
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(45deg, 
-                transparent, 
-                transparent 25px, 
-                rgba(255, 153, 51, 0.02) 25px, 
-                rgba(255, 153, 51, 0.02) 50px);
-            pointer-events: none;
-            z-index: 0;
-        }
-        @keyframes moveGrid {
-            0% { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
-        }
-
-        .container-custom {
-            max-width: 1214px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .section-title {
-            font-size: 2.8rem;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 2rem;
-            background: linear-gradient(to right, var(--saffron), var(--saffron-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            position: relative;
-        }
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: var(--saffron);
-            margin: 10px auto 0;
-            border-radius: 2px;
-        }
-
-        /* Header */
-        .header {
-            width: 100%;
-            max-width: 1214px;
-            height: 85px;
-            background: rgba(26, 26, 26, 0.95);
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(245,158,11,0.3);
-        }
-        .logo { font-size: 28px; font-weight: bold; color: var(--saffron); }
-        nav ul { list-style: none; display: flex; gap: 25px; }
-        .nav-link { color: white; text-decoration: none; font-size: 16px; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active { color: var(--saffron); text-decoration: underline; }
-        .hamburger { display: none; font-size: 28px; cursor: pointer; color: var(--saffron); }
-
-        /* Unified buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            line-height: 1.2;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-        .btn-primary {
-            background: var(--saffron);
-            color: var(--black);
-        }
-        .btn-primary:hover {
-            background: var(--saffron-light);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(245,158,11,0.4);
-        }
-        .btn-secondary {
-            background: transparent;
-            color: white;
-            border: 2px solid var(--saffron);
-        }
-        .btn-secondary:hover {
-            background: var(--saffron);
-            color: var(--black);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(245,158,11,0.4);
-        }
-        .btn-small { padding: 8px 16px; font-size: 0.9rem; border-radius: 30px; }
-        .btn-large { padding: 16px 40px; font-size: 1.2rem; }
-        .btn-text {
-            background: transparent;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-        }
-        .btn-text:hover {
-            color: var(--saffron);
-            background: rgba(245,158,11,0.1);
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Consultation modal */
-        .consultation-modal {
-            display: none;
-            position: fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,0.9);
-            justify-content:center;
-            align-items:center;
-            z-index:3000;
-        }
-        .consultation-modal.show { display: flex; }
-        .modal-container { background: var(--dark-gray); width: 90%; max-width: 1000px; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
-        .modal-left { flex:1; padding: 40px; }
-        .modal-right {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 30px 20px;
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 1px solid rgba(255,255,255,0.1);
-            height: 100%;
-        }
-        .modal-logo { font-size: 2.5rem; font-weight: 800; color: var(--saffron); margin-bottom: 30px; line-height: 1.2; }
-        .contact-info { color: white; font-size: 1rem; line-height: 1.8; margin-bottom: 20px; width: 100%; }
-        .contact-info p { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0; word-break: break-word; }
-        .contact-info i { color: var(--saffron); width: 20px; font-size: 1.1rem; }
-        .modal-step { display: none; }
-        .modal-step.active { display: block; }
-        .modal-title { font-size: 2rem; color: var(--saffron); margin-bottom: 20px; }
-        .calendar-container { margin-bottom: 20px; }
-        .time-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 20px 0; }
-        .time-slot { background: rgba(255,255,255,0.1); padding: 10px; text-align: center; border-radius: 5px; cursor: pointer; }
-        .time-slot.selected { background: var(--saffron); color: black; }
-        .modal-form input, .modal-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; color: white; }
-        .modal-actions { display: flex; gap: 15px; }
-        .modal-btn { padding: 12px 30px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; }
-        .modal-btn.primary { background: var(--saffron); color: black; }
-        .modal-btn.secondary { background: transparent; color: white; border: 1px solid var(--saffron); }
-        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 1.5rem; cursor: pointer; z-index: 10; }
-        .calendar-container input {background: rgba(255, 255, 255, 0.1);border: 1px solid rgba(255, 255, 255, 0.2);color: white;padding: 12px 15px;border-radius: 5px;width: 100%;font-family: 'Orbitron', sans-serif;font-size: 1rem;outline: none;transition: border 0.3s;}
-        .calendar-container input:focus { border-color: var(--saffron); }
-
-        /* Back to top */
-        .back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--saffron); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: black; cursor: pointer; opacity: 0; transform: translateY(20px); transition: 0.3s; z-index: 100; }
-        .back-to-top.show { opacity: 1; transform: translateY(0); }
-
-        /* Footer */
-        .footer-content { background: #0f172a; padding: 60px 20px 30px; }
-        .footer-container { max-width: 1214px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 40px; }
-        .footer-logo { font-size: 2rem; color: var(--saffron); }
-        .footer-about { color: #9CA3AF; margin: 15px 0; }
-        .social-icons { display: flex; gap: 15px; }
-        .social-icons a { color: var(--saffron); font-size: 1.3rem; }
-        .footer-title { color: white; font-size: 1.3rem; margin-bottom: 20px; }
-        .footer-links a { display: block; color: #9CA3AF; text-decoration: none; margin-bottom: 10px; }
-        .footer-links a:hover { color: var(--saffron); }
-        .copyright { text-align: center; color: #6B7280; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; }
-
-        /* Consultation sidebar */
-        .consultation-sidebar { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; }
-        .consultation-sidebar.show { opacity: 1; pointer-events: all; }
-        .sidebar-btn { background: var(--saffron); color: black; border: none; border-radius: 50px; padding: 15px 10px; writing-mode: vertical-lr; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-
-        /* WhatsApp chat button */
-        .whatsapp-chat {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: #25D366;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 2rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 2001;
-            transition: transform 0.3s;
-        }
-        .whatsapp-chat:hover {
-            transform: scale(1.1);
-            background: #20b859;
-        }
-
-        /* ===== CONTACT PAGE STYLES ===== */
-        /* Hero section with drone + form side by side */
-        .contact-hero {
-            min-height: 100vh;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 100px 5%;
-            background: url('https://images.unsplash.com/photo-1581094794329-71f4eed45a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') center/cover fixed;
-            gap: 40px;
-        }
-        .contact-hero::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.3);
-            z-index: 1;
-        }
-
-        /* Drone graphic (left) */
-        .drone-hero {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            max-width: 600px;
-            z-index: 2;
-        }
-        .drone-hero svg {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8));
-            animation: flight-hover 4s ease-in-out infinite alternate;
-        }
-        @keyframes flight-hover {
-            0% { transform: translateY(0) rotate(0.5deg); }
-            100% { transform: translateY(-15px) rotate(-0.5deg); }
-        }
-
-        /* Blinking LED effect for IQ text */
-        @keyframes blink-led {
-            0%, 100% { fill: #FF9933; filter: drop-shadow(0 0 5px #FF9933); }
-            50% { fill: #ffffff; filter: drop-shadow(0 0 15px #FF9933); }
-        }
-        .iq-led {
-            animation: blink-led 1s infinite;
-            font-family: 'Arial Black', sans-serif;
-            font-size: 24px;
-            font-weight: 900;
-        }
-
-        /* Spinning propellers - fixed positioning */
-        .prop-group {
-            transform-origin: center;
-            transform-box: fill-box;   /* ensures rotation around the group's center */
-            animation: prop-spin 0.15s linear infinite;
-        }
-        @keyframes prop-spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Form card (right) */
-        .form-card {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            max-width: 460px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .form-card h2 {
-            color: var(--saffron-light);
-            margin-bottom: 20px;
-            font-size: 2rem;
-            text-align: center;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 50px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-        }
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255,255,255,0.8);
-        }
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            border-color: var(--saffron);
-        }
-        .form-group select {
-            background: rgba(0,0,0,0.5);
-            color: white;
-        }
-        .form-group select option {
-            background: var(--dark-gray);
-        }
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background: var(--saffron);
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: black;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .submit-btn:hover {
-            background: var(--saffron-light);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(245,158,11,0.3);
-        }
-
-        /* Responsive for hero */
-        @media (max-width: 900px) {
-            .contact-hero {
-                flex-direction: column;
-                justify-content: center;
-            }
-            .drone-hero {
-                max-width: 400px;
-                margin-bottom: 20px;
-            }
-            .form-card {
-                flex: 0 0 auto;
-                width: 100%;
-                max-width: 460px;
-            }
-        }
-
-        /* Location slider */
-        .location-slider {
-            padding: 60px 20px;
-            background: rgba(0,0,0,0.5);
-        }
-        .slider-container {
-            max-width: 900px;
-            margin: 0 auto;
-            overflow: hidden;
-            border-radius: 30px;
-            border: 2px dashed var(--saffron);
-        }
-        .slider-track {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
-        .slider-item {
-            flex: 0 0 100%;
-            padding: 40px;
-            text-align: center;
-            background: rgba(26,26,26,0.7);
-            backdrop-filter: blur(5px);
-        }
-        .slider-item h3 {
-            font-size: 2rem;
-            color: var(--saffron-light);
-            margin-bottom: 10px;
-        }
-        .slider-item p {
-            color: #ddd;
-            margin: 5px 0;
-        }
-        .slider-dots {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .slider-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .slider-dot.active {
-            background: var(--saffron);
-        }
-
-        /* Contact info + map */
-        .info-map {
-            padding: 60px 20px;
-            background: rgba(0,0,0,0.3);
-        }
-        .info-map-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-        .info-left {
-            background: rgba(26,26,26,0.7);
-            border: 2px dashed var(--saffron);
-            border-radius: 30px;
-            padding: 40px;
-            backdrop-filter: blur(5px);
-        }
-        .info-left h3 {
-            font-size: 2rem;
-            color: var(--saffron-light);
-            margin-bottom: 30px;
-        }
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-        .info-item i {
-            font-size: 1.5rem;
-            color: var(--saffron);
-            width: 30px;
-        }
-        .map-right {
-            width: 100%;
-            height: 400px;
-            border: 2px dashed var(--saffron);
-            border-radius: 30px;
-            overflow: hidden;
-        }
-        .map-right iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        @media (max-width: 900px) {
-            .info-map-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        .modal-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .modal-checkbox input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-        }
-        .modal-checkbox label {
-            color: white;
-            margin: 0;
-        }
-        .modal-checkbox a {
-            color: var(--saffron);
-        }
-        .form-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        .form-checkbox input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-        }
-        .form-checkbox label {
-            color: white;
-            margin: 0;
-        }
-        .form-checkbox a {
-            color: var(--saffron);
-        }
-    </style>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Drone cursor -->
+    <!-- Drone cursor (handled by global script) -->
     <div id="drone-wrapper" style="--x: 0px; --y: 0px;">
         <div id="drone-model" style="--tiltX: 0deg; --tiltY: 0deg;">
             <svg viewBox="0 0 100 100" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
@@ -636,15 +50,15 @@
             <ul>
                 <li><a href="index.html" class="nav-link">Home</a></li>
                 <li><a href="courses.html" class="nav-link">Courses</a></li>
-                <li><a href="drone-service.html" class="nav-link">Service</a></li>
+                <li><a href="service.html" class="nav-link">Service</a></li>
                 <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
-                <li><a href="drone-workshops.html" class="nav-link">Workshops</a></li>
+                <li><a href="drone-workshop.html" class="nav-link">Workshops</a></li>
                 <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
                 <li><a href="about-us.html" class="nav-link">About Us</a></li>
                 <li><a href="contact-us.html" class="nav-link active">Contact Us</a></li>
             </ul>
         </nav>
-        <div style="display: flex; gap: 10px;">
+        <div class="header-buttons">
             <button class="btn btn-text" id="loginBtn">Login</button>
             <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
                 <i class="fas fa-calendar-check"></i> Free Consultation
@@ -655,32 +69,20 @@
 
     <!-- Hero section with drone (left) and form (right) -->
     <section class="contact-hero">
-        <!-- Left side: Drone with blinking IQ LED (fixed propeller spin & clear IQ) -->
         <div class="drone-hero">
             <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
-                <!-- Drone arms (thick) -->
                 <line x1="80" y1="45" x2="320" y2="205" stroke="#2a2c33" stroke-width="18" stroke-linecap="round" />
                 <line x1="320" y1="45" x2="80" y2="205" stroke="#2a2c33" stroke-width="18" stroke-linecap="round" />
-
-                <!-- Central body -->
                 <rect x="150" y="85" width="100" height="80" rx="15" fill="#1e1f25" stroke="#555" stroke-width="4" />
-
-                <!-- Camera / sensor (drawn first so it appears behind the text) -->
                 <circle cx="200" cy="115" r="14" fill="#111" stroke="#444" stroke-width="3" />
                 <circle cx="200" cy="115" r="6" fill="#0ff" opacity="0.9">
                     <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite" />
                 </circle>
-
-                <!-- BLINKING IQ LED (now placed below the camera, clearly visible) -->
                 <text x="175" y="155" class="iq-led">I</text>
                 <text x="205" y="155" class="iq-led" style="animation-delay: 0.2s;">Q</text>
-
-                <!-- Landing skids -->
                 <line x1="175" y1="165" x2="145" y2="210" stroke="#444" stroke-width="6" stroke-linecap="round" />
                 <line x1="225" y1="165" x2="255" y2="210" stroke="#444" stroke-width="6" stroke-linecap="round" />
                 <line x1="145" y1="210" x2="255" y2="210" stroke="#444" stroke-width="6" stroke-linecap="round" />
-
-                <!-- Motors with spinning propellers (fixed with transform-box) -->
                 <g transform="translate(80,45)">
                     <circle cx="0" cy="0" r="12" fill="#222" stroke="#888" stroke-width="3" />
                     <g class="prop-group">
@@ -712,14 +114,11 @@
             </svg>
         </div>
 
-        <!-- Right side: Contact form -->
         <div class="form-card">
             <h2>Get in Touch</h2>
             <form action="https://formspree.io/f/mjgabqwp" method="POST">
-                <!-- Hidden fields -->
                 <input type="hidden" name="_subject" value="New Contact Form Submission">
                 <input type="hidden" name="_next" value="thank-you.html">
-
                 <div class="form-group">
                     <input type="email" name="_replyto" placeholder="Email*" required>
                 </div>
@@ -743,8 +142,6 @@
                 <div class="form-group">
                     <input type="tel" name="phone" placeholder="Phone number*" required>
                 </div>
-
-                <!-- Terms & Privacy Checkbox -->
                 <div class="form-checkbox">
                     <input type="checkbox" id="contact-agree" name="agreeTerms" required>
                     <label for="contact-agree">
@@ -752,7 +149,6 @@
                         and <a href="privacy.html" target="_blank">Privacy Policy</a>
                     </label>
                 </div>
-
                 <button type="submit" class="submit-btn">Submit</button>
             </form>
         </div>
@@ -765,22 +161,22 @@
             <div class="slider-container">
                 <div class="slider-track" id="locationTrack">
                     <div class="slider-item">
-                        <h3>Dwarka</h3>
-                        <p>123 Drone Avenue, Dwarka, Delhi</p>
-                        <p><i class="fas fa-phone"></i> +91 98765 43210</p>
-                        <p><i class="fas fa-envelope"></i> dwarka@iqdrone.com</p>
+                        <h3>Indore</h3>
+                        <p>Vijay Nagar, Indore, MP</p>
+                        <p><i class="fas fa-phone"></i> +918889122261</p>
+                        <p><i class="fas fa-envelope"></i> Indore@iqdrone.com</p>
                     </div>
                     <div class="slider-item">
-                        <h3>Sonipat</h3>
-                        <p>456 Sky Road, Sonipat, Haryana</p>
-                        <p><i class="fas fa-phone"></i> +91 98765 43211</p>
-                        <p><i class="fas fa-envelope"></i> sonipat@iqdrone.com</p>
+                        <h3>Ujjain</h3>
+                        <p></p>
+                        <p><i class="fas fa-phone"></i> +91 8889122261</p>
+                        <p><i class="fas fa-envelope"></i> Ujjain@iqdrone.com</p>
                     </div>
                     <div class="slider-item">
-                        <h3>Gurugram</h3>
-                        <p>789 Flight Colony, Sohna, Gurugram</p>
-                        <p><i class="fas fa-phone"></i> +91 98765 43212</p>
-                        <p><i class="fas fa-envelope"></i> gurugram@iqdrone.com</p>
+                        <h3>Bhopal</h3>
+                        <p></p>
+                        <p><i class="fas fa-phone"></i> +91 8889122261</p>
+                        <p><i class="fas fa-envelope"></i> Bhopal@iqdrone.com</p>
                     </div>
                 </div>
             </div>
@@ -800,7 +196,7 @@
                     </div>
                     <div class="info-item">
                         <i class="fas fa-phone-alt"></i>
-                        <span>+91 98765 43210</span>
+                        <span>+8889122261</span>
                     </div>
                     <div class="info-item">
                         <i class="fas fa-clock"></i>
@@ -808,7 +204,6 @@
                     </div>
                 </div>
                 <div class="map-right">
-                    <!-- Replace with your actual Google Maps embed -->
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.901943129141!2d77.10276611508108!3d28.59598278242568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1b1f7e1f1f1f%3A0x1f1f1f1f1f1f1f1f!2sDelhi%2C%20India!5e0!3m2!1sen!2sin!4v1641234567890!5m2!1sen!2sin" allowfullscreen loading="lazy"></iframe>
                 </div>
             </div>
@@ -833,9 +228,9 @@
                 <div class="footer-links">
                     <a href="index.html">Home</a>
                     <a href="courses.html">Courses</a>
-                    <a href="drone-service.html">Service</a>
+                    <a href="service.html">Service</a>
                     <a href="drone-lab.html">Drone Lab</a>
-                    <a href="drone-workshops.html">Workshops</a>
+                    <a href="drone-workshop.html">Workshops</a>
                     <a href="drone-jobs.html">Jobs</a>
                 </div>
             </div>
@@ -853,8 +248,8 @@
             <div class="footer-column">
                 <h3 class="footer-title">Contact</h3>
                 <div class="footer-links">
-                    <a href="#"><i class="fas fa-map-marker-alt"></i> 123 Drone Avenue, Tech City</a>
-                    <a href="tel:+911234567890"><i class="fas fa-phone"></i> +91 12345 67890</a>
+                    <a href="#"><i class="fas fa-map-marker-alt"></i> Vijay Nagar, Indore, MP</a>
+                    <a href="tel:+918889122261"><i class="fas fa-phone"></i> +918889122261</a>
                     <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
                 </div>
             </div>
@@ -868,16 +263,15 @@
     </div>
 
     <!-- WhatsApp Chat Button -->
-    <a href="https://wa.me/911234567890?text=Hello%20iQdrone%2C%20I'd%20like%20to%20get%20in%20touch" class="whatsapp-chat" target="_blank">
+    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'd%20like%20to%20get%20in%20touch" class="whatsapp-chat" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Consultation Modal (Final) -->
+    <!-- Consultation Modal -->
     <div class="consultation-modal" id="consultationModal">
         <div class="modal-container">
             <div class="close-modal"><i class="fas fa-times"></i></div>
             <div class="modal-left">
-                <!-- Step 1: Date & Time -->
                 <div class="modal-step active" id="step1">
                     <h3 class="modal-title">Schedule Your Consultation</h3>
                     <div class="calendar-container">
@@ -896,18 +290,14 @@
                         <button class="modal-btn" id="nextStepBtn">Next</button>
                     </div>
                 </div>
-                <!-- Step 2: Personal Details Form -->
                 <div class="modal-step" id="step2">
                     <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
                         <input type="hidden" name="_subject" value="New Consultation Request">
                         <input type="hidden" name="_next" value="thank-you.html">
-
                         <input type="text" name="fullName" placeholder="Full Name *" required>
                         <input type="email" name="_replyto" placeholder="Email Address *" required>
                         <input type="tel" name="phone" placeholder="Phone Number *" required>
                         <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
-
-                        <!-- Terms Checkbox -->
                         <div class="modal-checkbox">
                             <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
                             <label for="consultAgreeTerms">
@@ -915,7 +305,6 @@
                                 and <a href="privacy.html" target="_blank">Privacy Policy</a>
                             </label>
                         </div>
-
                         <div class="modal-actions">
                             <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
                             <button type="submit" class="modal-btn">Submit</button>
@@ -926,7 +315,7 @@
             <div class="modal-right">
                 <div class="modal-logo">iQdrone Academy</div>
                 <div class="contact-info">
-                    <p><i class="fas fa-phone"></i> +91 12345 67890</p>
+                    <p><i class="fas fa-phone"></i> +91 8889122261</p>
                     <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
                     <p>We'll contact you within 24h</p>
                 </div>
@@ -937,683 +326,24 @@
     <!-- Back to Top -->
     <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
 
-    <!-- Scripts -->
+    
+
+    <!-- Global scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            AOS.init({ duration: 800, once: true, offset: 100 });
+    <script src="script.js"></script>
 
-            // Drone cursor
-            const wrapper = document.getElementById('drone-wrapper');
-            const model = document.getElementById('drone-model');
-            let lastX = window.innerWidth / 2, lastY = window.innerHeight / 2;
-            let stopTimeout;
-            window.addEventListener('mousemove', (e) => {
-                const x = e.clientX, y = e.clientY;
-                wrapper.style.setProperty('--x', `${x}px`);
-                wrapper.style.setProperty('--y', `${y}px`);
-                const dx = x - lastX, dy = y - lastY;
-                const tiltY = Math.min(Math.max(dx * 2.5, -60), 60);
-                const tiltX = Math.min(Math.max(dy * -2.5, -60), 60);
-                model.style.setProperty('--tiltX', `${tiltX}deg`);
-                model.style.setProperty('--tiltY', `${tiltY}deg`);
-                wrapper.classList.add('moving');
-                lastX = x; lastY = y;
-                clearTimeout(stopTimeout);
-                stopTimeout = setTimeout(() => {
-                    model.style.setProperty('--tiltX', `0deg`);
-                    model.style.setProperty('--tiltY', `0deg`);
-                    wrapper.classList.remove('moving');
-                }, 150);
-            });
-            // Trail dots
-            for (let i = 0; i < 3; i++) {
-                let dot = document.createElement('div');
-                dot.className = 'trail-dot';
-                document.body.appendChild(dot);
-            }
-            const trailDots = document.querySelectorAll('.trail-dot');
-            let trailIndex = 0;
-            setInterval(() => {
-                if (trailDots[trailIndex]) {
-                    trailDots[trailIndex].style.left = (lastX - 2) + 'px';
-                    trailDots[trailIndex].style.top = (lastY - 2) + 'px';
-                    trailDots[trailIndex].style.opacity = '0.5';
-                    setTimeout(() => trailDots[trailIndex].style.opacity = '0', 100);
-                }
-                trailIndex = (trailIndex + 1) % trailDots.length;
-            }, 50);
-
-            // Consultation modal
-            const modal = document.getElementById('consultationModal');
-            const triggers = document.querySelectorAll('.consultation-trigger');
-            const closeModal = document.querySelector('.close-modal');
-            const cancelBtn = document.getElementById('cancelBtn');
-            const nextStepBtn = document.getElementById('nextStepBtn');
-            const backBtn = document.getElementById('backBtn');
-            const step1 = document.getElementById('step1');
-            const step2 = document.getElementById('step2');
-            const timeSlots = document.querySelectorAll('.time-slot');
-
-            triggers.forEach(t => t.addEventListener('click', () => {
-                modal.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            }));
-
-            function hideModal() {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-            closeModal?.addEventListener('click', hideModal);
-            cancelBtn?.addEventListener('click', hideModal);
-            nextStepBtn?.addEventListener('click', () => {
-                step1.classList.remove('active');
-                step2.classList.add('active');
-            });
-            backBtn?.addEventListener('click', () => {
-                step2.classList.remove('active');
-                step1.classList.add('active');
-            });
-            timeSlots.forEach(s => s.addEventListener('click', function() {
-                timeSlots.forEach(s => s.classList.remove('selected'));
-                this.classList.add('selected');
-            }));
-
-            flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => date.getDay() === 0 || date.getDay() === 6 ] });
-            
-            // Hamburger menu
-            document.querySelector('.hamburger')?.addEventListener('click', () => document.querySelector('nav ul').classList.toggle('active'));
-
-            // Scroll events (sidebar & back to top)
-            const sidebar = document.getElementById('consultationSidebar');
-            const backTop = document.getElementById('backToTop');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) sidebar.classList.add('show'); else sidebar.classList.remove('show');
-                if (window.scrollY > 500) backTop.classList.add('show'); else backTop.classList.remove('show');
-            });
-            backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-            // Location slider
-            const track = document.getElementById('locationTrack');
-            const dotsContainer = document.getElementById('locationDots');
-            const slides = document.querySelectorAll('.slider-item');
-            let currentSlide = 0;
-
-            if (slides.length > 0) {
-                slides.forEach((_, index) => {
-                    const dot = document.createElement('span');
-                    dot.classList.add('slider-dot');
-                    if (index === 0) dot.classList.add('active');
-                    dot.addEventListener('click', () => {
-                        currentSlide = index;
-                        updateSlider();
-                    });
-                    dotsContainer.appendChild(dot);
-                });
-
-                function updateSlider() {
-                    track.style.transform = `translateX(-${currentSlide * 100}%)`;
-                    document.querySelectorAll('.slider-dot').forEach((dot, index) => {
-                        dot.classList.toggle('active', index === currentSlide);
-                    });
-                }
-
-                setInterval(() => {
-                    currentSlide = (currentSlide + 1) % slides.length;
-                    updateSlider();
-                }, 5000);
-            }
-        });
-    </script>
-    <!-- Cookie Consent Banner -->
-    <div id="cookie-banner" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; justify-content: space-between; align-items: center; gap: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-        <p style="color: white; margin: 0; font-size: 0.95rem; line-height: 1.4;">
-            <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
-            We use cookies to enhance your experience. By continuing, you agree to our 
-            <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
-        </p>
-        <button onclick="acceptCookies()" class="btn btn-primary btn-small" style="white-space: nowrap;">Accept</button>
-    </div>
-
-    <script>
-        function acceptCookies() {
-            localStorage.setItem('cookiesAccepted', 'true');
-            document.getElementById('cookie-banner').style.display = 'none';
-        }
-        if (localStorage.getItem('cookiesAccepted')) {
-            document.getElementById('cookie-banner').style.display = 'none';
-        }
-    </script>
-<!-- ===== IQDRONE CHATBOT (Full version – ready to paste) ===== -->
-<style>
-    .iqdrone-chat {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        width: 380px;
-        height: 500px;
-        background: rgba(10, 11, 14, 0.95);
-        backdrop-filter: blur(15px);
-        border: 1px solid var(--saffron);
-        border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        z-index: 10000;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-        transform: translateY(calc(100% - 70px));
-        opacity: 0.9;
-    }
-    .iqdrone-chat.expanded {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    .chat-header {
-        background: var(--dark-gray);
-        padding: 12px 20px;
-        border-bottom: 2px solid var(--saffron);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        cursor: pointer;
-        position: relative;
-    }
-    .chat-header-left {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex: 1;
-    }
-    .chat-avatar {
-        width: 50px;
-        height: 50px;
-    }
-    .chat-avatar svg {
-        width: 100%;
-        height: 100%;
-    }
-    .chat-avatar .prop-group {
-        transform-origin: center;
-        transform-box: fill-box;
-        transition: animation 0.2s;
-    }
-    .chat-avatar.spin .prop-group {
-        animation: prop-spin 0.2s linear infinite;
-    }
-    @keyframes prop-spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    .chat-title {
-        color: var(--saffron-light);
-        font-weight: bold;
-        font-size: 1.2rem;
-        letter-spacing: 1px;
-    }
-    .chat-status {
-        font-size: 0.8rem;
-        color: #0f0;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-    .status-led {
-        width: 8px;
-        height: 8px;
-        background: #0f0;
-        border-radius: 50%;
-        box-shadow: 0 0 10px #0f0;
-        animation: blink 1.5s infinite;
-    }
-    @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.3; }
-    }
-    #minimizeChat {
-        color: var(--saffron);
-        font-size: 1.2rem;
-        padding: 5px;
-        cursor: pointer;
-        transition: 0.2s;
-        z-index: 10;
-    }
-    #minimizeChat:hover {
-        color: white;
-    }
-    .chat-messages {
-        flex: 1;
-        padding: 15px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        background: rgba(0,0,0,0.3);
-        font-family: 'Courier New', monospace;
-    }
-    .message {
-        display: flex;
-        max-width: 85%;
-    }
-    .message.user {
-        align-self: flex-end;
-    }
-    .message.bot {
-        align-self: flex-start;
-    }
-    .message-content {
-        padding: 12px 16px;
-        border-radius: 18px;
-        font-size: 0.95rem;
-        line-height: 1.4;
-        word-break: break-word;
-    }
-    .user .message-content {
-        background: var(--saffron);
-        color: black;
-        border-bottom-right-radius: 4px;
-    }
-    .bot .message-content {
-        background: rgba(30, 30, 35, 0.9);
-        border: 1px solid var(--saffron);
-        color: #eee;
-        border-bottom-left-radius: 4px;
-    }
-    .quick-replies {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 8px;
-    }
-    .quick-reply-btn {
-        background: rgba(255,255,255,0.1);
-        border: 1px solid var(--saffron);
-        border-radius: 30px;
-        padding: 8px 15px;
-        color: white;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-    .quick-reply-btn:hover {
-        background: var(--saffron);
-        color: black;
-    }
-    .thinking .message-content {
-        border-color: #888;
-    }
-    .thinking-dots {
-        display: inline-flex;
-        gap: 3px;
-    }
-    .thinking-dots span {
-        width: 6px;
-        height: 6px;
-        background: #aaa;
-        border-radius: 50%;
-        animation: thinkingPulse 1.4s infinite;
-    }
-    .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
-    .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes thinkingPulse {
-        0%, 60%, 100% { transform: scale(1); opacity: 0.6; }
-        30% { transform: scale(1.4); opacity: 1; }
-    }
-    .chat-input {
-        padding: 15px;
-        background: var(--dark-gray);
-        border-top: 1px solid var(--saffron);
-        display: flex;
-        gap: 10px;
-    }
-    .chat-input input {
-        flex: 1;
-        background: rgba(0,0,0,0.5);
-        border: 1px solid var(--saffron);
-        border-radius: 30px;
-        padding: 12px 18px;
-        color: white;
-        font-family: 'Courier New', monospace;
-        font-size: 0.95rem;
-        outline: none;
-        transition: box-shadow 0.2s;
-    }
-    .chat-input input:focus {
-        border-color: var(--saffron-light);
-        box-shadow: 0 0 12px var(--saffron);
-    }
-    .chat-input button {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: var(--saffron);
-        border: none;
-        color: black;
-        font-size: 1.2rem;
-        cursor: pointer;
-        transition: 0.2s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .chat-input button:hover {
-        background: var(--saffron-light);
-        transform: scale(1.1);
-    }
-    .chat-messages::-webkit-scrollbar {
-        width: 6px;
-    }
-    .chat-messages::-webkit-scrollbar-track {
-        background: rgba(0,0,0,0.3);
-    }
-    .chat-messages::-webkit-scrollbar-thumb {
-        background: var(--saffron);
-        border-radius: 3px;
-    }
-    .contact-form {
-        background: rgba(30,30,35,0.9);
-        border: 1px solid var(--saffron);
-        border-radius: 18px;
-        padding: 15px;
-        margin-top: 5px;
-    }
-    .contact-form input {
-        width: 100%;
-        background: rgba(0,0,0,0.5);
-        border: 1px solid var(--saffron);
-        border-radius: 30px;
-        padding: 10px 15px;
-        color: white;
-        margin-bottom: 10px;
-        outline: none;
-        transition: box-shadow 0.2s;
-    }
-    .contact-form input:focus {
-        border-color: var(--saffron-light);
-        box-shadow: 0 0 12px var(--saffron);
-    }
-    .contact-form button {
-        background: var(--saffron);
-        border: none;
-        border-radius: 30px;
-        padding: 10px 20px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        transition: 0.2s;
-    }
-    .contact-form button:hover {
-        background: var(--saffron-light);
-        transform: scale(1.02);
-    }
-</style>
-
-<div class="iqdrone-chat" id="iqdroneChat">
-    <div class="chat-header" id="chatHeader">
-        <div class="chat-header-left">
-            <div class="chat-avatar" id="chatAvatar">
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="38" y="32" width="24" height="36" rx="6" fill="#1a1a1a" stroke="#FF9933" stroke-width="2"/>
-                    <circle cx="50" cy="50" r="6" fill="#00ffff" opacity="0.9">
-                        <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite" />
-                    </circle>
-                    <g transform="translate(20,20)">
-                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
-                        <g class="prop-group" style="transform-origin: center;">
-                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
-                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
-                        </g>
-                    </g>
-                    <g transform="translate(80,20)">
-                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
-                        <g class="prop-group" style="transform-origin: center;">
-                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
-                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
-                        </g>
-                    </g>
-                    <g transform="translate(20,80)">
-                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
-                        <g class="prop-group" style="transform-origin: center;">
-                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
-                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
-                        </g>
-                    </g>
-                    <g transform="translate(80,80)">
-                        <circle cx="0" cy="0" r="6" fill="#333" stroke="#888" stroke-width="1.5"/>
-                        <g class="prop-group" style="transform-origin: center;">
-                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(45)"/>
-                            <rect x="-10" y="-2" width="20" height="4" fill="white" opacity="0.9" transform="rotate(-45)"/>
-                        </g>
-                    </g>
-                </svg>
-            </div>
-            <div>
-                <div class="chat-title">IQDRONE AI</div>
-                <div class="chat-status"><span class="status-led"></span> ONLINE</div>
-            </div>
-        </div>
-        <div id="minimizeChat"><i class="fas fa-minus"></i></div>
-    </div>
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="chat-input">
-        <input type="text" id="chatInput" placeholder="Enter message..." autocomplete="off">
-        <button id="sendChat"><i class="fas fa-paper-plane"></i></button>
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.9rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <div style="display: flex; gap: 10px;">
+        <button onclick="rejectCookies()" class="btn btn-secondary btn-small" style="background: transparent; border: 1px solid var(--saffron);">Reject All</button>
+        <button onclick="acceptCookies()" class="btn btn-primary btn-small">Accept</button>
     </div>
 </div>
-
-<script>
-    (function() {
-        const conversationFlow = {
-            greeting: "🛸 HI, I'M IQDRONE. WHICH LANDING PLATFORM WOULD YOU LIKE TO SELECT TO LAUNCH?",
-            options: [
-                { id: 'pilot', label: 'PILOT TRAINING', keywords: ['pilot', 'training', 'course'] },
-                { id: 'services', label: 'DRONE SERVICES', keywords: ['service', 'aerial', 'mapping'] },
-                { id: 'lab', label: 'DRONE LAB SETUP', keywords: ['lab', 'setup', 'rd'] },
-                { id: 'workshops', label: 'WORKSHOPS', keywords: ['workshop', 'hands-on'] },
-                { id: 'jobs', label: 'JOB OPPORTUNITIES', keywords: ['job', 'career', 'hiring'] }
-            ],
-            responses: {
-                pilot: "🛩️ PILOT TRAINING: We offer DGCA-certified courses from beginner to advanced. Would you like info on Basic (₹15k) or Advanced (₹45k)?",
-                services: "📡 DRONE SERVICES: Aerial surveying, mapping, inspection, and filming. Tell us your project type!",
-                lab: "🔬 DRONE LAB: We help set up drone R&D labs for educational institutions. Need a quote?",
-                workshops: "🔧 WORKSHOPS: Weekend hands-on sessions. Next: April 15-16 in Dwarka. Interested?",
-                jobs: "💼 JOBS: We're hiring instructors, pilots, and developers. Check our Jobs page or type 'resume'."
-            }
-        };
-
-        const chat = document.getElementById('iqdroneChat');
-        const header = document.getElementById('chatHeader');
-        const minimizeBtn = document.getElementById('minimizeChat');
-        const messagesDiv = document.getElementById('chatMessages');
-        const input = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendChat');
-        const avatar = document.getElementById('chatAvatar');
-
-        let expanded = false;
-        let lastActivity = Date.now();
-        let spinTimeout = null;
-
-        function setPropellerSpin(spin) {
-            if (spin) avatar.classList.add('spin');
-            else avatar.classList.remove('spin');
-        }
-
-        function resetInactivityTimer() {
-            lastActivity = Date.now();
-            setPropellerSpin(true);
-            if (spinTimeout) clearTimeout(spinTimeout);
-            spinTimeout = setTimeout(() => {
-                if (Date.now() - lastActivity > 5000) setPropellerSpin(false);
-            }, 5000);
-        }
-
-        function escapeHTML(str) {
-            return str.replace(/[&<>"]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                if (m === '"') return '&quot;';
-                return m;
-            });
-        }
-
-        function addBotMessage(text, quickReplies = []) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message bot';
-            let html = `<div class="message-content">${escapeHTML(text)}</div>`;
-            if (quickReplies.length) {
-                html += `<div class="quick-replies">`;
-                quickReplies.forEach(qr => {
-                    html += `<span class="quick-reply-btn" data-value="${qr.id}">${qr.label}</span>`;
-                });
-                html += `</div>`;
-            }
-            msgDiv.innerHTML = html;
-            messagesDiv.appendChild(msgDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            msgDiv.querySelectorAll('.quick-reply-btn').forEach(btn => {
-                btn.addEventListener('click', () => handleQuickReply(btn.dataset.value));
-            });
-        }
-
-        function addUserMessage(text) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message user';
-            msgDiv.innerHTML = `<div class="message-content">${escapeHTML(text)}</div>`;
-            messagesDiv.appendChild(msgDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        function showThinking() {
-            const thinkingDiv = document.createElement('div');
-            thinkingDiv.className = 'message bot thinking';
-            thinkingDiv.id = 'thinkingIndicator';
-            thinkingDiv.innerHTML = `<div class="message-content"><span class="thinking-dots"><span></span><span></span><span></span></span></div>`;
-            messagesDiv.appendChild(thinkingDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        function removeThinking() {
-            const thinking = document.getElementById('thinkingIndicator');
-            if (thinking) thinking.remove();
-        }
-
-        function showContactForm() {
-            const savedName = localStorage.getItem('iqdrone_name') || '';
-            const savedPhone = localStorage.getItem('iqdrone_phone') || '';
-
-            const formHTML = `
-                <div class="message bot">
-                    <div class="message-content">
-                        <strong>Please share your details so we can connect you with an expert:</strong>
-                        <div class="contact-form">
-                            <input type="text" id="chatName" placeholder="Your Name" value="${escapeHTML(savedName)}">
-                            <input type="tel" id="chatPhone" placeholder="Mobile Number" value="${escapeHTML(savedPhone)}">
-                            <button id="submitContact">SUBMIT</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            messagesDiv.insertAdjacentHTML('beforeend', formHTML);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            document.getElementById('submitContact').addEventListener('click', () => {
-                const name = document.getElementById('chatName').value.trim();
-                const phone = document.getElementById('chatPhone').value.trim();
-                if (name && phone) {
-                    localStorage.setItem('iqdrone_name', name);
-                    localStorage.setItem('iqdrone_phone', phone);
-                    addBotMessage(`✅ Thanks ${name}! An expert will contact you at ${phone} within 24 hours.`);
-                } else {
-                    alert('Please enter both name and mobile number.');
-                }
-            });
-        }
-
-        function handleQuickReply(optionId) {
-            if (optionId === 'connect') {
-                showContactForm();
-                return;
-            }
-            const option = conversationFlow.options.find(o => o.id === optionId);
-            addUserMessage(option ? option.label : optionId);
-            showThinking();
-            setTimeout(() => {
-                removeThinking();
-                const reply = conversationFlow.responses[optionId] || "Please contact us for more details.";
-                addBotMessage(reply);
-                addBotMessage("Would you like an expert to contact you?", [
-                    { id: 'connect', label: '📞 CONNECT NOW' }
-                ]);
-                resetInactivityTimer();
-            }, 800);
-        }
-
-        function processUserInput(text) {
-            const lower = text.toLowerCase();
-            const matched = conversationFlow.options.find(opt => opt.keywords.some(k => lower.includes(k)));
-            if (matched) {
-                handleQuickReply(matched.id);
-            } else if (lower.includes('contact') || lower.includes('call') || lower.includes('expert')) {
-                showContactForm();
-            } else {
-                addBotMessage("I'm not sure. Please select: Pilot Training, Services, Lab, Workshops, or Jobs.", conversationFlow.options);
-            }
-        }
-
-        function sendMessage() {
-            const text = input.value.trim();
-            if (!text) return;
-
-            if (!expanded) {
-                chat.classList.add('expanded');
-                expanded = true;
-            }
-
-            addUserMessage(text);
-            input.value = '';
-            showThinking();
-
-            setTimeout(() => {
-                removeThinking();
-                processUserInput(text);
-                resetInactivityTimer();
-            }, 1000);
-        }
-
-        function initChat() {
-            addBotMessage(conversationFlow.greeting, conversationFlow.options);
-            resetInactivityTimer();
-
-            setTimeout(() => {
-                if (!expanded && !chat.classList.contains('expanded')) {
-                    chat.classList.add('expanded');
-                    expanded = true;
-                    addBotMessage("Need help? I'm here to assist with courses, services, and more!", conversationFlow.options);
-                }
-            }, 10000);
-        }
-
-        header.addEventListener('click', (e) => {
-            if (e.target.closest('#minimizeChat')) return;
-            chat.classList.toggle('expanded');
-            expanded = chat.classList.contains('expanded');
-            if (expanded) resetInactivityTimer();
-        });
-
-        minimizeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            chat.classList.remove('expanded');
-            expanded = false;
-        });
-
-        sendBtn.addEventListener('click', sendMessage);
-        input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-
-        initChat();
-    })();
-</script></body>
-<!-- ===== END IQDRONE CHATBOT ===== -->
+</body>
 </html>

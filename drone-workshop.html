@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Workshops | iQdrone Academy</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- AOS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Global custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-workshops">
+    <!-- Drone cursor -->
+    <div id="drone-wrapper" style="--x: 0px; --y: 0px;">
+        <div id="drone-model" style="--tiltX: 0deg; --tiltY: 0deg;">
+            <svg viewBox="0 0 100 100" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 20 L80 80 M80 20 L20 80" stroke="#FF9933" stroke-width="12" stroke-linecap="round"/>
+                <rect x="38" y="32" width="24" height="36" rx="6" fill="#1a1a1a" stroke="#FF9933" stroke-width="2"/>
+                <circle cx="50" cy="40" r="3" fill="#FF9933">
+                    <animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite" />
+                </circle>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="20" r="6" fill="#333"/>
+                    <rect x="5" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="20" r="6" fill="#333"/>
+                    <rect x="65" y="18" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="20" cy="80" r="6" fill="#333"/>
+                    <rect x="5" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+                <g class="propeller" style="transform-box: fill-box; transform-origin: center;">
+                    <circle cx="80" cy="80" r="6" fill="#333"/>
+                    <rect x="65" y="78" width="30" height="4" fill="white" opacity="0.9" rx="2"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">iQdrone</div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="courses.html" class="nav-link">Courses</a></li>
+                <li><a href="service.html" class="nav-link">Service</a></li>
+                <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
+                <li><a href="drone-workshop.html" class="nav-link active">Workshops</a></li>
+                <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
+                <li><a href="about-us.html" class="nav-link">About Us</a></li>
+                <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn btn-text" id="loginBtn">Login</button>
+            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
+                <i class="fas fa-calendar-check"></i> Free Consultation
+            </button>
+        </div>
+        <div class="hamburger">☰</div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <video autoplay muted loop class="hero-video">
+            <source src="videos/drone-workshop.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">Hands‑On Drone Workshops</h1>
+            <p class="hero-subtitle">2‑ or 3‑day immersive experiences for institutions, schools, and individuals – build, fly, and learn from experts.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary btn-large consultation-trigger"><i class="fas fa-calendar-check"></i> Book a Workshop</button>
+                <a href="#packages" class="btn btn-secondary btn-large">View Packages</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="overview">
+        <div class="container-custom">
+            <p data-aos="fade-up">Our workshops are designed to ignite curiosity and build practical skills. Whether you're an individual enthusiast or an institution looking to introduce drone technology, we offer flexible, hands‑on programs that cover everything from basic assembly to advanced flight techniques. All workshops are led by DGCA‑certified instructors and include all necessary equipment.</p>
+        </div>
+    </section>
+
+    <!-- Packages -->
+    <section id="packages" class="packages">
+        <div class="container-custom">
+            <h2 class="section-title" data-aos="fade-up">Choose Your Workshop</h2>
+            <div class="packages-grid">
+               <div class="package-card">
+                    <h3>Introductory Workshop</h3>
+                    <div class="package-duration">2 Days</div>
+                    <div class="package-price">₹15,000 <span>per person</span></div>
+                    <ul class="package-features">
+                        <li><i class="fas fa-check-circle"></i> Drone assembly basics</li>
+                        <li><i class="fas fa-check-circle"></i> Pre‑flight checks & safety</li>
+                        <li><i class="fas fa-check-circle"></i> Basic flight manoeuvres</li>
+                        <li><i class="fas fa-check-circle"></i> Simulator practice</li>
+                        <li><i class="fas fa-check-circle"></i> Certificate of participation</li>
+                    </ul>
+                    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20workshop" class="btn btn-primary" target="_blank">Enquire Now</a>
+                </div>
+                <div class="package-card" data-aos="fade-up" data-aos-delay="200">
+                    <h3>Advanced Workshop</h3>
+                    <div class="package-duration">3 Days</div>
+                    <div class="package-price">₹25,000 <span>per person</span></div>
+                    <ul class="package-features">
+                        <li><i class="fas fa-check-circle"></i> All 2‑day inclusions</li>
+                        <li><i class="fas fa-check-circle"></i> Advanced flight techniques</li>
+                        <li><i class="fas fa-check-circle"></i> First‑person view (FPV) flying</li>
+                        <li><i class="fas fa-check-circle"></i> Basic repairs & maintenance</li>
+                        <li><i class="fas fa-check-circle"></i> Mission planning</li>
+                    </ul>
+                    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20workshop" class="btn btn-primary" target="_blank">Enquire Now</a>
+                </div>
+                <div class="package-card" data-aos="fade-up" data-aos-delay="300">
+                    <h3>Custom / Institution</h3>
+                    <div class="package-duration">Tailored</div>
+                    <div class="package-price">Negotiable</div>
+                    <ul class="package-features">
+                        <li><i class="fas fa-check-circle"></i> Custom curriculum for schools/colleges</li>
+                        <li><i class="fas fa-check-circle"></i> Flexible dates & group sizes</li>
+                        <li><i class="fas fa-check-circle"></i> On‑site training available</li>
+                        <li><i class="fas fa-check-circle"></i> Teacher training option</li>
+                        <li><i class="fas fa-check-circle"></i> Includes all materials</li>
+                    </ul>
+                    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20workshop" class="btn btn-primary" target="_blank">Enquire Now</a>
+                </div>
+            </div>
+            <div class="custom-note">
+                <i class="fas fa-hand-holding-usd"></i> All prices are indicative – group discounts available. Contact us for a custom quote.
+            </div>
+        </div>
+    </section>
+
+    <!-- Agenda -->
+    <section class="agenda">
+        <div class="container-custom">
+            <h2 class="section-title" data-aos="fade-up">Typical Agenda (3‑Day Workshop)</h2>
+            <div class="agenda-grid">
+                <div class="day-card" data-aos="fade-right" data-aos-delay="100">
+                    <h3>Day 1 – Build & Understand</h3>
+                    <ul>
+                        <li><i class="fas fa-tools"></i> Introduction to drone parts & tools</li>
+                        <li><i class="fas fa-cogs"></i> Step‑by‑step assembly</li>
+                        <li><i class="fas fa-bolt"></i> Battery handling & safety</li>
+                        <li><i class="fas fa-microchip"></i> Flight controller basics</li>
+                        <li><i class="fas fa-gamepad"></i> Simulator familiarisation</li>
+                    </ul>
+                </div>
+                <div class="day-card" data-aos="fade-left" data-aos-delay="200">
+                    <h3>Day 2 – Fly & Control</h3>
+                    <ul>
+                        <li><i class="fas fa-plane"></i> Pre‑flight checks & take‑off</li>
+                        <li><i class="fas fa-arrows-alt"></i> Basic manoeuvres (hover, turns)</li>
+                        <li><i class="fas fa-redo-alt"></i> Disorientation recovery</li>
+                        <li><i class="fas fa-chart-line"></i> Circuit flying & patterns</li>
+                        <li><i class="fas fa-sun"></i> Outdoor flight practice</li>
+                    </ul>
+                </div>
+                <div class="day-card" data-aos="fade-right" data-aos-delay="300">
+                    <h3>Day 3 – Advanced & Explore</h3>
+                    <ul>
+                        <li><i class="fas fa-headset"></i> Introduction to FPV</li>
+                        <li><i class="fas fa-camera"></i> Aerial photography basics</li>
+                        <li><i class="fas fa-wrench"></i> Troubleshooting & repairs</li>
+                        <li><i class="fas fa-map-marked-alt"></i> Mission planning</li>
+                        <li><i class="fas fa-certificate"></i> Certificate distribution</li>
+                    </ul>
+                </div>
+                <div class="day-card" data-aos="fade-left" data-aos-delay="400">
+                    <h3>Customisation</h3>
+                    <p>For institutions, we can tailor the agenda to your specific needs – longer sessions, deeper theory, or special projects. Just let us know.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inclusions -->
+    <section class="inclusions">
+        <div class="container-custom">
+            <h2 class="section-title" data-aos="fade-up">What's Included</h2>
+            <div class="inclusions-grid">
+                <div class="inclusion-card" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fas fa-drone"></i>
+                    <h4>All Equipment</h4>
+                    <p>Drones, batteries, tools – everything provided.</p>
+                </div>
+                <div class="inclusion-card" data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h4>Expert Instructors</h4>
+                    <p>DGCA‑certified pilots with years of experience.</p>
+                </div>
+                <div class="inclusion-card" data-aos="zoom-in" data-aos-delay="300">
+                    <i class="fas fa-book"></i>
+                    <h4>Training Material</h4>
+                    <p>Handouts, guides, and digital resources.</p>
+                </div>
+                <div class="inclusion-card" data-aos="zoom-in" data-aos-delay="400">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Certificate</h4>
+                    <p>Participation certificate for all attendees.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container-custom">
+            <h2 class="section-title" data-aos="fade-up">What Participants Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card" data-aos="fade-right" data-aos-delay="100">
+                    <i class="fas fa-quote-left"></i>
+                    <p class="testimonial-text">"The 2‑day workshop was perfect for our school’s STEM club. The instructors kept the students engaged and made complex topics easy to understand."</p>
+                    <div class="testimonial-author">– Mrs. Anjali Mehta, Principal</div>
+                </div>
+                <div class="testimonial-card" data-aos="fade-left" data-aos-delay="200">
+                    <i class="fas fa-quote-left"></i>
+                    <p class="testimonial-text">"I came as a hobbyist and left with the confidence to fly and repair my own drone. Highly recommended!"</p>
+                    <div class="testimonial-author">– Rohan Khanna, Enthusiast</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta">
+        <div class="container-custom">
+            <h2>Ready to Take Flight?</h2>
+            <p>Contact us to schedule a workshop for your institution or group. We'll customise the program to match your goals.</p>
+            <button class="btn btn-primary btn-large consultation-trigger"><i class="fas fa-calendar-check"></i> Schedule a Workshop</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-content">
+        <div class="footer-container">
+            <div class="footer-column">
+                <div class="footer-logo"><i class="fas fa-drone-alt"></i> iQdrone Academy</div>
+                <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="courses.html">Courses</a>
+                    <a href="service.html">Service</a>
+                    <a href="drone-lab.html">Drone Lab</a>
+                    <a href="drone-workshop.html">Workshops</a>
+                    <a href="drone-jobs.html">Jobs</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">More</h3>
+                <div class="footer-links">
+                    <a href="partner.html">Partner With Us</a>
+                    <a href="about-us.html">About Us</a>
+                    <a href="contact-us.html">Contact Us</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Contact</h3>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-map-marker-alt"></i> Vijay Nagar, Indore, MP</a>
+                    <a href="tel:+918889122261"><i class="fas fa-phone"></i> +918889122261</a>
+                    <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
+    </footer>
+
+    <!-- Consultation Sidebar -->
+    <div class="consultation-sidebar" id="consultationSidebar">
+        <button class="sidebar-btn consultation-trigger"><i class="fas fa-calendar-check"></i><span>Free Consultation</span></button>
+    </div>
+
+    <!-- WhatsApp Chat Button -->
+    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20workshops" class="whatsapp-chat" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Consultation Modal -->
+    <div class="consultation-modal" id="consultationModal">
+        <div class="modal-container">
+            <div class="close-modal"><i class="fas fa-times"></i></div>
+            <div class="modal-left">
+                <!-- Step 1: Date & Time -->
+                <div class="modal-step active" id="step1">
+                    <h3 class="modal-title">Schedule Your Consultation</h3>
+                    <div class="calendar-container">
+                        <input type="text" id="date" placeholder="Select Date">
+                    </div>
+                    <div class="time-slots" id="timeSlots">
+                        <div class="time-slot">9:00 AM</div>
+                        <div class="time-slot">10:00 AM</div>
+                        <div class="time-slot">11:00 AM</div>
+                        <div class="time-slot">1:00 PM</div>
+                        <div class="time-slot">2:00 PM</div>
+                        <div class="time-slot">3:00 PM</div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="modal-btn secondary" id="cancelBtn">Cancel</button>
+                        <button class="modal-btn" id="nextStepBtn">Next</button>
+                    </div>
+                </div>
+                <!-- Step 2: Personal Details Form -->
+                <div class="modal-step" id="step2">
+                    <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
+                        <input type="hidden" name="_subject" value="New Consultation Request">
+                        <input type="hidden" name="_next" value="thank-you.html">
+
+                        <input type="text" name="fullName" placeholder="Full Name *" required>
+                        <input type="email" name="_replyto" placeholder="Email Address *" required>
+                        <input type="tel" name="phone" placeholder="Phone Number *" required>
+                        <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
+
+                        <!-- Terms Checkbox -->
+                        <div class="modal-checkbox">
+                            <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
+                            <label for="consultAgreeTerms">
+                                I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
+                                and <a href="privacy.html" target="_blank">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
+                            <button type="submit" class="modal-btn">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-right">
+                <div class="modal-logo">iQdrone Academy</div>
+                <div class="contact-info">
+                    <p><i class="fas fa-phone"></i> +918889122261</p>
+                    <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
+                    <p>We'll contact you within 24h</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
+
+    
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+  AOS.init({ duration: 800, once: true, offset: 100 });
+</script>
+    <script src="script.js"></script>
+    <!-- If you have workshops-specific JS, add it here, e.g., <script src="workshops.js"></script> -->
+
+<!-- Cookie Consent Banner -->
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+    <p style="color: white; margin: 0; font-size: 0.9rem; line-height: 1.4;">
+        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+        We use cookies to enhance your experience. By continuing, you agree to our 
+        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+    </p>
+    <div style="display: flex; gap: 10px;">
+        <button onclick="rejectCookies()" class="btn btn-secondary btn-small" style="background: transparent; border: 1px solid var(--saffron);">Reject All</button>
+        <button onclick="acceptCookies()" class="btn btn-primary btn-small">Accept</button>
+    </div>
+</div>
+</body>
+</html>
