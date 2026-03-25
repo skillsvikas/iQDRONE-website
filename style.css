@@ -3754,3 +3754,380 @@ nav ul { list-style: none; display: flex; gap: 25px; }
 @media (max-width: 600px) {
     .tracks-grid, .opportunities-grid { grid-template-columns: 1fr; }
 }
+/* ========== MOBILE RESPONSIVENESS (ALL PAGES) ========== */
+@media (max-width: 768px) {
+    /* Global adjustments */
+    .container-custom {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    .section-title::after {
+        width: 60px;
+        margin-top: 8px;
+    }
+    .btn, .btn-large, .btn-small {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding: 12px 20px;
+    }
+
+    /* Header (already has media query, keep as is) */
+
+    /* Homepage */
+    .hero-content {
+        margin-left: 16px;
+        margin-right: 16px;
+        text-align: center;
+    }
+    .hero-headline {
+        font-size: 2rem;
+    }
+    .hero-work {
+        font-size: 1.4rem;
+    }
+    .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .stats-section {
+        gap: 20px;
+        padding: 20px;
+    }
+    .stat-number {
+        font-size: 2rem;
+    }
+    .stat-label {
+        font-size: 1rem;
+    }
+    .courses-grid, .scholarship-grid, .workshops-grid {
+        grid-template-columns: 1fr;
+    }
+    .feature-card, .scholarship-card, .workshop-card {
+        padding: 1rem;
+    }
+    .drone-ecosystem .content-section {
+        flex-direction: column;
+    }
+    .image-container, .cards-container {
+        width: 100%;
+        height: auto;
+    }
+    .cards-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .card {
+        padding: 20px;
+    }
+    .sim-box {
+        flex-direction: column;
+        height: auto;
+    }
+    .sim-controls-vertical {
+        width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        border-right: none;
+        border-bottom: 2px solid var(--saffron);
+        padding: 10px;
+    }
+    .sim-viewport {
+        height: 350px;
+    }
+    .sim-hud {
+        flex-direction: column;
+        height: auto;
+        gap: 5px;
+        padding: 8px;
+    }
+    .phase-box {
+        font-size: 0.7rem;
+        bottom: 5px;
+        left: 5px;
+    }
+    .meet-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    .left-content, .center-content, .right-content {
+        width: 100%;
+    }
+    .boy-image {
+        max-width: 280px;
+        margin: 0 auto;
+    }
+    .faq-grid {
+        grid-template-columns: 1fr;
+    }
+    .gallery-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .social-icons {
+        justify-content: center;
+    }
+    .footer-links {
+        text-align: center;
+    }
+
+    /* Courses listing page */
+    .courses-grid {
+        grid-template-columns: 1fr;
+    }
+    .course-card .course-image {
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+    .faq-enroll-row {
+        flex-direction: column;
+    }
+    .enroll-box {
+        padding: 20px;
+    }
+
+    /* Course detail pages */
+    .course-hero {
+        min-height: 50vh;
+        padding: 60px 0 40px;
+    }
+    .course-title {
+        font-size: 2rem;
+    }
+    .course-subtitle {
+        font-size: 1.2rem;
+    }
+    .hero-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .course-overview {
+        flex-direction: column;
+    }
+    .course-image {
+        width: 100%;
+        flex-direction: row;
+        gap: 10px;
+    }
+    .course-image img {
+        width: calc(50% - 5px);
+        height: auto;
+        aspect-ratio: 4 / 3;
+    }
+    .course-details {
+        width: 100%;
+        padding: 20px;
+    }
+    .tab-nav {
+        flex-wrap: wrap;
+        gap: 0;
+    }
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+    .enrollment-related {
+        flex-direction: column;
+    }
+
+    /* Services page */
+    .services-hero {
+        min-height: auto;
+        padding: 80px 20px;
+    }
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    .hero-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    .why-grid {
+        grid-template-columns: 1fr;
+    }
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+    .cta-section {
+        padding: 40px 20px;
+    }
+
+    /* Drone Lab page */
+    .hero {
+        min-height: auto;
+        padding: 60px 20px;
+    }
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    .audience-text {
+        height: 40px;
+    }
+    .hero-buttons .btn {
+        width: 100%;
+    }
+    .matter-grid {
+        grid-template-columns: 1fr;
+    }
+    .card-stack {
+        order: 2;
+    }
+    .center-image {
+        order: 1;
+        margin-bottom: 20px;
+    }
+    .inside-container {
+        flex-direction: column;
+    }
+    .inside-left, .inside-right {
+        width: 100%;
+    }
+    .choose-row {
+        flex-direction: column;
+    }
+    .choose-grid {
+        grid-template-columns: 1fr;
+    }
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* Workshops page */
+    .packages-grid, .agenda-grid, .testimonial-grid {
+        grid-template-columns: 1fr;
+    }
+    .inclusions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 480px) {
+        .inclusions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Jobs page */
+    .jobs-grid, .testimonial-grid, .steps-grid {
+        grid-template-columns: 1fr;
+    }
+    .hero-search {
+        flex-direction: column;
+        background: none;
+        padding: 0;
+    }
+    .hero-search input, .hero-search button {
+        width: 100%;
+        border-radius: 50px;
+        margin-bottom: 10px;
+    }
+    .filter-container {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .filter-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    .qr-gateway .gateway-grid {
+        grid-template-columns: 1fr;
+    }
+    .how-it-works .steps-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+    .how-it-works .step-card {
+        width: 80%;
+    }
+
+    /* About page */
+    .founder-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    .founder-image {
+        max-width: 250px;
+        margin: 0 auto;
+    }
+    .value-grid {
+        grid-template-columns: 1fr;
+    }
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    @media (max-width: 480px) {
+        .team-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Contact page */
+    .contact-hero {
+        flex-direction: column;
+        padding: 60px 20px;
+    }
+    .drone-hero svg {
+        max-width: 280px;
+        height: auto;
+    }
+    .form-card {
+        max-width: 100%;
+        padding: 25px;
+    }
+    .info-map-container {
+        grid-template-columns: 1fr;
+    }
+    .map-right {
+        height: 250px;
+    }
+
+    /* Partner page */
+    .tracks-grid, .opportunities-grid {
+        grid-template-columns: 1fr;
+    }
+    .steps-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .step-card {
+        width: 80%;
+    }
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+    .map-container, .form-container {
+        height: auto;
+    }
+
+    /* Blog page */
+    .blog-main {
+        grid-template-columns: 1fr;
+    }
+    .blog-card {
+        flex-direction: column;
+    }
+    .blog-image {
+        width: 100%;
+        height: 200px;
+    }
+    .subscribe-form {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .subscribe-form input, .subscribe-form button {
+        width: 100%;
+    }
+}
