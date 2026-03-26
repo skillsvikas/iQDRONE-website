@@ -45,7 +45,14 @@
 
     <!-- Header -->
     <header class="header">
-        <div class="logo">iQdrone</div>
+<div class="logo">iQdrone</div>
+    <div class="menu-row">
+        <div class="header-buttons">
+            <button>Login</button>
+            <button>Free Consultation</button>
+        </div>
+        <div class="hamburger">☰</div>
+    </div>
         <nav>
             <ul>
                 <li><a href="index.html" class="nav-link">Home</a></li>
@@ -58,13 +65,7 @@
                 <li><a href="contact-us.html" class="nav-link active">Contact Us</a></li>
             </ul>
         </nav>
-        <div class="header-buttons">
-            <button class="btn btn-text" id="loginBtn">Login</button>
-            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
-                <i class="fas fa-calendar-check"></i> Free Consultation
-            </button>
-        </div>
-        <div class="hamburger">☰</div>
+
     </header>
 
     <!-- Hero section with drone (left) and form (right) -->
@@ -334,16 +335,40 @@
     <script src="script.js"></script>
 
 <!-- Cookie Consent Banner -->
-<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: none; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
     <p style="color: white; margin: 0; font-size: 0.9rem; line-height: 1.4;">
         <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
         We use cookies to enhance your experience. By continuing, you agree to our 
         <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
     </p>
     <div style="display: flex; gap: 10px;">
-        <button onclick="rejectCookies()" class="btn btn-secondary btn-small" style="background: transparent; border: 1px solid var(--saffron);">Reject All</button>
-        <button onclick="acceptCookies()" class="btn btn-primary btn-small">Accept</button>
+        <button onclick="rejectCookies()" style="background: transparent; border: 1px solid var(--saffron); color: white; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">Reject All</button>
+        <button onclick="acceptCookies()" style="background: var(--saffron); border: none; color: black; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">Accept</button>
     </div>
 </div>
+
+<script>
+function acceptCookies() {
+    localStorage.setItem('cookieChoice', 'accepted');
+    document.getElementById('cookie-banner').style.display = 'none';
+}
+
+function rejectCookies() {
+    localStorage.setItem('cookieChoice', 'rejected');
+    document.getElementById('cookie-banner').style.display = 'none';
+}
+
+(function() {
+    const choice = localStorage.getItem('cookieChoice');
+    const banner = document.getElementById('cookie-banner');
+    if (banner) {
+        if (choice === 'accepted' || choice === 'rejected') {
+            banner.style.display = 'none';
+        } else {
+            banner.style.display = 'flex';
+        }
+    }
+})();
+</script>
 </body>
 </html>

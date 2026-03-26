@@ -191,14 +191,7 @@ document.querySelector('.close')?.addEventListener('click', () => {
     document.getElementById('lightbox').style.display = 'none';
 });
 
-// ----- Cookie consent -----
-function acceptCookies() {
-    localStorage.setItem('cookiesAccepted', 'true');
-    document.getElementById('cookie-banner').style.display = 'none';
-}
-if (localStorage.getItem('cookiesAccepted')) {
-    document.getElementById('cookie-banner').style.display = 'none';
-}
+
 
 // ========== SIMULATOR SCRIPT (Enhanced with Discount & Realistic Controls) ==========
 (function() {
@@ -618,13 +611,15 @@ if (localStorage.getItem('cookiesAccepted')) {
 })();
 // ========== AOS (Animate on Scroll) Initialization ==========
 (function() {
-    // Check if AOS is available and there are elements with data-aos attribute
-    if (typeof AOS !== 'undefined' && document.querySelector('[data-aos]')) {
+        if (typeof AOS !== 'undefined' && document.querySelector('[data-aos]')) {
         AOS.init({
             duration: 800,
             once: true,
             offset: 100
         });
+        setTimeout(() => {
+    AOS.refresh();
+}, 500);
     }
 })();
 // ========== LOCATION SLIDER (Contact page) ==========
@@ -661,51 +656,42 @@ if (localStorage.getItem('cookiesAccepted')) {
         }
     }
 })();
-// ========== PARTNER PAGE CAROUSEL ==========
+
+// ========== PARTNER PAGE INFINITE CAROUSEL ==========
+// No JavaScript needed for auto-scroll! Pure CSS handles it.
+// This block is only for manual control if you want to pause/resume
 (function() {
-    const carousel = document.getElementById('carouselContainer');
-    const dotsContainer = document.getElementById('carouselNav');
-    if (carousel && dotsContainer) {
-        const items = document.querySelectorAll('.carousel-item');
-        let current = 0;
-        if (items.length) {
-            items.forEach((_, i) => {
-                const dot = document.createElement('span');
-                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-                dot.addEventListener('click', () => {
-                    current = i;
-                    carousel.scrollTo({ left: (carousel.children[0].offsetWidth + 20) * i, behavior: 'smooth' });
-                    document.querySelectorAll('.carousel-dot').forEach(d => d.classList.remove('active'));
-                    dot.classList.add('active');
-                });
-                dotsContainer.appendChild(dot);
-            });
-            setInterval(() => {
-                current = (current + 1) % items.length;
-                carousel.scrollTo({ left: (carousel.children[0].offsetWidth + 20) * current, behavior: 'smooth' });
-                document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === current));
-            }, 6000);
-        }
+    const carousel = document.querySelector('.carousel-container');
+    
+    if (carousel) {
+        // Optional: Pause on manual drag
+        let isDragging = false;
+        let startX;
+        let scrollLeft;
+        
+        carousel.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.pageX - carousel.offsetLeft;
+            scrollLeft = carousel.scrollLeft;
+            carousel.style.animationPlayState = 'paused';
+        });
+        
+        carousel.addEventListener('mouseleave', () => {
+            isDragging = false;
+            carousel.style.animationPlayState = 'running';
+        });
+        
+        carousel.addEventListener('mouseup', () => {
+            isDragging = false;
+            carousel.style.animationPlayState = 'running';
+        });
+        
+        carousel.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - carousel.offsetLeft;
+            const walk = (x - startX) * 2;
+            carousel.scrollLeft = scrollLeft - walk;
+        });
     }
 })();
-// ========== COOKIE CONSENT ==========
-function acceptCookies() {
-    localStorage.setItem('cookiesAccepted', 'true');
-    const banner = document.getElementById('cookie-banner');
-    if (banner) banner.style.display = 'none';
-}
-
-function rejectCookies() {
-    localStorage.setItem('cookiesAccepted', 'false');
-    const banner = document.getElementById('cookie-banner');
-    if (banner) banner.style.display = 'none';
-}
-
-// On page load, hide banner if already accepted or rejected
-document.addEventListener('DOMContentLoaded', function() {
-    const accepted = localStorage.getItem('cookiesAccepted');
-    if (accepted === 'true' || accepted === 'false') {
-        const banner = document.getElementById('cookie-banner');
-        if (banner) banner.style.display = 'none';
-    }
-});
