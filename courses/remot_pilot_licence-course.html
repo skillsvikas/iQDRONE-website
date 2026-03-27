@@ -41,18 +41,11 @@
         </div>
     </div>
 
-    <!-- Header -->
-    <header class="header">
-<div class="logo">iQdrone</div>
-    <div class="menu-row">
-        <div class="header-buttons">
-            <button>Login</button>
-            <button>Free Consultation</button>
-        </div>
-        <div class="hamburger">☰</div>
-    </div>
-        <nav>
-            <ul>
+    <!-- HEADER -->
+<header class="header">
+    <div class="logo">iQdrone</div>
+    <nav id="navMenu">
+        <ul>
                 <li><a href="../index.html" class="nav-link">Home</a></li>
                 <li><a href="../courses.html" class="nav-link active">Courses</a></li>
                 <li><a href="../service.html" class="nav-link">Service</a></li>
@@ -62,9 +55,17 @@
                 <li><a href="../about-us.html" class="nav-link">About Us</a></li>
                 <li><a href="../contact-us.html" class="nav-link">Contact Us</a></li>
             </ul>
-        </nav>
-
-    </header>
+    </nav>
+    <div class="menu-row">
+        <div class="header-buttons">
+            <button class="btn btn-text" id="loginBtn">Login</button>
+            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
+                <i class="fas fa-calendar-check"></i> Free Consultation
+            </button>
+        </div>
+        <button class="hamburger">☰</button>
+    </div> 
+</header>
 
     <!-- Course Hero Section -->
     <section class="course-hero" style="background-image: url('../course_image/course-page-agri/small-rpc-hero.webp');">

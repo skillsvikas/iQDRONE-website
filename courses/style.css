@@ -111,6 +111,7 @@ body::after {
     max-width: 1214px;
     margin: 0 auto;
     padding: 0 20px;
+    text-align: center;
 }
 .section-title {
     font-size: 2.8rem;
@@ -309,60 +310,111 @@ nav ul { list-style: none; display: flex; gap: 25px; }
 }
 
 /* ===== COURSE LISTING PAGE STYLES ===== */
+/* ========== PAGE HERO ========== */
+/* ===== FINAL COURSE LISTING STYLES ===== */
+
+/* 1. Fully Responsive Hero Image */
 .page-hero {    
-    min-height: calc(100vh - 85px);
-    background-image: url(Course_Hero.jpg); /* adjust path if needed */
+    width: 100%;
+    min-height: 400px;
+    background: url('images/Course_Hero.webp') no-repeat center center;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+/* 2. Global Centering for Headings */
+.container-custom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center; /* Centers all text inside */
+}
+
 .page-title {
     font-size: 3.5rem;
     font-weight: 800;
-    margin-bottom: 15px;
-    background: linear-gradient(to right, var(--saffron), var(--saffron-light));
+    margin: 40px auto 10px auto;
+    background: linear-gradient(to right, #ff9933, #ffcc66); 
     -webkit-background-clip: text;
     background-clip: text;
-    color: white;
-}
-.page-subtitle {
-    font-size: 1.3rem;
-    max-width: 800px;
-    margin: 0 auto;
-    color: #ddd;
+    color: transparent;
+    display: inline-block; /* Helps with centering gradient text */
 }
 
+.page-subtitle {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto 40px auto;
+    color: #cccccc;
+    line-height: 1.6;
+}
+
+/* 3. Responsive Stats Section */
 .stats-section {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 50px;
-    margin: 50px auto;
-    padding: 30px 20px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 60px;
-    border: 1px solid var(--saffron);
-}
-.stat-item {
-    text-align: center;
-}
-.stat-number {
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--saffron);
-    line-height: 1;
-}
-.stat-label {
-    font-size: 1.1rem;
-    color: white;
-    margin-top: 5px;
-}
-.hero-heading-section {
-    padding: 30px 0;
-    text-align: center;
-    background: transparent;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin: -60px auto 40px auto; /* Overlaps hero slightly */
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.85); 
+    border-radius: 20px;
+    border: 2px solid #ff9933;
+    position: relative;
+    z-index: 5;
 }
 
+.stat-item {
+    text-align: center;
+    min-width: 160px;
+}
+
+.stat-number {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #ff9933;
+}
+
+.stat-label {
+    color: white;
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+/* ========== MOBILE RESPONSIVE FIXES ========== */
+@media (max-width: 768px) {
+    .page-hero {
+        min-height: 220px; /* Shorter for mobile */
+        background-attachment: scroll;
+    }
+
+    .page-title {
+        font-size: 1.8rem;
+        margin-top: 30px;
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+
+    .stats-section {
+        margin: 20px 10px; /* Removes negative overlap on mobile */
+        gap: 20px;
+        padding: 20px 10px;
+    }
+
+    .stat-item {
+        flex: 0 0 calc(50% - 20px); /* 2 per row on phones */
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+    }
+}
 .courses-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

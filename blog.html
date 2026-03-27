@@ -805,30 +805,31 @@
         </div>
     </div>
 
-    <!-- Header -->
-    <header class="header">
-<div class="logo">iQdrone</div>
+    <!-- HEADER -->
+<header class="header">
+    <div class="logo">iQdrone</div>
+    <nav id="navMenu">
+        <ul>
+            <li><a href="index.html" class="nav-link active">Home</a></li>
+            <li><a href="courses.html" class="nav-link">Courses</a></li>
+            <li><a href="service.html" class="nav-link">Service</a></li>
+            <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
+            <li><a href="drone-workshop.html" class="nav-link">Workshops</a></li>
+            <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
+            <li><a href="about-us.html" class="nav-link">About Us</a></li>
+            <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
+        </ul>
+    </nav>
     <div class="menu-row">
         <div class="header-buttons">
-            <button>Login</button>
-            <button>Free Consultation</button>
+            <button class="btn btn-text" id="loginBtn">Login</button>
+            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
+                <i class="fas fa-calendar-check"></i> Free Consultation
+            </button>
         </div>
-        <div class="hamburger">☰</div>
-    </div>
-        <nav>
-            <ul>
-                <li><a href="index.html" class="nav-link">Home</a></li>
-                <li><a href="courses.html" class="nav-link">Courses</a></li>
-                <li><a href="service.html" class="nav-link">Services</a></li>
-                <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
-                <li><a href="drone-workshop.html" class="nav-link">Workshops</a></li>
-                <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
-                <li><a href="about-us.html" class="nav-link">About Us</a></li>
-                <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
-            </ul>
-        </nav>
-
-    </header>
+        <button class="hamburger">☰</button>
+    </div> 
+</header>
 
     <!-- Blog Hero -->
     <section class="blog-hero">
@@ -1341,18 +1342,6 @@ flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => d
             });
         });
     </script>
-<!-- Cookie Consent Banner -->
-
-    <p style="color: white; margin: 0; font-size: 0.95rem; line-height: 1.4;">
-        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
-        We use cookies to enhance your experience. By continuing, you agree to our 
-        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
-    </p>
-    <button onclick="acceptCookies()" class="btn btn-primary btn-small" style="white-space: nowrap;">Accept</button>
-</div>
-
-
-
 
 <!-- Cookie Consent Banner -->
 <div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: none; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">

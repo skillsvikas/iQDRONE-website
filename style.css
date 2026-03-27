@@ -1,5 +1,11 @@
 /* ========== GLOBAL STYLES ========== */
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    width: 100%;
+}
 :root {
     --saffron: #F59E0B;
     --saffron-light: #FBBF24;
@@ -110,6 +116,12 @@ body::after {
     max-width: 1214px;
     margin: 0 auto;
     padding: 0 20px;
+    text-align: center;
+}
+.container-custom .courses-grid,
+.container-custom .stats-section,
+.container-custom .faq-enroll-row {
+    text-align: left; /* Reset for grid containers */
 }
 .section-title {
     font-size: 2.8rem;
@@ -1504,29 +1516,67 @@ nav ul {
     margin: 0 auto 30px;
     color: #ddd;
 }
-
 /* ===== COURSE LISTING PAGE STYLES ===== */
 .page-hero {    
-    min-height: calc(100vh - 85px);
-    background-image: url(images/Course_Hero.webp);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    width: 100%;
+    overflow: hidden;
 }
+
+.page-hero img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Mobile hero fix */
+@media (max-width: 768px) {
+    .page-hero {
+        width: 100% !important;
+    }
+}
+
 .page-title {
     font-size: 3.5rem;
     font-weight: 800;
-    margin-bottom: 15px;
+    margin: 40px 0 15px 0;
+    text-align: center;
     background: linear-gradient(to right, var(--saffron), var(--saffron-light));
     -webkit-background-clip: text;
     background-clip: text;
     color: white;
+    width: 100%;
 }
+
 .page-subtitle {
     font-size: 1.3rem;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 0 auto 40px auto;
+    text-align: center;
     color: #ddd;
+    line-height: 1.5;
+}
+
+/* Mobile heading fixes */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2rem !important;
+        margin: 30px 0 10px 0 !important;
+        padding: 0 15px;
+    }
+    
+    .page-subtitle {
+        font-size: 1rem !important;
+        margin: 0 auto 25px auto !important;
+        padding: 0 15px;
+    }
+    
+    .container-custom {
+        padding: 0 15px;
+    }
+}
+
+.header + .page-hero + .container-custom {
+    clear: both;
 }
 .hero-heading-section {
     padding: 30px 0;
