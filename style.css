@@ -162,10 +162,23 @@ body::after {
 }
 
 .logo {
-    font-size: 28px;
+     font-size: 28px;
     font-weight: bold;
     color: var(--saffron);
     white-space: nowrap;
+    display: flex;
+    align-items: center
+}
+@media (max-width: 992px) {
+    .logo {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .logo img {
+        margin: 0 auto;
+    }
 }
 
 /* DESKTOP NAV */
@@ -4292,4 +4305,37 @@ nav ul {
     .map-overlay li {
         font-size: 0.75rem;
     }
+}
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background: var(--dark-gray);
+    min-width: 200px;
+    border-radius: 8px;
+    padding: 10px 0;
+    z-index: 100;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    list-style: none;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 20px;
+    color: white;
+    text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+    background: var(--saffron);
+    color: black;
 }
