@@ -381,12 +381,15 @@
     </div>
     <span class="error-msg" id="termsError"></span>
 
-    <!-- Captcha & Submit -->
-    <div id="captcha-box">
-        <p>🔐 Verify: <span id="math-q" style="color:var(--saffron); font-weight:bold;"></span></p>
-        <input type="number" id="math-ans" placeholder="Enter answer">
-        <button class="btn btn-saffron" id="submitBtn" style="margin-top: 15px;">🚀 SUBMIT ENROLLMENT</button>
-    </div>
+    
+   <!-- Captcha (hidden until selfie) -->
+<div id="captcha-box" style="display:none;">
+    <p>🔐 Verify: <span id="math-q" style="color:var(--saffron); font-weight:bold;"></span></p>
+    <input type="number" id="math-ans" placeholder="Enter answer">
+</div>
+
+<!-- Submit Button - Always Visible -->
+<button class="btn btn-saffron" id="submitBtn" style="margin-top: 15px;">🚀 SUBMIT ENROLLMENT</button>
     
     <div id="status-msg"></div>
 </div>
