@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>iQDRONE | Pilot Registry Enrollment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --saffron: #F59E0B;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --blue: #38bdf8;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+        
+        body {
+            background: var(--bg);
+            color: white;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .nav-header {
+            background: #020617;
+            width: 100%;
+            padding: 14px 20px;
+            border-bottom: 2px solid var(--blue);
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .nav-header a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .nav-header a:hover {
+            color: var(--blue);
+        }
+        
+        .logo-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-section img {
+            height: 60px;
+        }
+        
+        .enroll-box {
+            background: var(--card);
+            padding: 28px 24px;
+            border-radius: 28px;
+            border: 1px solid var(--saffron);
+            width: 100%;
+            max-width: 550px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+        }
+        
+        h2 {
+            text-align: center;
+            color: var(--saffron);
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+        
+        /* NEW: smaller, round camera area */
+        .camera-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px 0 20px 0;
+        }
+        
+        #camera-area {
+            width: 180px;
+            height: 180px;
+            background: #000;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--saffron);
+            margin: 0 auto 12px auto;
+            box-shadow: 0 0 0 2px rgba(245,158,11,0.3);
+        }
+        
+        video, canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cam-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .btn-cam {
+            padding: 8px 20px;
+            font-size: 0.8rem;
+            border-radius: 40px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .btn-cam-saffron {
+            background: var(--saffron);
+            color: black;
+        }
+        
+        .btn-cam-snap {
+            background: var(--success);
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #94a3b8;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .required-star {
+            color: var(--saffron);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1.5px solid #334155;
+            background: #0f172a;
+            color: white;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--blue);
+            outline: none;
+        }
+        
+        .error-msg {
+            font-size: 0.7rem;
+            color: var(--danger);
+            margin-top: 4px;
+            display: block;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .radio-option input {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .radio-option label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: normal;
+            color: white;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+            font-size: 1rem;
+        }
+        
+        .btn-saffron {
+            background: var(--saffron);
+            color: black;
+        }
+        
+        .btn-saffron:hover {
+            background: #e68a00;
+            transform: translateY(-2px);
+        }
+        
+        .terms-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 20px 0 10px;
+        }
+        
+        .terms-container input {
+            width: 20px;
+            height: 20px;
+            margin: 0;
+        }
+        
+        .file-info {
+            font-size: 0.7rem;
+            color: var(--success);
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .helper-text {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        
+        #captcha-box {
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        #status-msg {
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 550px) {
+            .enroll-box {
+                padding: 20px 18px;
+            }
+            #camera-area {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav-header">
+    <a href="#">HOME</a>
+    <a href="#">COURSES</a>
+    <a href="#">JOBS</a>
+    <a href="#" style="color: var(--blue);">ENROLL</a>
+</nav>
+
+<div class="logo-section">
+    <img src="images/IQdrone-logo.webp" alt="iQDRONE Logo" onerror="this.src='https://placehold.co/200x60?text=iQDRONE'">
+</div>
+
+<div class="enroll-box">
+    <h2>✈ iQDRONE PILOT REGISTRY</h2>
+    <div class="subtitle">Founder Member Enrollment</div>
+    <p style="text-align: center; font-size: 0.8rem; margin-top: -5px; margin-bottom: 15px; color: var(--blue);">
+        📸 Picture Round: Selfie required
+    </p>
+
+    <!-- SELFIE CAMERA - SMALL & ROUND (moved to top) -->
+    <div class="camera-wrapper">
+        <div id="camera-area">
+            <video id="video" autoplay playsinline muted></video>
+            <canvas id="canvas" style="display:none;"></canvas>
+        </div>
+        <div class="cam-buttons">
+            <button class="btn-cam btn-cam-saffron" id="startBtn">📸 OPEN CAMERA</button>
+            <button class="btn-cam btn-cam-snap" id="snapBtn" style="display:none;">✅ CAPTURE</button>
+        </div>
+        <span class="error-msg" id="selfieError"></span>
+    </div>
+
+    <!-- ALL OTHER FIELDS (unchanged, exactly as before) -->
+    <div class="form-group">
+        <label>Full Name <span class="required-star">*</span></label>
+        <input type="text" id="pName" placeholder="Enter your full name">
+        <span class="error-msg" id="nameError"></span>
+    </div>
+    
+    <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="pEmail" placeholder="you@example.com">
+        <span class="error-msg" id="emailError"></span>
+    </div>
+    
+    <div class="form-group">
+        <label>Qualification</label>
+        <input type="text" id="pQualification" placeholder="e.g., B.Tech, 12th Pass, Diploma">
+        <div class="helper-text">📚 Your educational background</div>
+    </div>
+    
+    <div class="form-group">
+        <label>WhatsApp Number <span class="required-star">*</span></label>
+        <input type="tel" id="pPhone" placeholder="9876543210" maxlength="10">
+        <span class="error-msg" id="phoneError"></span>
+    </div>
+    
+    <div class="form-group">
+        <label>Do you have a Drone License? <span class="required-star">*</span></label>
+        <div class="radio-group">
+            <label class="radio-option">
+                <input type="radio" name="droneLicense" value="Yes"> 
+                <span>✅ Yes, I have a drone license</span>
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="droneLicense" value="No"> 
+                <span>❌ No, I don't have a license</span>
+            </label>
+            <label class="radio-option">
+                <input type="radio" name="droneLicense" value="In Progress"> 
+                <span>🔄 In Progress / Applying</span>
+            </label>
+        </div>
+        <span class="error-msg" id="licenseError"></span>
+        <div class="helper-text">🪪 DGCA Remote Pilot Certificate or any drone flying license</div>
+    </div>
+    
+    <div class="form-group">
+        <label>Course Interested In</label>
+        <select id="pCourse">
+            <option value="">-- Select a course --</option>
+            <option value="Small RPC (Drone License)">Small RPC (Drone License)</option>
+            <option value="Medium RPC">Medium RPC</option>
+            <option value="Drone Videography & Content">Drone Videography & Content</option>
+            <option value="Kisan Drone Operator (Agri)">Kisan Drone Operator (Agri)</option>
+            <option value="Drone Building & Repair">Drone Building & Repair</option>
+            <option value="Drone Survey & Mapping">Drone Survey & Mapping</option>
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label>Upload Resume (Optional)</label>
+        <input type="file" id="pResume" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+        <div id="resumeStatus" class="file-info">✅ File selected: <span id="resumeFileName"></span></div>
+        <div class="helper-text">📄 Upload PDF, DOC, or Image (Max 5MB)</div>
+    </div>
+
+    <!-- Terms & Conditions (restored) -->
+    <div class="terms-container">
+        <input type="checkbox" id="agreeTerms">
+        <span>I agree to the <a href="#" style="color:var(--blue);">Terms</a> and <a href="#" style="color:var(--blue);">Privacy Policy</a></span>
+    </div>
+    <span class="error-msg" id="termsError"></span>
+
+    <!-- Captcha & Submit -->
+    <div id="captcha-box">
+        <p>🔐 Verify: <span id="math-q" style="color:var(--saffron); font-weight:bold;"></span></p>
+        <input type="number" id="math-ans" placeholder="Enter answer">
+        <button class="btn btn-saffron" id="submitBtn" style="margin-top: 15px;">🚀 SUBMIT ENROLLMENT</button>
+    </div>
+    
+    <div id="status-msg"></div>
+</div>
+
+<script>
+    // ============================================
+    // REPLACE THIS WITH YOUR GOOGLE APPS SCRIPT URL
+    // ============================================
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_ACTUAL_URL_HERE/exec";
+    
+    // DOM Elements
+    const nameInput = document.getElementById('pName');
+    const emailInput = document.getElementById('pEmail');
+    const phoneInput = document.getElementById('pPhone');
+    const qualificationInput = document.getElementById('pQualification');
+    const courseSelect = document.getElementById('pCourse');
+    const agreeCheck = document.getElementById('agreeTerms');
+    const startBtn = document.getElementById('startBtn');
+    const snapBtn = document.getElementById('snapBtn');
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const submitBtn = document.getElementById('submitBtn');
+    const resumeInput = document.getElementById('pResume');
+    
+    const licenseRadios = document.querySelectorAll('input[name="droneLicense"]');
+    
+    const nameErr = document.getElementById('nameError');
+    const emailErr = document.getElementById('emailError');
+    const phoneErr = document.getElementById('phoneError');
+    const selfieErr = document.getElementById('selfieError');
+    const termsErr = document.getElementById('termsError');
+    const licenseErr = document.getElementById('licenseError');
+    
+    let selfieData = null;
+    let stream = null;
+    let captchaAnswer = 0;
+    let resumeBase64 = null;
+    let resumeFileName = "";
+    
+    // Validation functions (unchanged)
+    function validateName() {
+        if (!nameInput.value.trim()) {
+            nameErr.innerText = "Full name is required";
+            return false;
+        }
+        nameErr.innerText = "";
+        return true;
+    }
+    
+    function validateEmail() {
+        const email = emailInput.value.trim();
+        if (email && !/^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email)) {
+            emailErr.innerText = "Enter valid email address";
+            return false;
+        }
+        emailErr.innerText = "";
+        return true;
+    }
+    
+    function validatePhone() {
+        const phone = phoneInput.value.trim();
+        if (!phone) {
+            phoneErr.innerText = "WhatsApp number is required";
+            return false;
+        }
+        if (!/^[6-9]\d{9}$/.test(phone)) {
+            phoneErr.innerText = "Enter valid 10-digit Indian mobile number";
+            return false;
+        }
+        phoneErr.innerText = "";
+        return true;
+    }
+    
+    function validateDroneLicense() {
+        let selected = false;
+        for (const radio of licenseRadios) {
+            if (radio.checked) { selected = true; break; }
+        }
+        if (!selected) {
+            licenseErr.innerText = "Please select if you have a drone license or not";
+            return false;
+        }
+        licenseErr.innerText = "";
+        return true;
+    }
+    
+    function validateSelfie() {
+        if (!selfieData) {
+            selfieErr.innerText = "⚠️ Please capture a selfie";
+            return false;
+        }
+        selfieErr.innerText = "";
+        return true;
+    }
+    
+    function validateTerms() {
+        if (!agreeCheck.checked) {
+            termsErr.innerText = "Please accept Terms & Privacy Policy";
+            return false;
+        }
+        termsErr.innerText = "";
+        return true;
+    }
+    
+    // Camera functions (adapted for smaller UI)
+    async function initCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+            video.srcObject = stream;
+            video.style.display = "block";
+            canvas.style.display = "none";
+            startBtn.style.display = "none";
+            snapBtn.style.display = "inline-block";
+            selfieErr.innerText = "";
+        } catch(e) {
+            alert("Camera access denied. Please allow camera to take selfie.");
+        }
+    }
+    
+    function takePhoto() {
+        if (!video.srcObject || !video.videoWidth) {
+            alert("Camera not ready. Please open camera first.");
+            return;
+        }
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        selfieData = canvas.toDataURL('image/jpeg', 0.7);
+        
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        
+        video.style.display = "none";
+        canvas.style.display = "block";
+        snapBtn.style.display = "none";
+        startBtn.style.display = "inline-block";
+        startBtn.innerText = "📷 RETRY";
+        
+        const num1 = Math.floor(Math.random() * 12) + 1;
+        const num2 = Math.floor(Math.random() * 12) + 1;
+        captchaAnswer = num1 + num2;
+        document.getElementById('math-q').innerText = `${num1} + ${num2} = ?`;
+        document.getElementById('captcha-box').style.display = "block";
+        validateSelfie();
+    }
+    
+    // Resume file handling
+    resumeInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                alert("File too large! Maximum 5MB.");
+                resumeInput.value = "";
+                return;
+            }
+            resumeFileName = file.name;
+            document.getElementById('resumeFileName').innerText = resumeFileName;
+            document.getElementById('resumeStatus').style.display = "block";
+            const reader = new FileReader();
+            reader.onload = function(evt) { resumeBase64 = evt.target.result; };
+            reader.readAsDataURL(file);
+        } else {
+            resumeBase64 = null;
+            document.getElementById('resumeStatus').style.display = "none";
+        }
+    });
+    
+    phoneInput.addEventListener('input', function(e) {
+        this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
+        validatePhone();
+    });
+    
+    nameInput.addEventListener('input', validateName);
+    emailInput.addEventListener('input', validateEmail);
+    phoneInput.addEventListener('input', validatePhone);
+    agreeCheck.addEventListener('change', validateTerms);
+    licenseRadios.forEach(radio => radio.addEventListener('change', validateDroneLicense));
+    
+    startBtn.onclick = initCamera;
+    snapBtn.onclick = takePhoto;
+    
+    submitBtn.onclick = async function() {
+        let droneLicenseValue = "";
+        for (const radio of licenseRadios) {
+            if (radio.checked) { droneLicenseValue = radio.value; break; }
+        }
+        
+        const isNameValid = validateName();
+        const isPhoneValid = validatePhone();
+        const isLicenseValid = validateDroneLicense();
+        const isSelfieValid = validateSelfie();
+        const isTermsValid = validateTerms();
+        const isEmailValid = validateEmail();
+        
+        if (!isNameValid || !isPhoneValid || !isLicenseValid || !isSelfieValid || !isTermsValid) {
+            alert("❌ Please complete all mandatory fields: Name, Phone, Drone License, Selfie, and Terms.");
+            return;
+        }
+        if (!isEmailValid) {
+            alert("❌ Please fix the email address or leave it empty.");
+            return;
+        }
+        
+        const userAnswer = parseInt(document.getElementById('math-ans').value);
+        if (isNaN(userAnswer) || userAnswer !== captchaAnswer) {
+            alert("❌ Captcha verification failed. Please try again.");
+            return;
+        }
+        
+        submitBtn.disabled = true;
+        submitBtn.innerText = "⏳ SUBMITTING...";
+        
+        const formData = {
+            name: nameInput.value.trim(),
+            email: emailInput.value.trim() || "",
+            qualification: qualificationInput.value.trim() || "Not specified",
+            phone: phoneInput.value.trim(),
+            droneLicense: droneLicenseValue,
+            course: courseSelect.value || "Not selected",
+            resume: resumeBase64,
+            resumeFileName: resumeFileName,
+            selfie: selfieData
+        };
+        
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            const statusMsg = document.getElementById('status-msg');
+            statusMsg.innerHTML = "✅ SUCCESS! Your enrollment has been saved to the Pilot Registry!";
+            statusMsg.style.color = "#10b981";
+            statusMsg.style.fontWeight = "bold";
+            setTimeout(() => window.location.reload(), 3000);
+        } catch(error) {
+            console.error("Submission error:", error);
+            alert("❌ Submission failed. Please check your internet and try again.");
+            submitBtn.disabled = false;
+            submitBtn.innerText = "🚀 SUBMIT ENROLLMENT";
+        }
+    };
+    
+    // Initial state: camera preview hidden, show start button
+    video.style.display = "block";
+    canvas.style.display = "none";
+    startBtn.style.display = "inline-block";
+    snapBtn.style.display = "none";
+</script>
+</body>
+</html>

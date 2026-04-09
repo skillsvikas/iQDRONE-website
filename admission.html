@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iQDRONE Academy - Official Enrollment System</title>
+    <style>
+        /* ========== MAIN DARK THEME (for screen) ========== */
+        :root {
+            --saffron: #F59E0B;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --blue: #38bdf8;
+            --border-light: #334155;
+            --light-text: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: white;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 20px;
+        }
+
+        .form-card {
+            max-width: 950px;
+            margin: auto;
+            background: var(--card);
+            border-radius: 28px;
+            border: 1px solid var(--saffron);
+            padding: 30px 35px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+        }
+
+        .header-section {
+            text-align: center;
+            border-bottom: 2px solid var(--blue);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+        .logo {
+            font-weight: bold;
+            font-size: 36px;
+            color: var(--blue);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .logo span {
+            color: var(--saffron);
+        }
+        .header-section h1 {
+            font-size: 20px;
+            margin: 5px 0 0;
+            color: var(--light-text);
+            font-weight: normal;
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: #0f172a;
+            padding: 12px 15px;
+            border-radius: 14px;
+            border: 1px solid var(--border-light);
+            color: var(--light-text);
+        }
+        .meta-info input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--blue);
+            color: white;
+            width: 140px;
+            padding: 4px;
+        }
+
+        fieldset {
+            border: 1px solid var(--border-light);
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 16px;
+        }
+        legend {
+            font-weight: bold;
+            color: var(--saffron);
+            text-transform: uppercase;
+            padding: 0 12px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #94a3b8;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            background: #0f172a;
+            color: white;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+        input:focus, select:focus {
+            border-color: var(--blue);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(56,189,248,0.2);
+        }
+
+        /* Photo Box – same position */
+        .photo-box {
+            width: 180px;
+            height: 210px;
+            border: 2px solid var(--saffron);
+            background: #0f172a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            float: right;
+            margin-left: 20px;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        #video, #canvas {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background: #000;
+        }
+        .cam-btns {
+            display: flex;
+            width: 100%;
+        }
+        .cam-btn {
+            font-size: 10px;
+            padding: 6px;
+            cursor: pointer;
+            border: none;
+            flex: 1;
+            color: white;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid var(--border-light);
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        th {
+            background: #0f172a;
+            color: var(--blue);
+        }
+
+        .legal-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            background: #0f172a;
+            padding: 12px;
+            border: 1px solid var(--saffron);
+            margin-bottom: 10px;
+            border-radius: 12px;
+        }
+        .legal-item input {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: var(--blue);
+        }
+        .legal-item p {
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--light-text);
+        }
+
+        .captcha-row {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 14px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-light);
+        }
+        #cap_text {
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--saffron);
+        }
+        #cap_input {
+            width: 100px;
+            margin-left: 10px;
+        }
+
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 25px 0 15px;
+        }
+        .sig-line {
+            width: 45%;
+            border-bottom: 2px dotted var(--blue);
+            padding-bottom: 8px;
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            cursor: pointer;
+            border-radius: 40px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .btn-submit {
+            background: var(--saffron);
+            color: black;
+        }
+        .btn-submit:hover {
+            background: #e68a00;
+            transform: translateY(-2px);
+        }
+        .btn-print {
+            background: var(--blue);
+            color: black;
+        }
+        .no-print {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Receipt view (dark theme for screen) */
+        #receipt {
+            display: none;
+            border: 2px solid var(--saffron);
+            padding: 30px;
+            background: var(--card);
+            border-radius: 24px;
+            color: white;
+        }
+        .receipt-header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--blue);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .receipt-header .logo {
+            font-size: 28px;
+            margin: 0;
+        }
+
+        /* ========== PRINT STYLES – WHITE A4, BLACK TEXT, NO INK WASTE ========== */
+        @media print {
+            /* Force white background and black text everywhere */
+            body, .form-card, fieldset, .legal-item, .captcha-row, .meta-info,
+            .photo-box, #receipt, .receipt-header {
+                background: white !important;
+                color: black !important;
+                border-color: #ccc !important;
+                box-shadow: none !important;
+            }
+            /* Hide camera buttons and any interactive elements */
+            .cam-btns, .no-print, .btn, .btn-submit, .btn-print {
+                display: none !important;
+            }
+            /* Ensure text is black on white */
+            input, select, textarea, .meta-info input, .sig-line {
+                background: white !important;
+                color: black !important;
+                border-color: #aaa !important;
+            }
+            legend, .logo, .logo span, .header-section h1 {
+                color: black !important;
+                border-bottom-color: #aaa !important;
+            }
+            .photo-box {
+                border: 1px solid #000 !important;
+                background: #f9f9f9 !important;
+            }
+            #video, #canvas {
+                filter: grayscale(100%);
+                border: 1px solid #ccc;
+            }
+            table, th, td {
+                border-color: #aaa !important;
+                color: black !important;
+                background: white !important;
+            }
+            th {
+                background: #f0f0f0 !important;
+                color: black !important;
+            }
+            .legal-item p {
+                color: black !important;
+            }
+            .signature-row .sig-line {
+                border-bottom: 1px solid #000 !important;
+                color: #333 !important;
+            }
+            /* Ensure the form takes full width and is readable */
+            .form-card {
+                padding: 15px !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+            }
+            body {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            /* Keep photo box visible but without camera controls */
+            .photo-box {
+                float: right;
+                width: 150px;
+                height: 170px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-card" id="appContainer">
+    <div id="formView">
+        <div class="header-section">
+            <div class="logo">iQ<span>DRONE</span> ACADEMY</div>
+            <h1>OFFICIAL ADMISSION & ENROLLMENT FORM</h1>
+        </div>
+
+        <div class="meta-info">
+            <span>Serial No: <input type="text" id="serial_no" style="width:140px;"></span>
+            <span>Date: <input type="text" id="date_today" readonly style="width:110px;"></span>
+        </div>
+
+        <form id="admissionForm">
+            <fieldset>
+                <legend>I. Applicant’s Complete Personal Profile</legend>
+                <!-- PHOTO BOX – POSITION PRESERVED -->
+                <div class="photo-box">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas" style="display:none;"></canvas>
+                    <div class="cam-btns">
+                        <button type="button" class="cam-btn" style="background:var(--blue)" onclick="capture()">CAPTURE</button>
+                        <button type="button" class="cam-btn" style="background:#475569" onclick="retake()">RETAKE</button>
+                    </div>
+                </div>
+
+                <div style="margin-right: 210px;">
+                    <label>Full Name (As per Govt. ID)</label>
+                    <input type="text" id="full_name" required>
+                    <div class="grid">
+                        <div><label>Father’s/Husband’s Name</label><input type="text" id="guardian_name"></div>
+                        <div><label>Mother’s Name</label><input type="text" id="mother_name"></div>
+                    </div>
+                    <div class="grid">
+                        <div><label>Date of Birth</label><input type="date" id="dob"></div>
+                        <div><label>Gender</label><select id="gender"><option>Male</option><option>Female</option><option>Other</option></select></div>
+                        <div><label>Blood Group</label><input type="text" id="blood"></div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div><label>Nationality</label><input type="text" id="nat" value="Indian"></div>
+                    <div><label>Religion</label><input type="text" id="rel"></div>
+                    <div><label>Category</label><input type="text" placeholder="GEN/OBC/SC/ST/EWS"></div>
+                </div>
+                <div class="grid">
+                    <div><label>Aadhar Card No (KYC)</label><input type="text" id="aadhar" maxlength="12" required></div>
+                    <div><label>PAN No</label><input type="text" id="pan"></div>
+                </div>
+                <label>Permanent Address</label>
+                <input type="text" id="p_addr">
+                <div class="grid">
+                    <div><label>Current Address</label><input type="text" id="c_addr"></div>
+                    <div><label>PIN Code</label><input type="text" id="pin"></div>
+                </div>
+                <div class="grid">
+                    <div><label>Contact Number (Self)</label><input type="text" id="tel" required></div>
+                    <div><label>Emergency Contact</label><input type="text"></div>
+                    <div><label>Email Address</label><input type="email" id="email"></div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>II. Academic Qualification (Highest First)</legend>
+                <table>
+                    <tr><th>Degree/Exam</th><th>Board/University</th><th>Year of Passing</th><th>% / CGPA</th></tr>
+                    <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                    <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                </table>
+            </fieldset>
+
+            <fieldset>
+                <legend>III. Course Selection & Fee Structure</legend>
+                <div class="grid">
+                    <div><label>Course Name</label><input type="text" id="c_name" required></div>
+                    <div><label>Payment Mode</label>
+                        <select id="pay_mode" onchange="togglePay()">
+                            <option value="one_time">One-Time Full Payment</option>
+                            <option value="installment">Installment Plan (Quarterly)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid" style="background:#0f172a; padding:15px; border-radius:16px;">
+                    <div><label>Total Agreed Fees (₹)</label><input type="number" id="total_amt" oninput="updateFees()"></div>
+                    <div><label>Amount Paid Today (₹)</label><input type="number" id="paid_today" required></div>
+                    <div><label>Mode of Payment</label>
+                        <select id="pay_method">
+                            <option>Cash</option><option>UPI / QR</option><option>Bank Transfer</option><option>Cheque</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="inst_section" style="display:none; margin-top:15px;">
+                    <p><strong>Quarterly Balance Schedule:</strong></p>
+                    <div class="grid">
+                        <div><label>1st Quarter</label><input type="text" class="q_fee" readonly></div>
+                        <div><label>2nd Quarter</label><input type="text" class="q_fee" readonly></div>
+                        <div><label>3rd Quarter</label><input type="text" class="q_fee" readonly></div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>IV. Legal Terms & Binding Declaration (Compulsory Check)</legend>
+                <div class="legal-item"><input type="checkbox" required><p>1. <strong>Identity Verification:</strong> I hereby declare that all documents submitted are authentic. Any fraud will result in immediate termination and legal action.</p></div>
+                <div class="legal-item"><input type="checkbox" required><p>2. <strong>Financial Liability:</strong> I understand the Payment Plan is a contractual obligation. Failure to pay will attract a penalty per day.</p></div>
+                <div class="legal-item"><input type="checkbox" required><p>3. <strong>No Refund Policy:</strong> Fees once paid are non-refundable and non-transferable, even if the student leaves midway.</p></div>
+                <div class="legal-item"><input type="checkbox" required><p>4. <strong>Discipline:</strong> I agree to follow institutional rules. Damage to Drones or Lab equipment will be recovered from the student.</p></div>
+                <div class="legal-item"><input type="checkbox" required><p>5. <strong>Jurisdiction:</strong> Legal disputes are subject to the exclusive jurisdiction of the courts in <strong>Dewas, Madhya Pradesh</strong>.</p></div>
+            </fieldset>
+
+            <div class="captcha-row no-print">
+                <span id="cap_text" style="font-weight:bold; font-size:18px;"></span>
+                <input type="text" id="cap_input" placeholder="Result" style="width:100px;">
+            </div>
+
+            <div class="signature-row">
+                <div class="sig-line">Signature of Applicant</div>
+                <div class="sig-line">Signature of Parent/Guardian</div>
+            </div>
+
+            <div class="no-print">
+                <button type="submit" class="btn btn-submit">SUBMIT & GENERATE RECEIPT</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="receipt">
+        <div class="receipt-header">
+            <div class="logo">iQ<span>DRONE</span></div>
+            <div style="text-align:right; font-size:12px;"><strong>iQDRONE ACADEMY</strong><br>Dewas, Madhya Pradesh<br>Official Payment Receipt</div>
+        </div>
+        <h2 style="text-align:center; text-decoration:underline; color:var(--saffron);">FEES RECEIPT</h2>
+        <p><strong>Receipt No:</strong> <span id="r_no"></span> <span style="float:right"><strong>Date:</strong> <span id="r_date"></span></span></p>
+        <div style="border:1px solid var(--border-light); border-radius:16px; padding:20px; margin:20px 0;">
+            <p>Received with thanks from Mr./Ms. <strong><span id="r_name"></span></strong></p>
+            <p>A sum of <strong>₹ <span id="r_amt"></span></strong></p>
+            <p>Towards <strong><span id="r_mode"></span></strong> for Course: <strong><span id="r_course"></span></strong></p>
+            <p>Payment Method: <strong><span id="r_method"></span></strong></p>
+        </div>
+        <div id="r_inst_box" style="display:none; font-size:12px; background:#0f172a; padding:10px; border-radius:12px;">
+            <strong>Balance Note:</strong> Remaining installments calculated at ₹ <span id="r_bal"></span> each.
+        </div>
+        <div class="signature-row" style="margin-top:80px;">
+            <div class="sig-line">Student Signature</div>
+            <div class="sig-line">Authorized Signatory</div>
+        </div>
+        <div class="no-print" style="margin-top:40px;">
+            <button class="btn btn-print" onclick="window.print()">PRINT / DOWNLOAD PDF</button>
+            <button class="btn" style="background:#475569; color:white;" onclick="location.reload()">NEW ENTRY</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Setup date and captcha
+    document.getElementById('date_today').value = new Date().toLocaleDateString();
+    const n1 = Math.floor(Math.random()*10), n2 = Math.floor(Math.random()*10);
+    document.getElementById('cap_text').innerText = n1 + " + " + n2 + " = ";
+
+    // Camera logic (unchanged)
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    let stream = null;
+
+    function initCamera() {
+        if (stream) stream.getTracks().forEach(track => track.stop());
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+            .then(s => {
+                stream = s;
+                video.srcObject = stream;
+                video.style.display = 'block';
+                canvas.style.display = 'none';
+            })
+            .catch(e => alert("Camera access required for photo."));
+    }
+    initCamera();
+
+    function capture() {
+        if (!video.srcObject || !video.videoWidth) {
+            alert("Camera not ready, please allow camera.");
+            return;
+        }
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        video.style.display = 'none';
+        canvas.style.display = 'block';
+        if (stream) stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+
+    function retake() {
+        if (stream) stream.getTracks().forEach(track => track.stop());
+        initCamera();
+        video.style.display = 'block';
+        canvas.style.display = 'none';
+    }
+
+    // Fee logic
+    function togglePay() {
+        const instDiv = document.getElementById('inst_section');
+        instDiv.style.display = (document.getElementById('pay_mode').value === 'installment') ? 'block' : 'none';
+        updateFees();
+    }
+
+    function updateFees() {
+        const total = parseFloat(document.getElementById('total_amt').value);
+        const qFields = document.getElementsByClassName('q_fee');
+        if (!isNaN(total) && total > 0 && document.getElementById('pay_mode').value === 'installment') {
+            const split = (total / 4).toFixed(2);
+            for(let f of qFields) f.value = "₹ " + split;
+        } else {
+            for(let f of qFields) f.value = "";
+        }
+    }
+
+    // Form submission
+    document.getElementById('admissionForm').onsubmit = function(e) {
+        e.preventDefault();
+        const captchaInput = document.getElementById('cap_input').value;
+        if (parseInt(captchaInput) !== (n1 + n2)) {
+            alert("Wrong Captcha! Please verify.");
+            return;
+        }
+
+        // Populate receipt
+        const serial = document.getElementById('serial_no').value.trim();
+        document.getElementById('r_no').innerText = serial || "IQ-" + Math.floor(Math.random() * 10000);
+        document.getElementById('r_date').innerText = new Date().toLocaleDateString();
+        document.getElementById('r_name').innerText = document.getElementById('full_name').value.toUpperCase() || "Applicant";
+        document.getElementById('r_amt').innerText = document.getElementById('paid_today').value || "0";
+        document.getElementById('r_course').innerText = document.getElementById('c_name').value || "Not Specified";
+        document.getElementById('r_method').innerText = document.getElementById('pay_method').value;
+        
+        const payMode = document.getElementById('pay_mode').value;
+        document.getElementById('r_mode').innerText = (payMode === 'one_time') ? "Full Course Payment" : "Installment Downpayment";
+        
+        const instBox = document.getElementById('r_inst_box');
+        if (payMode === 'installment') {
+            instBox.style.display = 'block';
+            const total = parseFloat(document.getElementById('total_amt').value);
+            const installmentAmount = (total / 4).toFixed(2);
+            document.getElementById('r_bal').innerText = installmentAmount;
+        } else {
+            instBox.style.display = 'none';
+        }
+
+        document.getElementById('formView').style.display = 'none';
+        document.getElementById('receipt').style.display = 'block';
+        window.scrollTo(0, 0);
+    };
+</script>
+</body>
+</html>
