@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iQDRONE | Job Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0f172a;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            padding: 30px 20px;
+        }
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1e293b;
+            border-radius: 28px;
+            border: 1px solid #F59E0B;
+            padding: 30px;
+        }
+        h2 { color: #F59E0B; margin-bottom: 20px; }
+        textarea, input {
+            width: 100%;
+            padding: 12px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 14px;
+            color: white;
+            margin: 10px 0;
+        }
+        button {
+            background: #F59E0B;
+            color: black;
+            border: none;
+            border-radius: 40px;
+            padding: 12px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .job-preview {
+            margin-top: 30px;
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+        }
+        .job-card {
+            background: #1e293b;
+            border-left: 5px solid #F59E0B;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+        }
+        .job-card h3 { color: #F59E0B; margin-bottom: 8px; }
+        .job-card p { color: #94a3b8; font-size: 0.9rem; margin: 5px 0; }
+        hr { border-color: #334155; margin: 20px 0; }
+    </style>
+</head>
+<body>
+<div class="admin-container">
+    <h2>✈ iQDRONE Job Admin</h2>
+    <p>Paste the WhatsApp message (pipe‑separated format) and click "Add Job"</p>
+    <p style="font-size: 0.8rem; color: #94a3b8;">Format: <code>JOB_DATA|Company|Job Title|Location|Salary|Requirements</code></p>
+
+    <textarea id="waData" rows="3" placeholder="Example:&#10;JOB_DATA|SkyWorks Ltd.|Drone Pilot|Mumbai|35000-45000|DGCA license, 2+ years experience"></textarea>
+    <button onclick="addJob()">➕ Add Job to Portal</button>
+
+    <div class="job-preview">
+        <h3>📋 All Jobs (saved automatically)</h3>
+        <div id="jobList"></div>
+        <button onclick="exportHTML()">📤 Export HTML (to paste into drone-jobs.html)</button>
+        <button onclick="clearAll()" style="background:#ef4444; margin-left: 10px;">🗑️ Clear All</button>
+    </div>
+</div>
+
+<script>
+    // Load saved jobs from localStorage
+    let jobs = JSON.parse(localStorage.getItem('iqdrone_jobs')) || [];
+
+    function displayJobs() {
+        const container = document.getElementById('jobList');
+        if (!container) return;
+        if (jobs.length === 0) {
+            container.innerHTML = '<p style="color:#64748b;">No jobs added yet.</p>';
+            return;
+        }
+        container.innerHTML = jobs.map((job, idx) => `
+            <div class="job-card">
+                <h3>${escapeHtml(job.title)}</h3>
+                <p><strong>${escapeHtml(job.company)}</strong> | 📍 ${escapeHtml(job.location)}</p>
+                <p>💰 Salary: ₹ ${escapeHtml(job.salary)}</p>
+                <p>📝 ${escapeHtml(job.requirements)}</p>
+                <button onclick="removeJob(${idx})" style="background:#ef4444; padding:5px 12px; font-size:0.8rem; margin-top:10px;">Remove</button>
+            </div>
+        `).join('');
+    }
+
+    function addJob() {
+        const raw = document.getElementById('waData').value.trim();
+        if (!raw) return alert("Paste job data first");
+
+        // Split by pipe (|)
+        const parts = raw.split('|');
+        if (parts[0] !== "JOB_DATA") {
+            alert("Invalid format. Must start with JOB_DATA");
+            return;
+        }
+        if (parts.length < 6) {
+            alert("Missing fields. Need: JOB_DATA|Company|Title|Location|Salary|Requirements");
+            return;
+        }
+
+        const [, company, title, location, salary, requirements] = parts;
+        const newJob = {
+            company: company.trim(),
+            title: title.trim(),
+            location: location.trim(),
+            salary: salary.trim(),
+            requirements: requirements.trim(),
+            date: new Date().toISOString()
+        };
+        jobs.push(newJob);
+        localStorage.setItem('iqdrone_jobs', JSON.stringify(jobs));
+        displayJobs();
+        document.getElementById('waData').value = '';
+        alert("Job added!");
+    }
+
+    function removeJob(index) {
+        jobs.splice(index, 1);
+        localStorage.setItem('iqdrone_jobs', JSON.stringify(jobs));
+        displayJobs();
+    }
+
+    function clearAll() {
+        if (confirm("Delete all jobs?")) {
+            jobs = [];
+            localStorage.setItem('iqdrone_jobs', JSON.stringify(jobs));
+            displayJobs();
+        }
+    }
+
+    function exportHTML() {
+        if (jobs.length === 0) {
+            alert("No jobs to export");
+            return;
+        }
+        // Generate HTML that can be pasted into drone-jobs.html's #jobsGrid
+        const cardsHTML = jobs.map(job => `
+            <div class="job-card" data-tags="Full‑time">
+                <span class="job-tag">Full‑time</span>
+                <h3 class="job-title">${escapeHtml(job.title)}</h3>
+                <div class="job-company"><i class="fas fa-building"></i> ${escapeHtml(job.company)}</div>
+                <div class="job-details">
+                    <span><i class="fas fa-map-marker-alt"></i> ${escapeHtml(job.location)}</span>
+                    <span><i class="fas fa-briefcase"></i> ₹ ${escapeHtml(job.salary)}</span>
+                </div>
+                <p class="job-desc">${escapeHtml(job.requirements)}</p>
+                <button class="btn btn-primary btn-small apply-btn" data-job="${escapeHtml(job.title)}">Apply Now</button>
+            </div>
+        `).join('\n');
+
+        const fullBlock = `<!-- START DYNAMIC JOBS -->\n${cardsHTML}\n<!-- END DYNAMIC JOBS -->`;
+        navigator.clipboard.writeText(fullBlock);
+        alert("HTML copied! Paste it inside #jobsGrid in drone-jobs.html");
+    }
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    displayJobs();
+</script>
+</body>
+</html>
