@@ -74,43 +74,44 @@
         </ul>
     </nav>
     <div class="menu-row">
-        <div class="header-buttons">
-            <button class="btn btn-text" id="loginBtn">Login</button>
-            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
-                <i class="fas fa-calendar-check"></i> Free Consultation
-            </button>
-        </div>
-        <button class="hamburger">☰</button>
-    </div> 
+    <div class="header-buttons">
+        <button class="btn btn-text" id="loginBtn">Login</button>
+        <a href="contact-us.html" class="btn btn-primary">
+            <i class="fas fa-calendar-check"></i> Free Consultation
+        </a>
+    </div>
+    <button class="hamburger">☰</button>
+</div>
 </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <video autoplay muted loop class="hero-video">
-            <source src="videos/drone-lab-video.mp4" type="video/mp4">
-        </video>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-title">Transforming Education with <br><span>Drone Lab Solutions</span></h1>
-            <p class="hero-subtitle">
-                We provide cutting-edge drone lab setups to 
-                <div class="audience-text">
-                    <span class="audience-words">Schools</span>
-                    <span class="audience-words">Colleges</span>
-                    <span class="audience-words">R&D Institutes</span>
-                    <span class="audience-words">Skill Centers</span>
-                </div>
-            </p>
-            <div class="hero-buttons">
-                <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20Drone%20Lab" class="btn btn-primary btn-large" target="_blank">
-    <i class="fas fa-phone-alt"></i> Call Us Now
-</a>
-                <a href="#contactForm" class="btn btn-secondary btn-large">
-    <i class="fas fa-file-invoice-dollar"></i> Get a Quote
-</a>
+<!-- Hero Section (fixed for video autoplay) -->
+<section class="hero" style="position: relative; width: 100%; height: 100vh; min-height: 500px; overflow: hidden;">
+    <video autoplay muted loop playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+        <source src="videos/drone-lab-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="hero-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1;"></div>
+    <div class="hero-content" style="position: relative; z-index: 2; text-align: center; color: white; top: 50%; transform: translateY(-50%); padding: 20px;">
+        <h1 class="hero-title">Transforming Education with <br><span>Drone Lab Solutions</span></h1>
+        <p class="hero-subtitle">
+            We provide cutting-edge drone lab setups to 
+            <div class="audience-text">
+                <span class="audience-words">Schools</span>
+                <span class="audience-words">Colleges</span>
+                <span class="audience-words">R&D Institutes</span>
+                <span class="audience-words">Skill Centers</span>
             </div>
+        </p>
+        <div class="hero-buttons">
+            <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20Drone%20Lab" class="btn btn-primary btn-large" target="_blank">
+                <i class="fas fa-phone-alt"></i> Call Us Now
+            </a>
+            <a href="#contactForm" class="btn btn-secondary btn-large">
+                <i class="fas fa-file-invoice-dollar"></i> Get a Quote
+            </a>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Trust Line -->
     <section class="trust-line">
@@ -259,62 +260,58 @@
     </section>
 
     <!-- Contact Section -->
-    <section class="contact">
-        <div class="contact-overlay"></div>
-        <div class="contact-container">
-            <div class="contact-info">
-                <h2>Launch Your Drone Lab Today!</h2>
-                <div class="contact-detail"><i class="fas fa-map-marker-alt"></i> <span>Vijay Nagar, Indore, MP, India 110001</span></div>
-                <div class="contact-detail"><i class="fas fa-phone-alt"></i> <span>+91 98765 43210</span></div>
-                <div class="contact-detail"><i class="fas fa-envelope"></i> <span>labs@iqdrone.com</span></div>
-                <div class="contact-detail"><i class="fas fa-clock"></i> <span>Mon-Sat: 9:00 AM - 6:00 PM</span></div>
-                <div class="social-icons" style="display:flex; gap:15px; margin-top:2rem;">
-                    <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
-                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                </div>
-                <button class="btn btn-primary btn-large" style="margin-top:2rem;"><i class="fas fa-phone-alt"></i> Call Us Now!</button>
+<section class="contact">
+    <div class="contact-overlay"></div>
+    <div class="contact-container">
+        <div class="contact-info">
+            <h2>Launch Your Drone Lab Today!</h2>
+            <div class="contact-detail"><i class="fas fa-map-marker-alt"></i> <span>Vijay Nagar, Indore, MP, India 110001</span></div>
+            <div class="contact-detail"><i class="fas fa-phone-alt"></i> <span>+91 98765 43210</span></div>
+            <div class="contact-detail"><i class="fas fa-envelope"></i> <span>labs@iqdrone.com</span></div>
+            <div class="contact-detail"><i class="fas fa-clock"></i> <span>Mon-Sat: 9:00 AM - 6:00 PM</span></div>
+            <div class="social-icons" style="display:flex; gap:15px; margin-top:2rem;">
+                <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
             </div>
-    <div class="contact-form">
-    <form id="contactForm" action="https://formspree.io/f/YOUR_CONTACT_ENDPOINT" method="POST">
-        <input type="hidden" name="_subject" value="New Drone Lab Inquiry">
-        <input type="hidden" name="_next" value="thank-you.html">
-
-        <div class="form-group">
-            <label for="name">Full Name *</label>
-            <input type="text" id="name" name="fullName" required placeholder="Enter your name">
+            <button class="btn btn-primary btn-large" style="margin-top:2rem;"><i class="fas fa-phone-alt"></i> Call Us Now!</button>
         </div>
-        <div class="form-group">
-            <label for="institution">Institution Name *</label>
-            <input type="text" id="institution" name="institution" required placeholder="Enter institution name">
+        <div class="contact-form">
+            <form id="droneLabForm" data-form-type="drone-lab-inquiry">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="fullName" required placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="institution">Institution Name *</label>
+                    <input type="text" id="institution" name="institution" required placeholder="Enter institution name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="_replyto" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+                </div>
+                <div class="form-group">
+                    <label for="message">Your Requirements</label>
+                    <textarea id="message" name="message" placeholder="Tell us about your drone lab needs"></textarea>
+                </div>
+                <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="labAgreeTerms" name="agreeTerms" required style="width: auto;">
+                    <label for="labAgreeTerms" style="color: white;">
+                        I agree to the <a href="terms.html" target="_blank" style="color: var(--saffron);">Terms and Conditions</a> 
+                        and <a href="privacy.html" target="_blank" style="color: var(--saffron);">Privacy Policy</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;"><i class="fas fa-paper-plane"></i> Submit Request</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="email">Email Address *</label>
-            <input type="email" id="email" name="_replyto" required placeholder="Enter your email">
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone Number *</label>
-            <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
-        </div>
-        <div class="form-group">
-            <label for="message">Your Requirements</label>
-            <textarea id="message" name="message" placeholder="Tell us about your drone lab needs"></textarea>
-        </div>
-
-        <!-- Terms checkbox -->
-        <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
-            <input type="checkbox" id="labAgreeTerms" name="agreeTerms" required style="width: auto;">
-            <label for="labAgreeTerms" style="color: white;">
-                I agree to the <a href="terms.html" target="_blank" style="color: var(--saffron);">Terms and Conditions</a> 
-                and <a href="privacy.html" target="_blank" style="color: var(--saffron);">Privacy Policy</a>
-            </label>
-        </div>
-
-        <button type="submit" class="btn btn-primary" style="width:100%;"><i class="fas fa-paper-plane"></i> Submit Request</button>
-    </form>
-</div>
-    </section>
+    </div>
+</section>
+<script src="common-form.js"></script>
 
     <!-- Footer -->
     <footer class="footer-content">
@@ -364,78 +361,17 @@
 </footer>
 
     <!-- Consultation Sidebar -->
-    <div class="consultation-sidebar" id="consultationSidebar">
-        <button class="sidebar-btn consultation-trigger"><i class="fas fa-calendar-check"></i><span>Free Consultation</span></button>
-    </div>
+    
 
     <!-- WhatsApp Chat Button -->
-    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20Drone%20Lab" class="whatsapp-chat" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'd%20like%20to%20get%20in%20touch" 
+   class="whatsapp-chat" 
+   target="_blank"
+   style="position:fixed; bottom:30px; right:30px; width:60px; height:60px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; z-index:2001; text-decoration:none;">
+    <i class="fab fa-whatsapp"></i>
+</a>
 
-   <!-- Consultation Modal (Final) -->
-<div class="consultation-modal" id="consultationModal">
-    <div class="modal-container">
-        <div class="close-modal"><i class="fas fa-times"></i></div>
-        <div class="modal-left">
-            <!-- Step 1: Date & Time -->
-            <div class="modal-step active" id="step1">
-                <h3 class="modal-title">Schedule Your Consultation</h3>
-                <div class="calendar-container">
-                    <input type="text" id="date" placeholder="Select Date">
-                </div>
-                <div class="time-slots" id="timeSlots">
-                    <div class="time-slot">9:00 AM</div>
-                    <div class="time-slot">10:00 AM</div>
-                    <div class="time-slot">11:00 AM</div>
-                    <div class="time-slot">1:00 PM</div>
-                    <div class="time-slot">2:00 PM</div>
-                    <div class="time-slot">3:00 PM</div>
-                </div>
-                <div class="modal-actions">
-                    <button class="modal-btn secondary" id="cancelBtn">Cancel</button>
-                    <button class="modal-btn" id="nextStepBtn">Next</button>
-                </div>
-            </div>
-            <!-- Step 2: Personal Details Form -->
-            <div class="modal-step" id="step2">
-                <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
-                    <input type="hidden" name="_subject" value="New Consultation Request">
-                    <input type="hidden" name="_next" value="thank-you.html">
-
-                    <input type="text" name="fullName" placeholder="Full Name *" required>
-                    <input type="email" name="_replyto" placeholder="Email Address *" required>
-                    <input type="tel" name="phone" placeholder="Phone Number *" required>
-                    <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
-
-                    <!-- Terms Checkbox -->
-                    <div class="modal-checkbox">
-                        <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
-                        <label for="consultAgreeTerms">
-                            I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
-                            and <a href="privacy.html" target="_blank">Privacy Policy</a>
-                        </label>
-                    </div>
-
-                    <div class="modal-actions">
-                        <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
-                        <button type="submit" class="modal-btn">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="modal-right">
-            <div class="modal-logo">iQdrone Academy</div>
-            <div class="contact-info">
-                <p><i class="fas fa-phone"></i> +918889122261</p>
-                <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
-                <p>We'll contact you within 24h</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-    <!-- Back to Top -->
+       <!-- Back to Top -->
     <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
 
     

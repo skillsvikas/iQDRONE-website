@@ -72,15 +72,15 @@
             <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
         </ul>
     </nav>
-    <div class="menu-row">
-        <div class="header-buttons">
-            <button class="btn btn-text" id="loginBtn">Login</button>
-            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
-                <i class="fas fa-calendar-check"></i> Free Consultation
-            </button>
-        </div>
-        <button class="hamburger">☰</button>
-    </div> 
+<div class="menu-row">
+    <div class="header-buttons">
+        <button class="btn btn-text" id="loginBtn">Login</button>
+        <a href="contact-us.html" class="btn btn-primary">
+            <i class="fas fa-calendar-check"></i> Free Consultation
+        </a>
+    </div>
+    <button class="hamburger">☰</button>
+</div>
 </header>
 <!-- PAGE HERO (Background Image Only) -->
 <div class="page-hero">
@@ -239,232 +239,134 @@
         </div>
     </div>
 
-    <!-- FAQ + Enroll Row -->
-    <div class="container-custom">
-        <div class="faq-enroll-row">
-            <!-- FAQ Column -->
-            <div class="faq-column">
-                <h2 class="faq-title">Frequently Asked Questions</h2>
-                <div class="faq-container">
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <i class="fas fa-question-circle faq-icon"></i>
-                            <span>Which course is right for me?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            <div class="faq-answer-content">
-                                It depends on your goals. Beginners should start with Small RPC. If you already have a license, consider Medium RPC or specialisations like Agriculture, Survey, or Videography.
-                            </div>
-                        </div>
+     <div class="container-custom">
+    <div class="faq-enroll-row">
+        <!-- Enroll Column (Left) -->
+        <div class="enroll-column">
+            <div id="enrollForm" class="enrollment-form">
+                <h2 class="section-title">Enroll Now</h2>
+                <form id="courseEnrollForm" data-form-type="course-enrollment">
+                    <input type="hidden" name="_subject" value="New Course Enrollment">
+                    <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html">
+                    
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
                     </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <i class="fas fa-briefcase faq-icon"></i>
-                            <span>Do you offer placement assistance?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            <div class="faq-answer-content">
-                                Yes, we have 100% job assistance with 50+ partner companies across various sectors.
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="_replyto" required placeholder="Enter your email">
                     </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <i class="fas fa-credit-card faq-icon"></i>
-                            <span>What are the payment options?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            <div class="faq-answer-content">
-                                We accept online payments, bank transfers, and offer EMI options on request.
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
                     </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <i class="fas fa-laptop faq-icon"></i>
-                            <span>Can I take courses online?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            <div class="faq-answer-content">
-                                Most courses have online theory and offline practical sessions. Check individual course pages for details.
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="course">Select Course</label>
+                        <select id="course" name="course" required>
+                            <option value="small">Small RPC</option>
+                            <option value="medium">Medium RPC</option>
+                            <option value="kisan">Kisan Drone Operator</option>
+                            <option value="repair">Drone Building & Repair</option>
+                            <option value="survey">Drone Survey & Mapping</option>
+                            <option value="advanced-agri">Advanced Agriculture</option>
+                            <option value="fpv">FPV Racing & Freestyle</option>
+                            <option value="storytellers">Sky Storytellers</option>
+                            <option value="ttt">Train The Trainer (TTT)</option>
+                        </select>
                     </div>
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <i class="fas fa-file-signature faq-icon"></i>
-                            <span>How do I enroll?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            <div class="faq-answer-content">
-                                Fill the enrollment form on this page or click any "Start Career" button to go to the course page and enroll.
-                            </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                        <label for="agreeTerms">
+                            I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
+                            and <a href="privacy.html" target="_blank">Privacy Policy</a>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large" style="width:100%;">Submit Enrollment</button>
+                </form>
+            </div>
+        </div>
+    
+        <!-- FAQ Column (Right) -->
+        <div class="faq-column">
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-question-circle faq-icon"></i>
+                        <span>Which course is right for me?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            It depends on your goals. Beginners should start with Small RPC. If you already have a license, consider Medium RPC or specialisations like Agriculture, Survey, or Videography.
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Enroll Column -->
-            <div class="enroll-column">
-                <div class="enroll-box">
-                    <h3>Ready to Start?</h3>
-                    <form class="enroll-form" id="enrollForm" action="https://formspree.io/f/mzdjpnek" method="POST">
-                        <!-- Hidden fields for Formspree -->
-                        <input type="hidden" name="_subject" value="New Course Enrollment">
-
-                        <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="fullName" required placeholder="Enter your name">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-briefcase faq-icon"></i>
+                        <span>Do you offer placement assistance?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes, we have 100% job assistance with 50+ partner companies across various sectors.
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="_replyto" required placeholder="Enter your email">
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-credit-card faq-icon"></i>
+                        <span>What are the payment options?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            We accept online payments, bank transfers, and offer EMI options on request.
                         </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" required placeholder="Enter your phone">
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-laptop faq-icon"></i>
+                        <span>Can I take courses online?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Most courses have online theory and offline practical sessions. Check individual course pages for details.
                         </div>
-                        <div class="form-group">
-                            <label for="course-select">Interested Course *</label>
-                            <select id="course-select" name="course" required>
-                                <option value="small">Small RPC</option>
-                                <option value="medium">Medium RPC</option>
-                                <option value="kisan">Kisan Drone Operator</option>
-                                <option value="repair">Drone Building & Repair</option>
-                                <option value="survey">Drone Survey & Mapping</option>
-                                <option value="advanced-agri">Advanced Agriculture</option>
-                                <option value="fpv">FPV Racing & Freestyle</option>
-                                <option value="storytellers">Sky Storytellers</option>
-                                <option value="ttt">Train The Trainer (TTT)</option>
-                            </select>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-file-signature faq-icon"></i>
+                        <span>How do I enroll?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Fill the enrollment form on this page or click any "Start Career" button to go to the course page and enroll.
                         </div>
-
-                        <!-- Terms & Conditions Checkbox -->
-                        <div class="form-group form-checkbox">
-                            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
-                            <label for="agreeTerms">
-                                I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
-                                and <a href="privacy.html" target="_blank">Privacy Policy</a>
-                            </label>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-large" style="width:100%;">Submit Enrollment</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Footer -->
-    <footer class="footer-content">
-        <div class="footer-container">
-            <div class="footer-column">
-                <div class="footer-logo"><img src="images/IQdrone-logo.webp" alt="iQdrone Academy" style="height: 40px; width: auto;"></div>
-                <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h3 class="footer-title">Quick Links</h3>
-                <div class="footer-links">
-                    <a href="index.html">Home</a>
-                    <a href="courses.html">Courses</a>
-                    <a href="service.html">Service</a>
-                    <a href="drone-lab.html">Drone Lab</a>
-                    <a href="drone-workshop.html">Workshops</a>
-                    <a href="drone-jobs.html">Jobs</a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h3 class="footer-title">More</h3>
-                <div class="footer-links">
-                    <a href="partner.html">Partner With Us</a>
-                    <a href="about-us.html">About Us</a>
-                    <a href="contact-us.html">Contact Us</a>
-                    <a href="blog.html">Blog</a>
-                    <a href="privacy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms</a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h3 class="footer-title">Contact</h3>
-                <div class="footer-links">
-                    <a href="#"><i class="fas fa-map-marker-alt"></i> Vijay Nagar, Indore, MP</a>
-                    <a href="tel:+918889122261"><i class="fas fa-phone"></i> +918889122261</a>
-                    <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
-                </div>
-            </div>
-        </div>
-        <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
-    </footer>
-
-    <!-- Consultation Sidebar -->
-    <div class="consultation-sidebar" id="consultationSidebar">
-        <button class="sidebar-btn consultation-trigger"><i class="fas fa-calendar-check"></i><span>Free Consultation</span></button>
-    </div>
 
     <!-- WhatsApp Chat Button -->
-    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20courses" class="whatsapp-chat" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'd%20like%20to%20get%20in%20touch" 
+   class="whatsapp-chat" 
+   target="_blank"
+   style="position:fixed; bottom:30px; right:30px; width:60px; height:60px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; z-index:2001; text-decoration:none;">
+    <i class="fab fa-whatsapp"></i>
+</a>
 
-    <!-- Consultation Modal -->
-    <div class="consultation-modal" id="consultationModal">
-        <div class="modal-container">
-            <div class="close-modal"><i class="fas fa-times"></i></div>
-            <div class="modal-left">
-                <div class="modal-step active" id="step1">
-                    <h3 class="modal-title">Schedule Your Consultation</h3>
-                    <div class="calendar-container"><input type="text" id="date" placeholder="Select Date"></div>
-                    <div class="time-slots" id="timeSlots">
-                        <div class="time-slot">9:00 AM</div><div class="time-slot">10:00 AM</div><div class="time-slot">11:00 AM</div>
-                        <div class="time-slot">1:00 PM</div><div class="time-slot">2:00 PM</div><div class="time-slot">3:00 PM</div>
-                    </div>
-                    <div class="modal-actions"><button class="modal-btn secondary" id="cancelBtn">Cancel</button><button class="modal-btn" id="nextStepBtn">Next</button></div>
-                </div>
-                <div class="modal-step" id="step2">
-                    <h3 class="modal-title">Your Information</h3>
-                    <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
-                        <input type="hidden" name="_subject" value="New Consultation Request">
-                        <input type="hidden" name="_next" value="thank-you.html">
-
-                        <input type="text" name="fullName" placeholder="Full Name *" required>
-                        <input type="email" name="_replyto" placeholder="Email Address *" required>
-                        <input type="tel" name="phone" placeholder="Phone Number *" required>
-                        <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
-
-                        <!-- Terms Checkbox -->
-                        <div class="modal-checkbox">
-                            <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
-                            <label for="consultAgreeTerms">
-                                I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
-                                and <a href="privacy.html" target="_blank">Privacy Policy</a>
-                            </label>
-                        </div>
-
-                        <div class="modal-actions">
-                            <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
-                            <button type="submit" class="modal-btn">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-right">
-                <div class="modal-logo">iQdrone Academy</div>
-                <div class="contact-info"><p><i class="fas fa-phone"></i> +918889122261</p><p><i class="fas fa-envelope"></i> info@iqdrone.com</p><p>We'll contact you within 24h</p></div>
-            </div>
-        </div>
-    </div>
-
+    
     <!-- Back to Top -->
     <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
     <!-- Scripts -->
@@ -512,5 +414,6 @@ function rejectCookies() {
     }
 })();
 </script>
+<script src="common-form.js"></script>
 </body>
 </html>

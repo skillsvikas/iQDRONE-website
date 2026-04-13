@@ -209,61 +209,6 @@ nav ul { list-style: none; display: flex; gap: 25px; }
     box-shadow: none;
 }
 
-/* Consultation modal */
-.consultation-modal {
-    display: none;
-    position: fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.9);
-    justify-content:center;
-    align-items:center;
-    z-index:3000;
-}
-.consultation-modal.show { display: flex; }
-.modal-container { background: var(--dark-gray); width: 90%; max-width: 1000px; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
-.modal-left { flex:1; padding: 40px; }
-.modal-right {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 30px 20px;
-    background: rgba(245, 158, 11, 0.1);
-    border-left: 1px solid rgba(255,255,255,0.1);
-    height: 100%;
-}
-.modal-logo { font-size: 2.5rem; font-weight: 800; color: var(--saffron); margin-bottom: 30px; line-height: 1.2; }
-.contact-info { color: white; font-size: 1rem; line-height: 1.8; margin-bottom: 20px; width: 100%; }
-.contact-info p { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 8px 0; word-break: break-word; }
-.contact-info i { color: var(--saffron); width: 20px; font-size: 1.1rem; }
-.modal-step { display: none; }
-.modal-step.active { display: block; }
-.modal-title { font-size: 2rem; color: var(--saffron); margin-bottom: 20px; }
-.calendar-container { margin-bottom: 20px; }
-.time-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 20px 0; }
-.time-slot { background: rgba(255,255,255,0.1); padding: 10px; text-align: center; border-radius: 5px; cursor: pointer; }
-.time-slot.selected { background: var(--saffron); color: black; }
-.modal-form input, .modal-form textarea { 
-    width: 100%; 
-    padding: 12px; 
-    margin-bottom: 15px; 
-    background: rgba(255,255,255,0.1); 
-    border: 1px solid rgba(255,255,255,0.2); 
-    border-radius: 5px; 
-    color: white; 
-    box-sizing: border-box; 
-}
-.modal-actions { display: flex; gap: 15px; }
-.modal-btn { padding: 12px 30px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; }
-.modal-btn.primary { background: var(--saffron); color: black; }
-.modal-btn.secondary { background: transparent; color: white; border: 1px solid var(--saffron); }
-.close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 1.5rem; cursor: pointer; z-index: 10; }
-.calendar-container input {background: rgba(255, 255, 255, 0.1);border: 1px solid rgba(255, 255, 255, 0.2);color: white;padding: 12px 15px;border-radius: 5px;width: 100%;font-family: 'Orbitron', sans-serif;font-size: 1rem;outline: none;transition: border 0.3s;}
-.calendar-container input:focus { border-color: var(--saffron); }
 
 /* Back to top */
 .back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--saffron); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: black; cursor: pointer; opacity: 0; transform: translateY(20px); transition: 0.3s; z-index: 100; }
@@ -281,10 +226,6 @@ nav ul { list-style: none; display: flex; gap: 25px; }
 .footer-links a:hover { color: var(--saffron); }
 .copyright { text-align: center; color: #6B7280; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; }
 
-/* Consultation sidebar */
-.consultation-sidebar { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; }
-.consultation-sidebar.show { opacity: 1; pointer-events: all; }
-.sidebar-btn { background: var(--saffron); color: black; border: none; border-radius: 50px; padding: 15px 10px; writing-mode: vertical-lr; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 
 /* WhatsApp chat button */
 .whatsapp-chat {

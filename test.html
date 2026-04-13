@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Google Sheets Integration</title>
+</head>
+<body>
+    <h2>Test Form</h2>
+    <form id="testForm">
+        <input type="text" name="name" placeholder="Full Name" required><br>
+        <input type="email" name="email" placeholder="Email" required><br>
+        <input type="tel" name="phone" placeholder="Phone" required><br>
+        <select name="course" required>
+            <option value="Small RPC">Small RPC</option>
+            <option value="Kisan Drone">Kisan Drone</option>
+        </select><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('testForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = {
+                formType: "course-enrollment",
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                course: formData.get('course')
+            };
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwUj17r83QLrMw86j5NOspbfBd4h1AZ3B--Ts7SgmmWEWjN1viEo494anK8Pq2Y3sZYrA/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                alert('Submitted successfully!');
+                form.reset();
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+    </script>
+</body>
+</html>

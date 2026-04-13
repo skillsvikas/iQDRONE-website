@@ -73,14 +73,14 @@
             </ul>
     </nav>
     <div class="menu-row">
-        <div class="header-buttons">
-            <button class="btn btn-text" id="loginBtn">Login</button>
-            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
-                <i class="fas fa-calendar-check"></i> Free Consultation
-            </button>
-        </div>
-        <button class="hamburger">☰</button>
-    </div> 
+    <div class="header-buttons">
+        <button class="btn btn-text" id="loginBtn">Login</button>
+        <a href="contact-us.html" class="btn btn-primary">
+            <i class="fas fa-calendar-check"></i> Free Consultation
+        </a>
+    </div>
+    <button class="hamburger">☰</button>
+</div>
 </header>
 
     <!-- Course Hero Section -->
@@ -244,41 +244,39 @@
             </div>
         </div>
 
-        <!-- Enrollment & Related Courses -->
+       <!-- Enrollment & Related Courses -->
         <div class="enrollment-related">
             <div id="enrollForm" class="enrollment-form">
-                <h2 class="section-title">Enroll Now</h2>
-                <form action="https://formspree.io/f/mkoqwzjd" method="POST">
-                    <input type="hidden" name="_subject" value="New Course Enrollment">
-                    <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html">
-                    <div class="form-group">
-                        <label for="fullName">Full Name</label>
-                        <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="_replyto" required placeholder="Enter your email">
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
-                    </div>
-                    <div class="form-group">
-                        <label for="course">Select Course</label>
-                        <select id="course" name="course" required>
-                            <option value="drone-building-repair">Drone Building & Repair</option>
-                        </select>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
-                        <label for="agreeTerms">
-                            I agree to the <a href="../terms.html" target="_blank">Terms and Conditions</a> 
-                            and <a href="../privacy.html" target="_blank">Privacy Policy</a>
-                        </label>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-large" style="width:100%;">Submit Enrollment</button>
-                </form>
-            </div>
+    <h2 class="section-title">Enroll Now</h2>
+    <form id="courseEnrollForm" data-form-type="course-enrollment">
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="_replyto" required placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" required placeholder="Enter your phone number">
+        </div>
+        <div class="form-group">
+            <label for="course">Select Course</label>
+            <select id="course" name="course" required>
+                <option value="advanced-agriculture">Drone Maintainance</option>
+            </select>
+        </div>
+        <div class="checkbox-group">
+            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+            <label for="agreeTerms">
+                I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
+                and <a href="privacy.html" target="_blank">Privacy Policy</a>
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-large" style="width:100%;">Submit Enrollment</button>
+    </form>
+</div>
 
             <div class="related-courses">
                 <h2 class="section-title">Explore More Drone Training Courses</h2>
@@ -309,116 +307,60 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer-content">
-        <div class="footer-container">
-            <div class="footer-column">
-                <div class="footer-logo"><img src="../images/IQdrone-logo.webp" alt="iQdrone Academy" style="height: 40px; width: auto;"></div>
-                <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h3 class="footer-title">Quick Links</h3>
-                <div class="footer-links">
-                    <a href="../index.html">Home</a>
-                    <a href="../courses.html">Courses</a>
-                    <a href="../drone-lab.html">Drone Lab</a>
-                    <a href="../drone-workshop.html">Workshops</a>
-                    <a href="../contact-us.html">Contact</a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h3 class="footer-title">More</h3>
-                <div class="footer-links">
-                    <a href="../about-us.html">About Us</a>
-                    <a href="../partner.html">Partner with Us</a>
-                    <a href="../privacy.html">Privacy Policy</a>
-                    <a href="../terms.html">Terms</a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h3 class="footer-title">Contact</h3>
-                <div class="footer-links">
-                    <a href="#"><i class="fas fa-map-marker-alt"></i> Vijay Nagar, Indore, MP</a>
-                    <a href="tel:+918889122261"><i class="fas fa-phone"></i> +918889122261</a>
-                    <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
-                </div>
+   <footer class="footer-content">
+    <div class="footer-container">
+        <div class="footer-column">
+            <div class="footer-logo"><img src="../images/IQdrone-logo.webp" alt="iQdrone Academy" style="height: 40px; width: auto;"></div>
+            <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
             </div>
         </div>
-        <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
-    </footer>
-
-    <!-- Consultation Sidebar -->
-    <div class="consultation-sidebar" id="consultationSidebar">
-        <button class="sidebar-btn consultation-trigger"><i class="fas fa-calendar-check"></i><span>Free Consultation</span></button>
+        <div class="footer-column">
+            <h3 class="footer-title">Quick Links</h3>
+            <div class="footer-links">
+                <a href="../index.html">Home</a>
+                <a href="../courses.html">Courses</a>
+                <a href="../drone_service.html">Service</a>
+                <a href="../drone-lab.html">Drone Lab</a>
+                <a href="../drone-workshop.html">Workshops</a>
+                <a href="../drone-jobs.html">Jobs</a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3 class="footer-title">More</h3>
+            <div class="footer-links">
+                <a href="../partner.html">Partner With Us</a>
+                <a href="../about-us.html">About Us</a>
+                <a href="../contact-us.html">Contact Us</a>
+                <a href="../blog.html">Blog</a>
+                <a href="../privacy.html">Privacy Policy</a>
+                <a href="../terms.html">Terms</a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3 class="footer-title">Contact</h3>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-map-marker-alt"></i> Vijay Nagar Square ,Indore ,MP</a>
+                <a href="tel:+918889122261"><i class="fas fa-phone"></i> +91 8889122261</a>
+                <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
+            </div>
+        </div>
     </div>
+    <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
+</footer>
+    <!-- Consultation Sidebar -->
+    
 
     <!-- WhatsApp Chat Button -->
     <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20the%20Drone%20Building%20%26%20Repair%20course" class="whatsapp-chat" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Consultation Modal -->
-    <div class="consultation-modal" id="consultationModal">
-        <div class="modal-container">
-            <div class="close-modal"><i class="fas fa-times"></i></div>
-            <div class="modal-left">
-                <div class="modal-step active" id="step1">
-                    <h3 class="modal-title">Schedule Your Consultation</h3>
-                    <div class="calendar-container">
-                        <input type="text" id="date" placeholder="Select Date">
-                    </div>
-                    <div class="time-slots" id="timeSlots">
-                        <div class="time-slot">9:00 AM</div>
-                        <div class="time-slot">10:00 AM</div>
-                        <div class="time-slot">11:00 AM</div>
-                        <div class="time-slot">1:00 PM</div>
-                        <div class="time-slot">2:00 PM</div>
-                        <div class="time-slot">3:00 PM</div>
-                    </div>
-                    <div class="modal-actions">
-                        <button class="modal-btn secondary" id="cancelBtn">Cancel</button>
-                        <button class="modal-btn" id="nextStepBtn">Next</button>
-                    </div>
-                </div>
-                <div class="modal-step" id="step2">
-                    <form class="modal-form" action="https://formspree.io/f/mjgabqwp" method="POST">
-                        <input type="hidden" name="_subject" value="New Consultation Request">
-                        <input type="hidden" name="_next" value="thank-you.html">
-                        <input type="text" name="fullName" placeholder="Full Name *" required>
-                        <input type="email" name="_replyto" placeholder="Email Address *" required>
-                        <input type="tel" name="phone" placeholder="Phone Number *" required>
-                        <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
-                        <div class="modal-checkbox">
-                            <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
-                            <label for="consultAgreeTerms">
-                                I agree to the <a href="../terms.html" target="_blank">Terms and Conditions</a> 
-                                and <a href="../privacy.html" target="_blank">Privacy Policy</a>
-                            </label>
-                        </div>
-                        <div class="modal-actions">
-                            <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
-                            <button type="submit" class="modal-btn">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-right">
-                <div class="modal-logo">iQdrone Academy</div>
-                <div class="contact-info">
-                    <p><i class="fas fa-phone"></i> +918889122261</p>
-                    <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
-                    <p>We'll contact you within 24h</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Back to Top -->
+        <!-- Back to Top -->
     <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
 
     <$1
@@ -465,5 +407,6 @@ function rejectCookies() {
     }
 })();
 </script>
+<script src="../common-form.js"></script>
 </body>
 </html>

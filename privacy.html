@@ -596,15 +596,15 @@ img, svg, video {
             </ul>
         </nav>
         <div class="menu-row">
-            <div class="header-buttons">
-                <button class="btn btn-text" id="loginBtn">Login</button>
-                <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
-                    <i class="fas fa-calendar-check"></i> Free Consultation
-                </button>
-            </div>
-            <button class="hamburger">☰</button>
-        </div>
-    </header>
+    <div class="header-buttons">
+        <button class="btn btn-text" id="loginBtn">Login</button>
+        <a href="contact-us.html" class="btn btn-primary">
+            <i class="fas fa-calendar-check"></i> Free Consultation
+        </a>
+    </div>
+    <button class="hamburger">☰</button>
+</div>
+</header>
 
     <!-- Main Privacy Content -->
     <div class="container-custom">
@@ -747,12 +747,7 @@ img, svg, video {
     </div>
 
     <!-- Consultation Sidebar -->
-    <div class="consultation-sidebar" id="consultationSidebar">
-        <button class="sidebar-btn consultation-trigger">
-            <i class="fas fa-calendar-check"></i>
-            <span>Free Consultation</span>
-        </button>
-    </div>
+    
 
     <!-- Footer -->
     <footer class="footer-content">
@@ -800,61 +795,7 @@ img, svg, video {
         <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
     </footer>
 
-    <!-- Consultation Modal -->
-    <div class="consultation-modal" id="consultationModal">
-        <div class="modal-container">
-            <div class="close-modal"><i class="fas fa-times"></i></div>
-            <div class="modal-left">
-                <div class="modal-step active" id="step1">
-                    <h3 class="modal-title">Schedule Your Consultation</h3>
-                    <div class="calendar-container">
-                        <input type="text" id="date" placeholder="Select Date">
-                    </div>
-                    <div class="time-slots" id="timeSlots">
-                        <div class="time-slot">9:00 AM</div>
-                        <div class="time-slot">10:00 AM</div>
-                        <div class="time-slot">11:00 AM</div>
-                        <div class="time-slot">1:00 PM</div>
-                        <div class="time-slot">2:00 PM</div>
-                        <div class="time-slot">3:00 PM</div>
-                    </div>
-                    <div class="modal-actions">
-                        <button class="modal-btn secondary" id="cancelBtn">Cancel</button>
-                        <button class="modal-btn" id="nextStepBtn">Next</button>
-                    </div>
-                </div>
-                <div class="modal-step" id="step2">
-                    <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
-                        <input type="hidden" name="_subject" value="New Consultation Request">
-                        <input type="hidden" name="_next" value="thank-you.html">
-                        <input type="text" name="fullName" placeholder="Full Name *" required>
-                        <input type="email" name="_replyto" placeholder="Email Address *" required>
-                        <input type="tel" name="phone" placeholder="Phone Number *" required>
-                        <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
-                        <div class="modal-checkbox">
-                            <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
-                            <label for="consultAgreeTerms">
-                                I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
-                                and <a href="privacy.html" target="_blank">Privacy Policy</a>
-                            </label>
-                        </div>
-                        <div class="modal-actions">
-                            <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
-                            <button type="submit" class="modal-btn">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="modal-right">
-                <div class="modal-logo">iQdrone Academy</div>
-                <div class="contact-info">
-                    <p><i class="fas fa-phone"></i> +918889122261</p>
-                    <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
-                    <p>We'll contact you within 24h</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <!-- Back to Top -->
     <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
@@ -906,7 +847,24 @@ img, svg, video {
                 trailIndex = (trailIndex + 1) % trailDots.length;
             }, 50);
 
-            // Consultation modal
+           ssList.add('active');
+            });
+            if(backBtn) backBtn.addEventListener('click', () => {
+                step2.classList.remove('active');
+                step1.classList.add('active');
+            });
+            timeSlots.forEach(s => s.addEventListener('click', function() {
+                timeSlots.forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+            }));
+
+            // Flatpickr date picker
+            if(typeof flatpickr !== 'undefined') {
+                flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => date.getDay() === 0 || date.getDay() === 6 ] });
+            }
+
+            // Hamburger menu
+            const hamburger  // Consultation modal
             const modal = document.getElementById('consultationModal');
             const triggers = document.querySelectorAll('.consultation-trigger');
             const closeModal = document.querySelector('.close-modal');
@@ -930,24 +888,7 @@ img, svg, video {
             if(cancelBtn) cancelBtn.addEventListener('click', hideModal);
             if(nextStepBtn) nextStepBtn.addEventListener('click', () => {
                 step1.classList.remove('active');
-                step2.classList.add('active');
-            });
-            if(backBtn) backBtn.addEventListener('click', () => {
-                step2.classList.remove('active');
-                step1.classList.add('active');
-            });
-            timeSlots.forEach(s => s.addEventListener('click', function() {
-                timeSlots.forEach(s => s.classList.remove('selected'));
-                this.classList.add('selected');
-            }));
-
-            // Flatpickr date picker
-            if(typeof flatpickr !== 'undefined') {
-                flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => date.getDay() === 0 || date.getDay() === 6 ] });
-            }
-
-            // Hamburger menu
-            const hamburger = document.querySelector('.hamburger');
+                step2.cla= document.querySelector('.hamburger');
             const nav = document.querySelector('nav');
             
             if(hamburger && nav) {

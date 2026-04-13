@@ -13,541 +13,368 @@
     <!-- QR Code library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
     <style>
-        /* ========== GLOBAL STYLES ========== */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-:root {
-    --saffron: #F59E0B;
-    --saffron-light: #FBBF24;
-    --saffron-dark: #D97706;
-    --black: #000000;
-    --dark-gray: #1A1A1A;
-    --warm-dark: #2A1C00;
-    --light-gray: #2D2D2D;
-    --white: #FFFFFF;
-    --off-white: #F5F5F5;
-    --partner-blue: #1e40af;
-    --partner-light: #3b82f6;
-    --lime: #BFFF00;
-}
+        /* ========== GLOBAL STYLES (same as before) ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --saffron: #F59E0B;
+            --saffron-light: #FBBF24;
+            --saffron-dark: #D97706;
+            --black: #000000;
+            --dark-gray: #1A1A1A;
+            --warm-dark: #2A1C00;
+            --light-gray: #2D2D2D;
+            --white: #FFFFFF;
+            --off-white: #F5F5F5;
+            --partner-blue: #1e40af;
+            --partner-light: #3b82f6;
+            --lime: #BFFF00;
+        }
 
-/* Drone cursor */
-#drone-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 50px;
-    height: 50px;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate3d(var(--x), var(--y), 0);
-    will-change: transform;
-}
-#drone-model {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transform: rotateX(var(--tiltX)) rotateY(var(--tiltY));
-    transform-style: preserve-3d;
-}
-.propeller {
-    transform-origin: center;
-    animation: spin 0.1s linear infinite;
-}
-.moving .propeller {
-    animation-duration: 0.03s;
-}
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-body {
-    cursor: none;
-}
-.trail-dot {
-    position: fixed;
-    width: 4px;
-    height: 4px;
-    background: #FF9933;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    opacity: 0;
-    box-shadow: 0 0 8px #FF9933;
-    transition: opacity 0.2s;
-}
+        /* Drone cursor */
+        #drone-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate3d(var(--x), var(--y), 0);
+            will-change: transform;
+        }
+        #drone-model {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: rotateX(var(--tiltX)) rotateY(var(--tiltY));
+            transform-style: preserve-3d;
+        }
+        .propeller {
+            transform-origin: center;
+            animation: spin 0.1s linear infinite;
+        }
+        .moving .propeller {
+            animation-duration: 0.03s;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        body {
+            cursor: none;
+        }
+        .trail-dot {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: #FF9933;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            box-shadow: 0 0 8px #FF9933;
+            transition: opacity 0.2s;
+        }
 
-/* Background */
-body {
-    background: var(--black);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: white;
-    overflow-x: hidden;
-    position: relative;
-}
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
-    animation: moveGrid 40s linear infinite;
-}
-body::after {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(45deg, 
-        transparent, 
-        transparent 25px, 
-        rgba(255, 153, 51, 0.02) 25px, 
-        rgba(255, 153, 51, 0.02) 50px);
-    pointer-events: none;
-    z-index: 0;
-}
-@keyframes moveGrid {
-    0% { background-position: 0 0; }
-    100% { background-position: 60px 60px; }
-}
+        /* Background */
+        body {
+            background: var(--black);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+            animation: moveGrid 40s linear infinite;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, 
+                transparent, 
+                transparent 25px, 
+                rgba(255, 153, 51, 0.02) 25px, 
+                rgba(255, 153, 51, 0.02) 50px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes moveGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 60px 60px; }
+        }
 
-.container-custom {
-    max-width: 1214px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-.section-title {
-    font-size: 2.8rem;
-    font-weight: 800;
-    text-align: center;
-    margin-bottom: 2rem;
-    background: linear-gradient(to right, var(--saffron), var(--saffron-light));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    position: relative;
-}
-.section-title::after {
-    content: '';
-    display: block;
-    width: 100px;
-    height: 4px;
-    background: var(--saffron);
-    margin: 10px auto 0;
-    border-radius: 2px;
-}
+        .container-custom {
+            max-width: 1214px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(to right, var(--saffron), var(--saffron-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: var(--saffron);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
 
-/* Header */
-.header {
-    width: 100%;
-    max-width: 1214px;
-    height: 85px;
-    background: rgba(26, 26, 26, 0.95);
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(245,158,11,0.3);
-}
-.logo { font-size: 28px; font-weight: bold; color: var(--saffron); }
-nav ul { list-style: none; display: flex; gap: 25px; }
-.nav-link { color: white; text-decoration: none; font-size: 16px; transition: 0.3s; }
-.nav-link:hover, .nav-link.active { color: var(--saffron); text-decoration: underline; }
-.hamburger { display: none; font-size: 28px; cursor: pointer; color: var(--saffron); }
+        /* Header */
+        .header {
+            width: 100%;
+            max-width: 1214px;
+            height: 85px;
+            background: rgba(26, 26, 26, 0.95);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(245,158,11,0.3);
+        }
+        .logo { font-size: 28px; font-weight: bold; color: var(--saffron); }
+        nav ul { list-style: none; display: flex; gap: 25px; }
+        .nav-link { color: white; text-decoration: none; font-size: 16px; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--saffron); text-decoration: underline; }
+        .hamburger { display: none; font-size: 28px; cursor: pointer; color: var(--saffron); }
 
-/* Buttons */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 30px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.2;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-.btn-primary { background: var(--saffron); color: var(--black); }
-.btn-primary:hover { background: var(--saffron-light); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(245,158,11,0.4); }
-.btn-secondary { background: transparent; color: white; border: 2px solid var(--saffron); }
-.btn-secondary:hover { background: var(--saffron); color: var(--black); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(245,158,11,0.4); }
-.btn-small { padding: 8px 16px; font-size: 0.9rem; border-radius: 30px; }
-.btn-large { padding: 16px 40px; font-size: 1.2rem; }
-.btn-text { background: transparent; color: white; border: none; padding: 8px 16px; }
-.btn-text:hover { color: var(--saffron); background: rgba(245,158,11,0.1); transform: none; box-shadow: none; }
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.2;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .btn-primary { background: var(--saffron); color: var(--black); }
+        .btn-primary:hover { background: var(--saffron-light); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(245,158,11,0.4); }
+        .btn-secondary { background: transparent; color: white; border: 2px solid var(--saffron); }
+        .btn-secondary:hover { background: var(--saffron); color: var(--black); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(245,158,11,0.4); }
+        .btn-small { padding: 8px 16px; font-size: 0.9rem; border-radius: 30px; }
+        .btn-large { padding: 16px 40px; font-size: 1.2rem; }
+        .btn-text { background: transparent; color: white; border: none; padding: 8px 16px; }
+        .btn-text:hover { color: var(--saffron); background: rgba(245,158,11,0.1); transform: none; box-shadow: none; }
 
-/* Consultation modal */
-.consultation-modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); justify-content:center; align-items:center; z-index:3000; }
-.consultation-modal.show { display: flex; }
-.modal-container { background: var(--dark-gray); width: 90%; max-width: 1000px; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
-.modal-left { flex:1; padding: 40px; }
-.modal-right { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px 20px; background: rgba(245, 158, 11, 0.1); border-left: 1px solid rgba(255,255,255,0.1); height: 100%; }
-.modal-logo { font-size: 2.5rem; font-weight: 800; color: var(--saffron); margin-bottom: 30px; }
-.modal-step { display: none; }
-.modal-step.active { display: block; }
-.modal-title { font-size: 2rem; color: var(--saffron); margin-bottom: 20px; }
-.calendar-container { margin-bottom: 20px; }
-.time-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 20px 0; }
-.time-slot { background: rgba(255,255,255,0.1); padding: 10px; text-align: center; border-radius: 5px; cursor: pointer; }
-.time-slot.selected { background: var(--saffron); color: black; }
-.modal-form input, .modal-form textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; color: white; }
-.modal-actions { display: flex; gap: 15px; }
-.modal-btn { padding: 12px 30px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; }
-.modal-btn.primary { background: var(--saffron); color: black; }
-.modal-btn.secondary { background: transparent; color: white; border: 1px solid var(--saffron); }
-.close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 1.5rem; cursor: pointer; z-index: 10; }
-.calendar-container input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 12px 15px; border-radius: 5px; width: 100%; outline: none; }
-.calendar-container input:focus { border-color: var(--saffron); }
-.modal-checkbox { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-.modal-checkbox input[type="checkbox"] { width: auto; margin: 0; }
-.modal-checkbox a { color: var(--saffron); }
+        
+        /* Back to top */
+        .back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--saffron); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: black; cursor: pointer; opacity: 0; transform: translateY(20px); transition: 0.3s; z-index: 100; }
+        .back-to-top.show { opacity: 1; transform: translateY(0); }
 
-/* Back to top */
-.back-to-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: var(--saffron); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: black; cursor: pointer; opacity: 0; transform: translateY(20px); transition: 0.3s; z-index: 100; }
-.back-to-top.show { opacity: 1; transform: translateY(0); }
+        
+        /* WhatsApp chat button */
+        .whatsapp-chat { position: fixed; bottom: 100px; right: 30px; width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 2001; transition: transform 0.3s; }
+        .whatsapp-chat:hover { transform: scale(1.1); background: #20b859; }
 
-/* Consultation sidebar */
-.consultation-sidebar { position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 2000; opacity: 0; pointer-events: none; transition: 0.3s; }
-.consultation-sidebar.show { opacity: 1; pointer-events: all; }
-.sidebar-btn { background: var(--saffron); color: black; border: none; border-radius: 50px; padding: 15px 10px; writing-mode: vertical-lr; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        /* Footer */
+        .footer-content { background: #0f172a; padding: 60px 20px 30px; }
+        .footer-container { max-width: 1214px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 40px; }
+        .footer-logo { font-size: 2rem; color: var(--saffron); }
+        .footer-about { color: #9CA3AF; margin: 15px 0; }
+        .social-icons { display: flex; gap: 15px; }
+        .social-icons a { color: var(--saffron); font-size: 1.3rem; }
+        .footer-title { color: white; font-size: 1.3rem; margin-bottom: 20px; }
+        .footer-links a { display: block; color: #9CA3AF; text-decoration: none; margin-bottom: 10px; }
+        .footer-links a:hover { color: var(--saffron); }
+        .copyright { text-align: center; color: #6B7280; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; }
 
-/* WhatsApp chat button */
-.whatsapp-chat { position: fixed; bottom: 100px; right: 30px; width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 2001; transition: transform 0.3s; }
-.whatsapp-chat:hover { transform: scale(1.1); background: #20b859; }
+        /* QR Gateway */
+        .qr-gateway { padding: 60px 20px; background: linear-gradient(135deg, #0A192F, #1e3a5f); border-bottom: 2px dashed var(--saffron); }
+        .gateway-title { font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 10px; color: white; }
+        .gateway-sub { text-align: center; color: #ccc; margin-bottom: 40px; font-size: 1.2rem; }
+        .gateway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 900px; margin: 0 auto; }
+        .qr-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 30px; padding: 30px; text-align: center; border: 2px dashed var(--saffron); transition: transform 0.3s; }
+        .qr-card:hover { transform: translateY(-5px); }
+        .qr-card h3 { color: var(--saffron-light); font-size: 1.8rem; margin-bottom: 10px; }
+        .qr-wrapper { display: inline-block; background: white; padding: 15px; border-radius: 20px; margin: 20px 0; position: relative; }
+        .qr-wrapper img { display: block; width: 180px; height: 180px; }
+        .qr-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--saffron); color: black; font-weight: 800; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
+        .qr-footer { color: #ddd; font-size: 0.9rem; }
 
-/* Footer */
-.footer-content { background: #0f172a; padding: 60px 20px 30px; }
-.footer-container { max-width: 1214px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 40px; }
-.footer-logo { font-size: 2rem; color: var(--saffron); }
-.footer-about { color: #9CA3AF; margin: 15px 0; }
-.social-icons { display: flex; gap: 15px; }
-.social-icons a { color: var(--saffron); font-size: 1.3rem; }
-.footer-title { color: white; font-size: 1.3rem; margin-bottom: 20px; }
-.footer-links a { display: block; color: #9CA3AF; text-decoration: none; margin-bottom: 10px; }
-.footer-links a:hover { color: var(--saffron); }
-.copyright { text-align: center; color: #6B7280; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; }
+        /* Jobs Page Styles */
+        .hero { position: relative; min-height: 400px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1581094794329-71f4eed45a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') center/cover fixed; }
+        .hero .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1; }
+        .hero .hero-content { position: relative; z-index: 2; text-align: center; padding: 0 20px; max-width: 800px; color: white; }
+        .hero-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; background: linear-gradient(to right, var(--saffron), var(--saffron-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .hero-subtitle { font-size: 1.3rem; color: #ddd; margin-bottom: 30px; }
+        .hero-search { display: flex; max-width: 600px; margin: 0 auto; background: rgba(255,255,255,0.1); border-radius: 50px; padding: 5px; }
+        .hero-search input { flex: 1; background: transparent; border: none; padding: 15px 20px; color: white; font-size: 1rem; outline: none; }
+        .hero-search input::placeholder { color: #aaa; }
+        .hero-search button { background: var(--saffron); border: none; border-radius: 50px; padding: 10px 30px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .hero-search button:hover { background: var(--saffron-light); }
 
-/* QR Gateway */
-.qr-gateway { padding: 60px 20px; background: linear-gradient(135deg, #0A192F, #1e3a5f); border-bottom: 2px dashed var(--saffron); }
-.gateway-title { font-size: 2.5rem; font-weight: 800; text-align: center; margin-bottom: 10px; color: white; }
-.gateway-sub { text-align: center; color: #ccc; margin-bottom: 40px; font-size: 1.2rem; }
-.gateway-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 900px; margin: 0 auto; }
-.qr-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 30px; padding: 30px; text-align: center; border: 2px dashed var(--saffron); transition: transform 0.3s; }
-.qr-card:hover { transform: translateY(-5px); }
-.qr-card h3 { color: var(--saffron-light); font-size: 1.8rem; margin-bottom: 10px; }
-.qr-wrapper { display: inline-block; background: white; padding: 15px; border-radius: 20px; margin: 20px 0; position: relative; }
-.qr-wrapper img { display: block; width: 180px; height: 180px; }
-.qr-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--saffron); color: black; font-weight: 800; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
-.qr-footer { color: #ddd; font-size: 0.9rem; }
+        .filters { background: rgba(0,0,0,0.3); padding: 20px 0; }
+        .filter-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 800px; margin: 0 auto; }
+        .filter-btn { background: transparent; border: 2px solid var(--saffron); color: white; padding: 10px 25px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .filter-btn:hover, .filter-btn.active { background: var(--saffron); color: black; }
 
-/* Jobs Page Styles */
-.hero { position: relative; min-height: 400px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 60px 20px; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1581094794329-71f4eed45a91?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') center/cover fixed; }
-.hero .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1; }
-.hero .hero-content { position: relative; z-index: 2; text-align: center; padding: 0 20px; max-width: 800px; color: white; }
-.hero-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; background: linear-gradient(to right, var(--saffron), var(--saffron-light)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.hero-subtitle { font-size: 1.3rem; color: #ddd; margin-bottom: 30px; }
-.hero-search { display: flex; max-width: 600px; margin: 0 auto; background: rgba(255,255,255,0.1); border-radius: 50px; padding: 5px; }
-.hero-search input { flex: 1; background: transparent; border: none; padding: 15px 20px; color: white; font-size: 1rem; outline: none; }
-.hero-search input::placeholder { color: #aaa; }
-.hero-search button { background: var(--saffron); border: none; border-radius: 50px; padding: 10px 30px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-.hero-search button:hover { background: var(--saffron-light); }
+        .jobs { padding: 60px 20px; }
+        .jobs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
+        .job-card { background: rgba(26,26,26,0.7); border: 2px dashed var(--saffron); border-radius: 20px; padding: 25px; backdrop-filter: blur(5px); transition: all 0.4s; }
+        .job-card:hover { transform: translateY(-10px); border-color: var(--saffron-light); box-shadow: 0 20px 30px rgba(0,0,0,0.6), 0 0 20px rgba(245,158,11,0.3); }
+        .job-tag { display: inline-block; background: rgba(245,158,11,0.2); color: var(--saffron); padding: 5px 12px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; margin-bottom: 15px; }
+        .job-card h3 { font-size: 1.5rem; color: var(--saffron-light); margin-bottom: 10px; }
+        .job-company { display: flex; align-items: center; gap: 8px; color: #ccc; margin-bottom: 10px; }
+        .job-company i { color: var(--saffron); }
+        .job-details { display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0; font-size: 0.9rem; color: #aaa; }
+        .job-details i { color: var(--saffron); width: 18px; }
+        .job-desc { color: #ccc; margin: 15px 0; line-height: 1.6; }
+        .job-card .btn { width: 100%; }
 
-.filters { background: rgba(0,0,0,0.3); padding: 20px 0; }
-.filter-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 800px; margin: 0 auto; }
-.filter-btn { background: transparent; border: 2px solid var(--saffron); color: white; padding: 10px 25px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: all 0.3s; }
-.filter-btn:hover, .filter-btn.active { background: var(--saffron); color: black; }
+        /* How It Works */
+        .how-it-works { padding: 60px 20px; background: rgba(0,0,0,0.3); position: relative; background-image: url('how-ir-works-drone-job.jpeg'); background-size: cover; background-position: center; background-attachment: fixed; isolation: isolate; }
+        .how-it-works::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1; pointer-events: none; }
+        .how-it-works .container-custom { position: relative; z-index: 2; }
+        .how-it-works .step-icon { position: relative; width: 120px; height: 120px; margin: 0 auto 30px auto; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.5); box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.05); overflow: hidden; }
+        .how-it-works .step-icon::before { content: ""; position: absolute; width: 150%; height: 150%; background: conic-gradient(transparent 70%, rgba(255,153,51,0.05) 80%, var(--saffron) 90%, transparent 100%); border-radius: 50%; animation: clock-spin 3s linear infinite; filter: blur(4px); }
+        .how-it-works .step-icon::after { content: ""; position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--saffron); border-left-color: var(--saffron); opacity: 0.1; animation: neon-pulse 4s ease-in-out infinite alternate; }
+        .how-it-works .step-icon i { font-size: 2.5rem; color: white; z-index: 10; }
+        .how-it-works .steps-grid { display: flex; gap: 40px; justify-content: center; align-items: center; }
+        .how-it-works .step-card { width: 250px; text-align: center; color: white; transition: transform 0.3s ease; }
+        .how-it-works .step-card:hover { transform: translateY(-10px); }
+        .how-it-works h4 { margin: 0 0 10px 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--saffron-light); }
+        .how-it-works p { margin: 0; font-size: 0.9rem; line-height: 1.6; color: rgba(255,255,255,0.7); }
 
-.jobs { padding: 60px 20px; }
-.jobs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
-.job-card { background: rgba(26,26,26,0.7); border: 2px dashed var(--saffron); border-radius: 20px; padding: 25px; backdrop-filter: blur(5px); transition: all 0.4s; }
-.job-card:hover { transform: translateY(-10px); border-color: var(--saffron-light); box-shadow: 0 20px 30px rgba(0,0,0,0.6), 0 0 20px rgba(245,158,11,0.3); }
-.job-tag { display: inline-block; background: rgba(245,158,11,0.2); color: var(--saffron); padding: 5px 12px; border-radius: 30px; font-size: 0.8rem; font-weight: 600; margin-bottom: 15px; }
-.job-card h3 { font-size: 1.5rem; color: var(--saffron-light); margin-bottom: 10px; }
-.job-company { display: flex; align-items: center; gap: 8px; color: #ccc; margin-bottom: 10px; }
-.job-company i { color: var(--saffron); }
-.job-details { display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0; font-size: 0.9rem; color: #aaa; }
-.job-details i { color: var(--saffron); width: 18px; }
-.job-desc { color: #ccc; margin: 15px 0; line-height: 1.6; }
-.job-card .btn { width: 100%; }
+        @keyframes clock-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes neon-pulse { 0% { opacity: 0.1; box-shadow: 0 0 10px transparent; } 100% { opacity: 0.3; box-shadow: 0 0 20px var(--neon-glow); } }
 
-/* How It Works */
-.how-it-works { padding: 60px 20px; background: rgba(0,0,0,0.3); position: relative; background-image: url('how-ir-works-drone-job.jpeg'); background-size: cover; background-position: center; background-attachment: fixed; isolation: isolate; }
-.how-it-works::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1; pointer-events: none; }
-.how-it-works .container-custom { position: relative; z-index: 2; }
-.how-it-works .step-icon { position: relative; width: 120px; height: 120px; margin: 0 auto 30px auto; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.5); box-shadow: 0 0 30px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.05); overflow: hidden; }
-.how-it-works .step-icon::before { content: ""; position: absolute; width: 150%; height: 150%; background: conic-gradient(transparent 70%, rgba(255,153,51,0.05) 80%, var(--saffron) 90%, transparent 100%); border-radius: 50%; animation: clock-spin 3s linear infinite; filter: blur(4px); }
-.how-it-works .step-icon::after { content: ""; position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--saffron); border-left-color: var(--saffron); opacity: 0.1; animation: neon-pulse 4s ease-in-out infinite alternate; }
-.how-it-works .step-icon i { font-size: 2.5rem; color: white; z-index: 10; }
-.how-it-works .steps-grid { display: flex; gap: 40px; justify-content: center; align-items: center; }
-.how-it-works .step-card { width: 250px; text-align: center; color: white; transition: transform 0.3s ease; }
-.how-it-works .step-card:hover { transform: translateY(-10px); }
-.how-it-works h4 { margin: 0 0 10px 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--saffron-light); }
-.how-it-works p { margin: 0; font-size: 0.9rem; line-height: 1.6; color: rgba(255,255,255,0.7); }
+        .employer-cta { padding: 60px 20px; text-align: center; background: linear-gradient(rgba(30,58,138,0.8), rgba(59,130,246,0.8)); }
+        .employer-cta h2 { font-size: 2.5rem; color: white; margin-bottom: 20px; }
+        .employer-cta p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; color: #f0f0f0; }
 
-@keyframes clock-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-@keyframes neon-pulse { 0% { opacity: 0.1; box-shadow: 0 0 10px transparent; } 100% { opacity: 0.3; box-shadow: 0 0 20px var(--neon-glow); } }
+        .testimonials { padding: 60px 20px; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 40px; }
+        .testimonial-card { background: rgba(26,26,26,0.7); border: 2px dashed var(--saffron); border-radius: 20px; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
+        .testimonial-card i { font-size: 2rem; color: var(--saffron); opacity: 0.3; }
+        .testimonial-text { font-style: italic; color: #ddd; }
+        .testimonial-author { font-weight: 700; color: var(--saffron-light); text-align: right; }
 
-.employer-cta { padding: 60px 20px; text-align: center; background: linear-gradient(rgba(30,58,138,0.8), rgba(59,130,246,0.8)); }
-.employer-cta h2 { font-size: 2.5rem; color: white; margin-bottom: 20px; }
-.employer-cta p { font-size: 1.2rem; max-width: 700px; margin: 0 auto 30px; color: #f0f0f0; }
+        /* Newsletter */
+        .newsletter { position: relative; background-size: cover; background-position: center; isolation: isolate; padding: 80px 20px; }
+        .newsletter .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1; pointer-events: none; }
+        .newsletter .container-custom { position: relative; z-index: 2; }
+        .newsletter-form { display: flex; flex-direction: column; align-items: center; gap: 15px; max-width: 500px; margin: 0 auto; }
+        .newsletter-form input[type="email"] { flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; padding: 15px 20px; color: white; font-size: 1rem; outline: none; width: 100%; }
+        .newsletter-form input[type="email"]:focus { border-color: var(--saffron); }
+        .newsletter-checkbox { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; color: #ccc; margin: 5px 0; justify-content: center; }
+        .newsletter-checkbox input[type="checkbox"] { width: auto; margin: 0; }
+        .newsletter-checkbox a { color: var(--saffron); text-decoration: underline; }
+        .newsletter-form button { background: var(--saffron); border: none; border-radius: 50px; padding: 15px 30px; font-weight: 600; cursor: pointer; transition: all 0.3s; color: black; font-size: 1rem; width: 200px; }
+        .newsletter-form button:hover { background: var(--saffron-light); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(245,158,11,0.4); }
 
-.testimonials { padding: 60px 20px; }
-.testimonial-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 40px; }
-.testimonial-card { background: rgba(26,26,26,0.7); border: 2px dashed var(--saffron); border-radius: 20px; padding: 25px; display: flex; flex-direction: column; gap: 15px; }
-.testimonial-card i { font-size: 2rem; color: var(--saffron); opacity: 0.3; }
-.testimonial-text { font-style: italic; color: #ddd; }
-.testimonial-author { font-weight: 700; color: var(--saffron-light); text-align: right; }
+        /* Tablet Responsive */
+        @media (max-width: 1000px) {
+            .jobs-grid, .steps-grid, .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+            .gateway-grid { grid-template-columns: 1fr; }
+        }
 
-/* Newsletter */
-.newsletter { position: relative; background-size: cover; background-position: center; isolation: isolate; padding: 80px 20px; }
-.newsletter .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1; pointer-events: none; }
-.newsletter .container-custom { position: relative; z-index: 2; }
-.newsletter-form { display: flex; flex-direction: column; align-items: center; gap: 15px; max-width: 500px; margin: 0 auto; }
-.newsletter-form input[type="email"] { flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 50px; padding: 15px 20px; color: white; font-size: 1rem; outline: none; width: 100%; }
-.newsletter-form input[type="email"]:focus { border-color: var(--saffron); }
-.newsletter-checkbox { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; color: #ccc; margin: 5px 0; justify-content: center; }
-.newsletter-checkbox input[type="checkbox"] { width: auto; margin: 0; }
-.newsletter-checkbox a { color: var(--saffron); text-decoration: underline; }
-.newsletter-form button { background: var(--saffron); border: none; border-radius: 50px; padding: 15px 30px; font-weight: 600; cursor: pointer; transition: all 0.3s; color: black; font-size: 1rem; width: 200px; }
-.newsletter-form button:hover { background: var(--saffron-light); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(245,158,11,0.4); }
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px; height: auto; gap: 10px; }
+            .logo { order: 1; font-size: 28px; text-align: center; margin: 0; width: 100%; }
+            .menu-row { order: 2; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 15px; width: 100%; }
+            .header-buttons { display: flex; gap: 8px; margin: 0; }
+            .hamburger { display: block; font-size: 24px; cursor: pointer; color: var(--saffron); background: none; border: none; padding: 5px; }
+            .header-buttons .btn { padding: 6px 10px; font-size: 0.7rem; white-space: nowrap; }
+            nav { order: 3; display: none; width: 100%; margin-top: 5px; }
+            nav.active { display: block; background: var(--dark-gray); padding: 15px; border-radius: 10px; }
+            nav.active ul { flex-direction: column; align-items: center; gap: 10px; }
+            nav.active ul li { width: 100%; text-align: center; }
+            nav.active .nav-link { display: block; padding: 8px; }
+            
+            .hero { min-height: 450px; padding: 40px 20px; background-attachment: scroll; }
+            .hero-title { font-size: 1.8rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .hero-search { flex-direction: column; background: transparent; padding: 0; gap: 10px; }
+            .hero-search input { width: 100%; background: rgba(255,255,255,0.1); border-radius: 50px; padding: 12px 20px; }
+            .hero-search button { width: 100%; }
+            
+            .filter-container { flex-wrap: wrap; gap: 8px; justify-content: center; }
+            .filter-btn { padding: 6px 12px; font-size: 0.8rem; }
+            .jobs-grid { grid-template-columns: 1fr; gap: 20px; }
+            .how-it-works .steps-grid { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+            .how-it-works .step-card { width: 100%; max-width: 280px; margin: 0 auto; }
+            .gateway-grid { grid-template-columns: 1fr; gap: 30px; }
+            .qr-wrapper img { width: 150px; height: 150px; }
+            .gateway-title { font-size: 1.8rem; }
+            .testimonial-grid { grid-template-columns: 1fr; gap: 20px; }
+            .footer-container { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 35px; width: 100%; }
+            .footer-column { width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; }
+            .footer-about { text-align: center; max-width: 90%; margin: 10px auto; }
+            .social-icons { justify-content: center; margin-top: 10px; }
+            .footer-title { text-align: center; margin-bottom: 15px; }
+            .footer-links { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+            .whatsapp-chat { position: fixed; bottom: 20px; right: 10px; width: 50px; height: 50px; font-size: 1.6rem; z-index: 9999; display: flex; align-items: center; justify-content: center; background: #25D366; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; }
+            .back-to-top { position: fixed; bottom: 85px; right: 10px; width: 45px; height: 45px; z-index: 9999; display: flex; align-items: center; justify-content: center; background: var(--saffron); border-radius: 50%; color: black; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; }
+            body { overflow-x: hidden; width: 100%; position: relative; }
+        }
 
-/* Tablet Responsive */
-@media (max-width: 1000px) {
-    .jobs-grid, .steps-grid, .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
-    .gateway-grid { grid-template-columns: 1fr; }
-}
+        /* Small Mobile */
+        @media (max-width: 600px) {
+            .jobs-grid, .steps-grid, .testimonial-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2.5rem; }
+        }
 
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    /* Header */
-    .header { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 15px; height: auto; gap: 10px; }
-    .logo { order: 1; font-size: 28px; text-align: center; margin: 0; width: 100%; }
-    .menu-row { order: 2; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 15px; width: 100%; }
-    .header-buttons { display: flex; gap: 8px; margin: 0; }
-    .hamburger { display: block; font-size: 24px; cursor: pointer; color: var(--saffron); background: none; border: none; padding: 5px; }
-    .header-buttons .btn { padding: 6px 10px; font-size: 0.7rem; white-space: nowrap; }
-    nav { order: 3; display: none; width: 100%; margin-top: 5px; }
-    nav.active { display: block; background: var(--dark-gray); padding: 15px; border-radius: 10px; }
-    nav.active ul { flex-direction: column; align-items: center; gap: 10px; }
-    nav.active ul li { width: 100%; text-align: center; }
-    nav.active .nav-link { display: block; padding: 8px; }
-    
-    /* Hero */
-    .hero { min-height: 450px; padding: 40px 20px; background-attachment: scroll; }
-    .hero-title { font-size: 1.8rem; }
-    .hero-subtitle { font-size: 1rem; }
-    .hero-search { flex-direction: column; background: transparent; padding: 0; gap: 10px; }
-    .hero-search input { width: 100%; background: rgba(255,255,255,0.1); border-radius: 50px; padding: 12px 20px; }
-    .hero-search button { width: 100%; }
-    
-    /* Filters */
-    .filter-container { flex-wrap: wrap; gap: 8px; justify-content: center; }
-    .filter-btn { padding: 6px 12px; font-size: 0.8rem; }
-    
-    /* Jobs Grid */
-    .jobs-grid { grid-template-columns: 1fr; gap: 20px; }
-    
-    /* How It Works */
-    .how-it-works .steps-grid { display: flex; flex-direction: column; align-items: center; gap: 30px; }
-    .how-it-works .step-card { width: 100%; max-width: 280px; margin: 0 auto; }
-    
-    /* QR Gateway */
-    .gateway-grid { grid-template-columns: 1fr; gap: 30px; }
-    .qr-wrapper img { width: 150px; height: 150px; }
-    .gateway-title { font-size: 1.8rem; }
-    
-    /* Newsletter */
-    .newsletter-box { flex-direction: column; background: transparent; padding: 0; gap: 10px; }
-    .newsletter-box input { width: 100%; background: rgba(255,255,255,0.1); border-radius: 50px; padding: 12px 20px; }
-    .newsletter-box button { width: 100%; }
-    
-    /* Testimonials */
-    .testimonial-grid { grid-template-columns: 1fr; gap: 20px; }
-    
-    /* Footer */
-    .footer-container { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 35px; width: 100%; }
-    .footer-column { width: 100%; text-align: center; display: flex; flex-direction: column; align-items: center; }
-    .footer-logo { text-align: center; margin-bottom: 10px; }
-    .footer-about { text-align: center; max-width: 90%; margin: 10px auto; }
-    .social-icons { justify-content: center; margin-top: 10px; }
-    .footer-title { text-align: center; margin-bottom: 15px; }
-    .footer-links { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .footer-links a { text-align: center; display: inline-block; }
-    .copyright { text-align: center; padding-top: 30px; margin-top: 30px; width: 100%; }
-    
-    /* Floating Buttons */
-    .whatsapp-chat { position: fixed; bottom: 20px; right: 10px; width: 50px; height: 50px; font-size: 1.6rem; z-index: 9999; display: flex; align-items: center; justify-content: center; background: #25D366; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; }
-    .back-to-top { position: fixed; bottom: 85px; right: 10px; width: 45px; height: 45px; z-index: 9999; display: flex; align-items: center; justify-content: center; background: var(--saffron); border-radius: 50%; color: black; box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer; }
-    body { overflow-x: hidden; width: 100%; position: relative; }
-}
+        /* Newsletter inline on desktop */
+        @media (min-width: 600px) {
+            .newsletter-form { flex-direction: row; flex-wrap: wrap; }
+            .newsletter-form input[type="email"] { width: auto; flex: 1; }
+            .newsletter-form button { width: auto; }
+            .newsletter-checkbox { width: 100%; justify-content: center; }
+        }
+               
 
-/* Small Mobile */
-@media (max-width: 600px) {
-    .jobs-grid, .steps-grid, .testimonial-grid { grid-template-columns: 1fr; }
-    .hero-title { font-size: 2.5rem; }
-}
-
-/* Newsletter inline on desktop */
-@media (min-width: 600px) {
-    .newsletter-form { flex-direction: row; flex-wrap: wrap; }
-    .newsletter-form input[type="email"] { width: auto; flex: 1; }
-    .newsletter-form button { width: auto; }
-    .newsletter-checkbox { width: 100%; justify-content: center; }
-}
-/* ========== CONSULTATION MODAL MOBILE RESPONSIVE ========== */
-@media (max-width: 768px) {
-    .consultation-modal .modal-container {
-        flex-direction: column;
-        width: 95%;
-        max-width: 95%;
-        margin: 20px;
-        border-radius: 20px;
-        max-height: 90vh;
-        overflow-y: auto;
-    }
-    
-    .consultation-modal .modal-left {
-        padding: 25px 20px;
-        order: 2;
-    }
-    
-    .consultation-modal .modal-right {
-        order: 1;
-        padding: 20px;
-        border-left: none;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        background: rgba(245, 158, 11, 0.15);
-    }
-    
-    .consultation-modal .modal-logo {
-        font-size: 1.8rem;
-        margin-bottom: 15px;
-    }
-    
-    .consultation-modal .contact-info p {
-        font-size: 0.85rem;
-        margin: 5px 0;
-    }
-    
-    .consultation-modal .modal-title {
-        font-size: 1.5rem;
-        margin-bottom: 15px;
-    }
-    
-    .consultation-modal .time-slots {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-    }
-    
-    .consultation-modal .time-slot {
-        padding: 8px;
-        font-size: 0.85rem;
-    }
-    
-    .consultation-modal .calendar-container input {
-        padding: 10px 12px;
-        font-size: 0.9rem;
-    }
-    
-    .consultation-modal .modal-form input,
-    .consultation-modal .modal-form textarea {
-        padding: 10px 12px;
-        margin-bottom: 12px;
-        font-size: 0.9rem;
-    }
-    
-    .consultation-modal .modal-actions {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .consultation-modal .modal-btn {
-        width: 100%;
-        padding: 10px;
-        font-size: 0.9rem;
-    }
-    
-    .consultation-modal .close-modal {
-        top: 12px;
-        right: 12px;
-        font-size: 1.2rem;
-        background: rgba(0,0,0,0.5);
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 20;
-    }
-    
-    .consultation-modal .modal-checkbox {
-        gap: 8px;
-        margin-bottom: 12px;
-    }
-    
-    .consultation-modal .modal-checkbox label {
-        font-size: 0.8rem;
-    }
-}
-.dropdown {
-    position: relative;
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    background: var(--dark-gray);
-    min-width: 200px;
-    border-radius: 8px;
-    padding: 10px 0;
-    z-index: 100;
-}
-
-.dropdown:hover .dropdown-menu {
-    display: block;
-}
-
-.dropdown-menu li {
-    list-style: none;
-}
-
-.dropdown-menu a {
-    display: block;
-    padding: 8px 20px;
-    color: white;
-    text-decoration: none;
-}
-
-.dropdown-menu a:hover {
-    background: var(--saffron);
-    color: black;
-}
+        .dropdown { position: relative; }
+        .dropdown-menu { display: none; position: absolute; background: var(--dark-gray); min-width: 200px; border-radius: 8px; padding: 10px 0; z-index: 100; }
+        .dropdown:hover .dropdown-menu { display: block; }
+        .dropdown-menu li { list-style: none; }
+        .dropdown-menu a { display: block; padding: 8px 20px; color: white; text-decoration: none; }
+        .dropdown-menu a:hover { background: var(--saffron); color: black; }
     </style>
 </head>
 <body>
-    <!-- Drone cursor -->
+    <!-- Drone cursor (same as before) -->
     <div id="drone-wrapper" style="--x: 0px; --y: 0px;">
         <div id="drone-model" style="--tiltX: 0deg; --tiltY: 0deg;">
             <svg viewBox="0 0 100 100" width="50" height="50" xmlns="http://www.w3.org/2000/svg">
@@ -577,47 +404,47 @@ nav ul { list-style: none; display: flex; gap: 25px; }
     </div>
 
     <!-- HEADER -->
-<header class="header">
-     <a href="index.html" class="logo" style="position: relative; display: inline-block;">
-    <img src="images/IQdrone-logo.webp" alt="iQdrone Academy" style="display: block; height: 50px; width: auto;">
-</a>
-    
-    <nav id="navMenu">
-        <ul>
-            <li><a href="index.html" class="nav-link active">Home</a></li>
-            <li class="dropdown">
-    <a href="courses.html" class="nav-link">Courses ▼</a>
-    <ul class="dropdown-menu">
-        <li><a href="courses/remot_pilot_licence-course.html">Small RPC</a></li>
-        <li><a href="courses/medium_pilot_licence_course.html">Medium RPC</a></li>
-        <li><a href="courses/Agrikisan_drone_operator.html">Kisan Drone Operator</a></li>
-        <li><a href="courses/Drone_Repair_Maintainance_course.html">Drone Building & Repair</a></li>
-        <li><a href="courses/Drone_Mapping_Survey_course.html">Drone Survey & Mapping</a></li>
-        <li><a href="courses/advance-agriculture.html">Advanced Agriculture</a></li>
-        <li><a href="courses/fpv-droen-racing-course.html">FPV Racing</a></li>
-        <li><a href="courses/Ariel-content-creation-course.html">Aerial Videography</a></li>
-        <li><a href="courses/Train_Trainer_course.html">Train The Trainer</a></li>
-    </ul>
-</li>
-            <li><a href="service.html" class="nav-link">Service</a></li>
-            <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
-            <li><a href="drone-workshop.html" class="nav-link">Workshops</a></li>
-            <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
-            <li><a href="about-us.html" class="nav-link">About Us</a></li>
-            <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
-        </ul>
-    </nav>
-    <div class="menu-row">
-        <div class="header-buttons">
-            <button class="btn btn-text" id="loginBtn">Login</button>
-            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
-                <i class="fas fa-calendar-check"></i> Free Consultation
-            </button>
-        </div>
-        <button class="hamburger">☰</button>
-    </div> 
+    <header class="header">
+        <a href="index.html" class="logo" style="position: relative; display: inline-block;">
+            <img src="images/IQdrone-logo.webp" alt="iQdrone Academy" style="display: block; height: 50px; width: auto;">
+        </a>
+        <nav id="navMenu">
+            <ul>
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li class="dropdown">
+                    <a href="courses.html" class="nav-link">Courses ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="courses/remot_pilot_licence-course.html">Small RPC</a></li>
+                        <li><a href="courses/medium_pilot_licence_course.html">Medium RPC</a></li>
+                        <li><a href="courses/Agrikisan_drone_operator.html">Kisan Drone Operator</a></li>
+                        <li><a href="courses/Drone_Repair_Maintainance_course.html">Drone Building & Repair</a></li>
+                        <li><a href="courses/Drone_Mapping_Survey_course.html">Drone Survey & Mapping</a></li>
+                        <li><a href="courses/advance-agriculture.html">Advanced Agriculture</a></li>
+                        <li><a href="courses/fpv-droen-racing-course.html">FPV Racing</a></li>
+                        <li><a href="courses/Ariel-content-creation-course.html">Aerial Videography</a></li>
+                        <li><a href="courses/Train_Trainer_course.html">Train The Trainer</a></li>
+                    </ul>
+                </li>
+                <li><a href="service.html" class="nav-link">Service</a></li>
+                <li><a href="drone-lab.html" class="nav-link">Drone Lab</a></li>
+                <li><a href="drone-workshop.html" class="nav-link">Workshops</a></li>
+                <li><a href="drone-jobs.html" class="nav-link">Jobs</a></li>
+                <li><a href="about-us.html" class="nav-link">About Us</a></li>
+                <li><a href="contact-us.html" class="nav-link">Contact Us</a></li>
+            </ul>
+        </nav>
+        <div class="menu-row">
+    <div class="header-buttons">
+        <button class="btn btn-text" id="loginBtn">Login</button>
+        <a href="contact-us.html" class="btn btn-primary">
+            <i class="fas fa-calendar-check"></i> Free Consultation
+        </a>
+    </div>
+    <button class="hamburger">☰</button>
+</div>
 </header>
-     <!-- How It Works -->
+
+    <!-- How It Works -->
     <section class="how-it-works">
         <div class="container-custom">
             <h2 class="section-title" data-aos="fade-up">How It Works</h2>
@@ -649,32 +476,35 @@ nav ul { list-style: none; display: flex; gap: 25px; }
             <div class="gateway-grid">
                 <div class="qr-card" id="providerCard">
                     <h3><i class="fas fa-building"></i> EMPLOYERS</h3>
-                    <p class="qr-footer">IQDrone:Scan and Post job for Right Cnadidates </p>
+                    <p class="qr-footer">IQDrone: Scan and Post job for Right Candidates</p>
                     <div class="qr-wrapper" id="qrProvider"></div>
                     <div class="qr-logo">iQ</div>
                     <p class="qr-footer">We’ll review and post your job within 24h</p>
                 </div>
                 <div class="qr-card" id="seekerCard">
                     <h3><i class="fas fa-user-tie"></i> PILOTS</h3>
-                    <p class="qr-footer">IQDrone:Scan your profile & resume link to get Right job </p>
+                    <p class="qr-footer">Scan to fill the enrollment form</p>
                     <div class="qr-wrapper" id="qrSeeker"></div>
                     <div class="qr-logo">iQ</div>
-                    <p class="qr-footer">We’ll match you with relevant openings</p>
+                    <p class="qr-footer">Register as a founder member to get job opportunities</p>
                 </div>
             </div>
-         </section>
-           <!-- Filters -->
-    <section class="filters"><section class="hero" style="background-image: url('');">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <h1 class="hero-title">Your Drone Career Starts Here</h1>
-        <p class="hero-subtitle">Explore job opportunities for drone pilots, technicians, instructors, and more.</p>
-        <div class="hero-search">
-            <input type="text" id="searchInput" placeholder="Job title, keyword, or company">
-            <button id="searchButton"><i class="fas fa-search"></i> Search</button>
         </div>
-    </div>
-</section>
+    </section>
+
+    <!-- Filters & Hero -->
+    <section class="filters">
+        <section class="hero" style="background-image: url('');">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1 class="hero-title">Your Drone Career Starts Here</h1>
+                <p class="hero-subtitle">Explore job opportunities for drone pilots, technicians, instructors, and more.</p>
+                <div class="hero-search">
+                    <input type="text" id="searchInput" placeholder="Job title, keyword, or company">
+                    <button id="searchButton"><i class="fas fa-search"></i> Search</button>
+                </div>
+            </div>
+        </section>
         <div class="container-custom">
             <div class="filter-container">
                 <button class="filter-btn active" data-filter="all">All</button>
@@ -692,6 +522,7 @@ nav ul { list-style: none; display: flex; gap: 25px; }
         <div class="container-custom">
             <h2 class="section-title" data-aos="fade-up">Featured Jobs</h2>
             <div class="jobs-grid" id="jobsGrid">
+                <!-- 6 job cards (unchanged) -->
                 <div class="job-card" data-tags="Pilot Full‑time" data-aos="fade-up" data-aos-delay="100">
                     <span class="job-tag">Full‑time</span>
                     <h3 class="job-title">Drone Pilot</h3>
@@ -762,8 +593,6 @@ nav ul { list-style: none; display: flex; gap: 25px; }
         </div>
     </section>
 
-   
-
     <!-- Employer CTA -->
     <section class="employer-cta">
         <div class="container-custom">
@@ -793,152 +622,86 @@ nav ul { list-style: none; display: flex; gap: 25px; }
     </section>
     
     <!-- Job Alerts Newsletter -->
-<section class="newsletter" style="background-image: url('JOB_PAGE.jpg');">
-    <div class="overlay"></div>
-    <div class="container-custom">
-        <h2 class="section-title" data-aos="fade-up">Get Job Alerts</h2>
-        <p style="margin-bottom: 30px; color: #ccc;text-align: center;">Subscribe to receive new job postings directly in your inbox.</p>
-        <div class="newsletter-box">
-            <form class="newsletter-form" action="https://formspree.io/f/YOUR_NEWSLETTER_ENDPOINT" method="POST">
-                <input type="hidden" name="_subject" value="New Job Alert Subscription">
-                <input type="hidden" name="_next" value="thank-you.html">
-
-                <input type="email" name="_replyto" placeholder="Your email address" required>
-
-                <!-- Terms checkbox -->
-                <div class="newsletter-checkbox">
-                    <input type="checkbox" id="job-terms" name="agreeTerms" required>
-                    <label for="job-terms">
-                        I agree to the <a href="terms.html" target="_blank">Terms</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>
-                    </label>
-                </div>
-
-                <button type="submit">Subscribe</button>
-            </form>
+    <section class="newsletter" style="background-image: url('JOB_PAGE.jpg');">
+        <div class="overlay"></div>
+        <div class="container-custom">
+            <h2 class="section-title" data-aos="fade-up">Get Job Alerts</h2>
+            <p style="margin-bottom: 30px; color: #ccc;text-align: center;">Subscribe to receive new job postings directly in your inbox.</p>
+            <div class="newsletter-box">
+                <form class="newsletter-form" action="https://formspree.io/f/YOUR_NEWSLETTER_ENDPOINT" method="POST">
+                    <input type="hidden" name="_subject" value="New Job Alert Subscription">
+                    <input type="hidden" name="_next" value="thank-you.html">
+                    <input type="email" name="_replyto" placeholder="Your email address" required>
+                    <div class="newsletter-checkbox">
+                        <input type="checkbox" id="job-terms" name="agreeTerms" required>
+                        <label for="job-terms">I agree to the <a href="terms.html" target="_blank">Terms</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></label>
+                    </div>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-    
+    <!-- Verified Founder Members Wall -->
+    <section style="padding: 60px 20px; background: #000; color: white; text-align: center;">
+        <h2 style="color: #F59E0B;">Verified Founder Members</h2>
+        <p style="color: #888; margin-bottom: 30px;">These pilots are officially registered in the iQDRONE database.</p>
+        <div id="pilot-wall" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto;"></div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer-content">
-    <div class="footer-container">
-        <div class="footer-column">
-            <div class="footer-logo"><img src="images/IQdrone-logo.webp" alt="iQdrone Academy" style="height: 40px; width: auto;"></div>
-            <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <div class="footer-container">
+            <div class="footer-column">
+                <div class="footer-logo"><img src="images/IQdrone-logo.webp" alt="iQdrone Academy" style="height: 40px; width: auto;"></div>
+                <p class="footer-about">Professional drone training academy providing certified courses for enthusiasts and commercial operators.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Quick Links</h3>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="courses.html">Courses</a>
+                    <a href="service.html">Service</a>
+                    <a href="drone-lab.html">Drone Lab</a>
+                    <a href="drone-workshop.html">Workshops</a>
+                    <a href="drone-jobs.html">Jobs</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">More</h3>
+                <div class="footer-links">
+                    <a href="partner.html">Partner With Us</a>
+                    <a href="about-us.html">About Us</a>
+                    <a href="contact-us.html">Contact Us</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms</a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3 class="footer-title">Contact</h3>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-map-marker-alt"></i> Vijay Nagar, Indore, MP</a>
+                    <a href="tel:+918889122261"><i class="fas fa-phone"></i> +918889122261</a>
+                    <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
+                </div>
             </div>
         </div>
-        <div class="footer-column">
-            <h3 class="footer-title">Quick Links</h3>
-            <div class="footer-links">
-                <a href="index.html">Home</a>
-                <a href="courses.html">Courses</a>
-                <a href="service.html">Service</a>
-                <a href="drone-lab.html">Drone Lab</a>
-                <a href="drone-workshop.html">Workshops</a>
-                <a href="drone-jobs.html">Jobs</a>
-            </div>
-        </div>
-        <div class="footer-column">
-            <h3 class="footer-title">More</h3>
-            <div class="footer-links">
-                <a href="partner.html">Partner With Us</a>
-                <a href="about-us.html">About Us</a>
-                <a href="contact-us.html">Contact Us</a>
-                <a href="blog.html">Blog</a>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="terms.html">Terms</a>
-            </div>
-        </div>
-        <div class="footer-column">
-            <h3 class="footer-title">Contact</h3>
-            <div class="footer-links">
-                <a href="#"><i class="fas fa-map-marker-alt"></i> Vijay Nagar, Indore, MP</a>
-                <a href="tel:+918889122261"><i class="fas fa-phone"></i> +918889122261</a>
-                <a href="mailto:info@iqdrone.com"><i class="fas fa-envelope"></i> info@iqdrone.com</a>
-            </div>
-        </div>
-    </div>
-    <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
-</footer>
-
-    <!-- Consultation Sidebar -->
-    <div class="consultation-sidebar" id="consultationSidebar">
-        <button class="sidebar-btn consultation-trigger"><i class="fas fa-calendar-check"></i><span>Free Consultation</span></button>
-    </div>
+        <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
+    </footer>
 
     <!-- WhatsApp Chat Button -->
     <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20your%20jobs%20portal" class="whatsapp-chat" target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Consultation Modal (Final) -->
-<div class="consultation-modal" id="consultationModal">
-    <div class="modal-container">
-        <div class="close-modal"><i class="fas fa-times"></i></div>
-        <div class="modal-left">
-            <!-- Step 1: Date & Time -->
-            <div class="modal-step active" id="step1">
-                <h3 class="modal-title">Schedule Your Consultation</h3>
-                <div class="calendar-container">
-                    <input type="text" id="date" placeholder="Select Date">
-                </div>
-                <div class="time-slots" id="timeSlots">
-                    <div class="time-slot">9:00 AM</div>
-                    <div class="time-slot">10:00 AM</div>
-                    <div class="time-slot">11:00 AM</div>
-                    <div class="time-slot">1:00 PM</div>
-                    <div class="time-slot">2:00 PM</div>
-                    <div class="time-slot">3:00 PM</div>
-                </div>
-                <div class="modal-actions">
-                    <button class="modal-btn secondary" id="cancelBtn">Cancel</button>
-                    <button class="modal-btn" id="nextStepBtn">Next</button>
-                </div>
-            </div>
-            <!-- Step 2: Personal Details Form -->
-            <div class="modal-step" id="step2">
-                <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
-                    <input type="hidden" name="_subject" value="New Consultation Request">
-                    <input type="hidden" name="_next" value="thank-you.html">
-
-                    <input type="text" name="fullName" placeholder="Full Name *" required>
-                    <input type="email" name="_replyto" placeholder="Email Address *" required>
-                    <input type="tel" name="phone" placeholder="Phone Number *" required>
-                    <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
-
-                    <!-- Terms Checkbox -->
-                    <div class="modal-checkbox">
-                        <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
-                        <label for="consultAgreeTerms">
-                            I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> 
-                            and <a href="privacy.html" target="_blank">Privacy Policy</a>
-                        </label>
-                    </div>
-
-                    <div class="modal-actions">
-                        <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
-                        <button type="submit" class="modal-btn">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="modal-right">
-            <div class="modal-logo">iQdrone Academy</div>
-            <div class="contact-info">
-                <p><i class="fas fa-phone"></i> +918889122261</p>
-                <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
-                <p>We'll contact you within 24h</p>
-            </div>
-        </div>
-    </div>
-</div>
+    
 
     <!-- Back to Top -->
     <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
@@ -947,10 +710,43 @@ nav ul { list-style: none; display: flex; gap: 25px; }
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // Helper to load the founder wall (unchanged)
+        async function loadWall() {
+            const scriptURL = "https://script.google.com/macros/s/AKfycbw20aREU1c8H_7_odxmvPt3bKNP29ylwThpYu0ggM5PDAwFYZOjdjoKfMgd-FONh_AX/exec";
+            try {
+                const response = await fetch(scriptURL);
+                const pilots = await response.json();
+                const wall = document.getElementById('pilot-wall');
+                wall.innerHTML = '';
+                if(pilots.length === 0) {
+                    wall.innerHTML = "<p style='grid-column: 1/-1; color:#555;'>Waiting for first approved member...</p>";
+                    return;
+                }
+                pilots.forEach(p => {
+                    const card = document.createElement('div');
+                    card.style = "background:#1e293b; border:1px solid #334155; border-radius:15px; overflow:hidden; display:flex; flex-direction:column; position:relative; isolation: isolate;";
+                    let photoId = p.photo;
+                    if (photoId.includes('id=')) photoId = photoId.split('id=')[1].split('&')[0];
+                    else if (photoId.includes('file/d/')) photoId = photoId.split('file/d/')[1].split('/')[0];
+                    const photoUrl = `https://lh3.googleusercontent.com/d/${photoId}`;
+                    card.innerHTML = `
+                        <div style="width:100%; aspect-ratio:1/1; overflow:hidden; background:#0f172a; position:relative;">
+                            <img src="${photoUrl}" style="width:100%; height:100%; object-fit:cover; display:block; border:none; outline:none;" onerror="this.src='https://ui-avatars.com/api/?name=${p.name}&background=0D8ABC&color=fff'">
+                        </div>
+                        <div style="padding:12px; background:#1e293b;">
+                            <div style="color:#38bdf8; font-weight:bold; font-size:0.9rem;">${p.name.split(' ')[0]}</div>
+                            <div style="color:#94a3b8; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.5px;">${p.course || 'Pilot'}</div>
+                        </div>
+                    `;
+                    wall.appendChild(card);
+                });
+            } catch(e) { console.log("Error loading Wall:", e); document.getElementById('pilot-wall').innerHTML = "Check connection..."; }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             AOS.init({ duration: 800, once: true, offset: 100 });
 
-            // Drone cursor
+            // Drone cursor (same as before)
             const wrapper = document.getElementById('drone-wrapper');
             const model = document.getElementById('drone-model');
             let lastX = window.innerWidth / 2, lastY = window.innerHeight / 2;
@@ -973,12 +769,7 @@ nav ul { list-style: none; display: flex; gap: 25px; }
                     wrapper.classList.remove('moving');
                 }, 150);
             });
-            // Trail dots
-            for (let i = 0; i < 3; i++) {
-                let dot = document.createElement('div');
-                dot.className = 'trail-dot';
-                document.body.appendChild(dot);
-            }
+            for (let i = 0; i < 3; i++) { let dot = document.createElement('div'); dot.className = 'trail-dot'; document.body.appendChild(dot); }
             const trailDots = document.querySelectorAll('.trail-dot');
             let trailIndex = 0;
             setInterval(() => {
@@ -991,82 +782,53 @@ nav ul { list-style: none; display: flex; gap: 25px; }
                 trailIndex = (trailIndex + 1) % trailDots.length;
             }, 50);
 
-            // Consultation modal
-const modal = document.getElementById('consultationModal');
-const triggers = document.querySelectorAll('.consultation-trigger');
-const closeModal = document.querySelector('.close-modal');
-const cancelBtn = document.getElementById('cancelBtn');
-const nextStepBtn = document.getElementById('nextStepBtn');
-const backBtn = document.getElementById('backBtn');
-const step1 = document.getElementById('step1');
-const step2 = document.getElementById('step2');
-const timeSlots = document.querySelectorAll('.time-slot');
+            // Consultation modal (same as before)
+            const modal = document.getElementById('consultationModal');
+            const triggers = document.querySelectorAll('.consultation-trigger');
+            const closeModal = document.querySelector('.close-modal');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const nextStepBtn = document.getElementById('nextStepBtn');
+            const backBtn = document.getElementById('backBtn');
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const timeSlots = document.querySelectorAll('.time-slot');
+            triggers.forEach(t => t.addEventListener('click', () => { modal.classList.add('show'); document.body.style.overflow = 'hidden'; }));
+            function hideModal() { modal.classList.remove('show'); document.body.style.overflow = ''; }
+            closeModal?.addEventListener('click', hideModal);
+            cancelBtn?.addEventListener('click', hideModal);
+            nextStepBtn?.addEventListener('click', () => { step1.classList.remove('active'); step2.classList.add('active'); });
+            backBtn?.addEventListener('click', () => { step2.classList.remove('active'); step1.classList.add('active'); });
+            timeSlots.forEach(s => s.addEventListener('click', function() { timeSlots.forEach(s => s.classList.remove('selected')); this.classList.add('selected'); }));
+            flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => date.getDay() === 0 || date.getDay() === 6 ] });
 
-triggers.forEach(t => t.addEventListener('click', () => {
-    modal.classList.add('show');
-    document.body.style.overflow = 'hidden';
-}));
-
-function hideModal() {
-    modal.classList.remove('show');
-    document.body.style.overflow = '';
-}
-closeModal?.addEventListener('click', hideModal);
-cancelBtn?.addEventListener('click', hideModal);
-nextStepBtn?.addEventListener('click', () => {
-    step1.classList.remove('active');
-    step2.classList.add('active');
-});
-backBtn?.addEventListener('click', () => {
-    step2.classList.remove('active');
-    step1.classList.add('active');
-});
-timeSlots.forEach(s => s.addEventListener('click', function() {
-    timeSlots.forEach(s => s.classList.remove('selected'));
-    this.classList.add('selected');
-}));
-
-// Remove or comment out the old consultForm listener (if present)
-// document.getElementById('consultForm')?.addEventListener('submit', (e) => { ... });
-
-flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => date.getDay() === 0 || date.getDay() === 6 ] });
             // Hamburger menu
             document.querySelector('.hamburger')?.addEventListener('click', () => document.querySelector('nav').classList.toggle('active'));
-            // Scroll events (sidebar & back to top)
-            const sidebar = document.getElementById('consultationSidebar');
             const backTop = document.getElementById('backToTop');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) sidebar.classList.add('show'); else sidebar.classList.remove('show');
-                if (window.scrollY > 500) backTop.classList.add('show'); else backTop.classList.remove('show');
-            });
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) backTop.classList.add('show'); else backTop.classList.remove('show');
+});
             backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-            // ========== SEARCH & FILTER FUNCTIONALITY ==========
+            // Search & filter
             const searchInput = document.getElementById('searchInput');
             const searchButton = document.getElementById('searchButton');
             const filterButtons = document.querySelectorAll('.filter-btn');
             const jobCards = document.querySelectorAll('.job-card');
-
             function filterJobs() {
                 const searchTerm = searchInput.value.toLowerCase().trim();
                 const activeFilter = document.querySelector('.filter-btn.active')?.getAttribute('data-filter') || 'all';
-
                 jobCards.forEach(card => {
                     const title = card.querySelector('.job-title')?.innerText.toLowerCase() || '';
                     const company = card.querySelector('.job-company')?.innerText.toLowerCase() || '';
                     const desc = card.querySelector('.job-desc')?.innerText.toLowerCase() || '';
                     const tags = card.getAttribute('data-tags')?.toLowerCase() || '';
-
                     const matchesSearch = searchTerm === '' || title.includes(searchTerm) || company.includes(searchTerm) || desc.includes(searchTerm);
                     const matchesFilter = activeFilter === 'all' || tags.includes(activeFilter.toLowerCase());
-
                     card.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
                 });
             }
-
             searchInput.addEventListener('input', filterJobs);
             searchButton.addEventListener('click', filterJobs);
-
             filterButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
                     filterButtons.forEach(b => b.classList.remove('active'));
@@ -1075,81 +837,91 @@ flatpickr("#date", { minDate: "today", dateFormat: "Y-m-d", disable: [ date => d
                 });
             });
 
-            // ========== APPLY NOW BUTTONS ==========
-            const WHATSAPP_NUMBER = "918889122261"; // <-- REPLACE WITH YOUR WHATSAPP NUMBER
-
+            // Apply buttons (WhatsApp)
+            const WHATSAPP_NUMBER = "918889122261";
             document.querySelectorAll('.apply-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.preventDefault();
                     const jobTitle = this.getAttribute('data-job') || 'this position';
                     const message = `👋 I'm interested in the *${jobTitle}* position.\n\n👤 Name: \n📱 Phone: \n📄 Resume link: \n✉️ Email: \n\n(Please fill in your details)`;
-                    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-                    window.open(url, '_blank');
+                    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
                 });
             });
-
-            // ========== POST A JOB BUTTON ==========
             document.getElementById('postJobBtn').addEventListener('click', function(e) {
                 e.preventDefault();
                 const message = `🏢 *JOB VACANCY | iQdrone*\n━━━━━━━━━━━━━━\n• COMPANY: \n• JOB TITLE: \n• LOCATION: \n• SALARY: \n•Mobile Num: \n━━━━━━━━━━━━━━\n📝 *NEXT STEPS:*\n1. Fill in the details above.\n2. Hit 'SEND'.\n3. Our team will verify and post within 24 hours.`;
-                const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-                window.open(url, '_blank');
+                window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
             });
 
-            // ========== QR CODES ==========
-            const giverForm = `🏢 *JOB VACANCY | iQdrone*\n━━━━━━━━━━━━━━\n• COMPANY: \n• JOB TITLE: \n• LOCATION: \n• SALARY: \n•Mobile Num: \n━━━━━━━━━━━━━━\n📝 *NEXT STEPS:*\n1. Fill in the details above.\n2. Hit 'SEND'.\n3. Our team will verify and post within 24 hours.\n\n⚠️ *Fake entries will be ignored.*`;
+            // ========== QR CODES (FIXED) ==========
+            const employerMessage = `🏢 *JOB VACANCY | iQdrone*
+━━━━━━━━━━━━━━
+• COMPANY: 
+• JOB TITLE: 
+• LOCATION: 
+• SALARY: 
+•Mobile Num: 
+━━━━━━━━━━━━━━
+📝 *NEXT STEPS:*
+1. Fill in the details above.
+2. Hit 'SEND'.
+3. Our team will verify and post within 24 hours.
 
-            const seekerForm = `🆔 *PILOT PROFILE | iQdrone*\n━━━━━━━━━━━━━━\n👤 *NAME:* \n📍 *LOCATION:* \n📜 *LICENSE NO:* \n📄 *RESUME LINK:* \n━━━━━━━━━━━━━━\n🚀 *GUIDE:*\n1. Fill details & paste your Google Drive/Resume link.\n2. Hit 'SEND' to register.\n3. We'll contact you if your profile matches a job.\n\n⚠️ *Fake entries will be ignored.*`;
+⚠️ *Fake entries will be ignored.*`;
 
-            function drawQR(text, containerId) {
-                const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+            // Function to generate WhatsApp QR
+            function drawWhatsAppQR(message, containerId) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
                 const qr = qrcode(0, 'H');
                 qr.addData(url);
                 qr.make();
-                const imgTag = qr.createImgTag(8, 0);
-                document.getElementById(containerId).innerHTML = imgTag;
+                container.innerHTML = qr.createImgTag(8, 0);
+                const img = container.querySelector('img');
+                if (img) { img.style.width = '100%'; img.style.height = 'auto'; img.style.maxWidth = '180px'; }
             }
 
-            drawQR(giverForm, 'qrProvider');
-            drawQR(seekerForm, 'qrSeeker');
+            // Function to generate a simple URL QR (for enrollment link)
+            function drawUrlQR(url, containerId) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                const qr = qrcode(0, 'H');
+                qr.addData(url);
+                qr.make();
+                container.innerHTML = qr.createImgTag(8, 0);
+                const img = container.querySelector('img');
+                if (img) { img.style.width = '100%'; img.style.height = 'auto'; img.style.maxWidth = '180px'; }
+            }
+
+            // Employer QR → WhatsApp
+            drawWhatsAppQR(employerMessage, 'qrProvider');
+            // Job Seeker (Pilot) QR → Enrollment Form
+            const enrollPageUrl = "https://iqdrone.vercel.app/enroll.html";
+            drawUrlQR(enrollPageUrl, 'qrSeeker');
+
+            // Load founder wall
+            loadWall();
         });
     </script>
 
-<!-- Cookie Consent Banner -->
-<div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: none; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-    <p style="color: white; margin: 0; font-size: 0.9rem; line-height: 1.4;">
-        <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
-        We use cookies to enhance your experience. By continuing, you agree to our 
-        <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
-    </p>
-    <div style="display: flex; gap: 10px;">
-        <button onclick="rejectCookies()" style="background: transparent; border: 1px solid var(--saffron); color: white; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">Reject All</button>
-        <button onclick="acceptCookies()" style="background: var(--saffron); border: none; color: black; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">Accept</button>
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: none; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+        <p style="color: white; margin: 0; font-size: 0.9rem; line-height: 1.4;">
+            <i class="fas fa-cookie-bite" style="color: var(--saffron); margin-right: 8px;"></i>
+            We use cookies to enhance your experience. By continuing, you agree to our 
+            <a href="privacy.html" style="color: var(--saffron); text-decoration: underline;">Privacy Policy</a>.
+        </p>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="rejectCookies()" style="background: transparent; border: 1px solid var(--saffron); color: white; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">Reject All</button>
+            <button onclick="acceptCookies()" style="background: var(--saffron); border: none; color: black; padding: 8px 16px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">Accept</button>
+        </div>
     </div>
-</div>
 
-<script>
-function acceptCookies() {
-    localStorage.setItem('cookieChoice', 'accepted');
-    document.getElementById('cookie-banner').style.display = 'none';
-}
-
-function rejectCookies() {
-    localStorage.setItem('cookieChoice', 'rejected');
-    document.getElementById('cookie-banner').style.display = 'none';
-}
-
-(function() {
-    const choice = localStorage.getItem('cookieChoice');
-    const banner = document.getElementById('cookie-banner');
-    if (banner) {
-        if (choice === 'accepted' || choice === 'rejected') {
-            banner.style.display = 'none';
-        } else {
-            banner.style.display = 'flex';
-        }
-    }
-})();
-</script>
+    <script>
+        function acceptCookies() { localStorage.setItem('cookieChoice', 'accepted'); document.getElementById('cookie-banner').style.display = 'none'; }
+        function rejectCookies() { localStorage.setItem('cookieChoice', 'rejected'); document.getElementById('cookie-banner').style.display = 'none'; }
+        (function() { const choice = localStorage.getItem('cookieChoice'); const banner = document.getElementById('cookie-banner'); if (banner && choice !== 'accepted' && choice !== 'rejected') banner.style.display = 'flex'; })();
+    </script>
 </body>
 </html>

@@ -103,14 +103,14 @@
         </ul>
     </nav>
     <div class="menu-row">
-        <div class="header-buttons">
-            <button class="btn btn-text" id="loginBtn">Login</button>
-            <button class="btn btn-primary consultation-trigger" id="headerConsultBtn">
-                <i class="fas fa-calendar-check"></i> Free Consultation
-            </button>
-        </div>
-        <button class="hamburger">☰</button>
-    </div> 
+    <div class="header-buttons">
+        <button class="btn btn-text" id="loginBtn">Login</button>
+        <a href="contact-us.html" class="btn btn-primary">
+            <i class="fas fa-calendar-check"></i> Free Consultation
+        </a>
+    </div>
+    <button class="hamburger">☰</button>
+</div>
 </header>
 
 <!-- HERO SECTION -->
@@ -127,7 +127,11 @@
         <p class="hero-highlight">Certified Pilot Programs | Agriculture | Surveying</p>
         <div class="hero-buttons">
             <a href="contact-us.html" class="btn btn-primary btn-large">🚁 Start Free Trial</a>
-            <button class="btn btn-secondary btn-large consultation-trigger">📞 Talk to Career Advisor</button>
+            <a href="https://wa.me/918889122261?text=Hello%20iQdrone%2C%20I'm%20interested%20in%20talking%20to%20a%20career%20advisor" 
+   class="btn btn-secondary btn-large" 
+   target="_blank">
+   📞 Talk to Career Advisor
+</a>
         </div>
         <p class="hero-micro">Trusted by 500+ Students in Madhya Pradesh</p>
     </div>
@@ -393,8 +397,9 @@
                 <h3 class="consultation-title">Free Programme Consultation</h3>
                 <p class="consultation-subtitle">Book your session with our experts</p>
             </div>
-            <button class="btn btn-primary consultation-trigger"><i class="fas fa-calendar-check"></i> Schedule Consultation</button>
-        </div>
+            <a href="contact-us.html" class="btn btn-primary">
+    <i class="fas fa-calendar-check"></i> Schedule Consultation
+</a>
     </div>
 </section>
 
@@ -495,58 +500,6 @@
     <div class="copyright">© 2025 iQdrone Academy. All rights reserved.</div>
 </footer>
 
-<!-- Consultation Modal (unchanged) -->
-<div class="consultation-modal" id="consultationModal">
-    <div class="modal-container">
-        <div class="close-modal"><i class="fas fa-times"></i></div>
-        <div class="modal-left">
-            <div class="modal-step active" id="step1">
-                <h3 class="modal-title">Schedule Your Consultation</h3>
-                <div class="calendar-container">
-                    <input type="text" id="date" placeholder="Select Date">
-                </div>
-                <div class="time-slots" id="timeSlots">
-                    <div class="time-slot">9:00 AM</div>
-                    <div class="time-slot">10:00 AM</div>
-                    <div class="time-slot">11:00 AM</div>
-                    <div class="time-slot">1:00 PM</div>
-                    <div class="time-slot">2:00 PM</div>
-                    <div class="time-slot">3:00 PM</div>
-                </div>
-                <div class="modal-actions">
-                    <button class="modal-btn secondary" id="cancelBtn">Cancel</button>
-                    <button class="modal-btn" id="nextStepBtn">Next</button>
-                </div>
-            </div>
-            <div class="modal-step" id="step2">
-                <form class="modal-form" action="https://formspree.io/f/YOUR_CONSULT_ENDPOINT" method="POST">
-                    <input type="hidden" name="_subject" value="New Consultation Request">
-                    <input type="hidden" name="_next" value="thank-you.html">
-                    <input type="text" name="fullName" placeholder="Full Name *" required>
-                    <input type="email" name="_replyto" placeholder="Email Address *" required>
-                    <input type="tel" name="phone" placeholder="Phone Number *" required>
-                    <textarea name="message" placeholder="Your Questions?" rows="2"></textarea>
-                    <div class="modal-checkbox">
-                        <input type="checkbox" id="consultAgreeTerms" name="agreeTerms" required>
-                        <label for="consultAgreeTerms">I agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> and <a href="privacy.html" target="_blank">Privacy Policy</a></label>
-                    </div>
-                    <div class="modal-actions">
-                        <button type="button" class="modal-btn secondary" id="backBtn">Back</button>
-                        <button type="submit" class="modal-btn">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="modal-right">
-            <div class="modal-logo">iQdrone Academy</div>
-            <div class="contact-info">
-                <p><i class="fas fa-phone"></i> +918889122261</p>
-                <p><i class="fas fa-envelope"></i> info@iqdrone.com</p>
-                <p>We'll contact you within 24h</p>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Back to Top -->
 <div class="back-to-top" id="backToTop"><i class="fas fa-arrow-up"></i></div>
@@ -560,9 +513,7 @@
 
 <!-- Custom script -->
 <script src="script.js"></script>
-
-
-<!-- ===== IQDRONE ASSISTANT (Final – Clean & Reliable) ===== -->
+<!-- iQDRONE Assistant – Direct WhatsApp or Callback (No Spam) 
 <style>
     .iqdrone-chat {
         position: fixed;
@@ -570,11 +521,11 @@
         right: 30px;
         width: 380px;
         height: 560px;
-        background: rgba(20, 22, 27, 0.9);
+        background: rgba(20, 22, 27, 0.95);
         backdrop-filter: blur(16px);
-        border: 1px solid rgba(245, 158, 11, 0.5);
+        border: 1px solid #F59E0B;
         border-radius: 24px;
-        box-shadow: 0 25px 40px rgba(0,0,0,0.2);
+        box-shadow: 0 25px 40px rgba(0,0,0,0.3);
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -582,17 +533,17 @@
         transition: transform 0.3s ease, opacity 0.3s ease;
         transform: translateY(calc(100% - 70px));
         opacity: 0.95;
-        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
     }
     .iqdrone-chat.expanded {
         transform: translateY(0);
         opacity: 1;
     }
     .chat-header {
-        background: rgba(26, 26, 30, 0.8);
+        background: rgba(26, 26, 30, 0.9);
         backdrop-filter: blur(8px);
-        padding: 14px 18px;
-        border-bottom: 1px solid rgba(245, 158, 11, 0.4);
+        padding: 12px 18px;
+        border-bottom: 1px solid rgba(245, 158, 11, 0.5);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -608,7 +559,7 @@
         width: 44px;
         height: 44px;
         border-radius: 50%;
-        background: #f0f0f0;
+        background: #1e293b;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -683,7 +634,7 @@
         display: flex;
         flex-direction: column;
         gap: 12px;
-        background: rgba(0,0,0,0.2);
+        background: rgba(0,0,0,0.3);
     }
     .message {
         display: flex;
@@ -708,8 +659,8 @@
         border-bottom-right-radius: 4px;
     }
     .bot .message-content {
-        background: rgba(30, 32, 38, 0.9);
-        border: 1px solid rgba(245, 158, 11, 0.3);
+        background: rgba(30, 32, 38, 0.95);
+        border: 1px solid rgba(245, 158, 11, 0.4);
         color: #f0f0f0;
         border-bottom-left-radius: 4px;
     }
@@ -720,8 +671,8 @@
         margin-top: 8px;
     }
     .option-card {
-        background: rgba(26, 28, 35, 0.9);
-        border: 1px solid rgba(245, 158, 11, 0.4);
+        background: rgba(26, 28, 35, 0.95);
+        border: 1px solid rgba(245, 158, 11, 0.5);
         border-radius: 16px;
         padding: 12px 16px;
         cursor: pointer;
@@ -765,52 +716,6 @@
         color: #000;
         border-color: #F59E0B;
     }
-    .contact-form {
-        background: rgba(30,32,38,0.9);
-        border-radius: 20px;
-        padding: 12px;
-        margin-top: 8px;
-    }
-    .contact-form input {
-        width: 100%;
-        background: rgba(0,0,0,0.5);
-        border: 1px solid #F59E0B;
-        border-radius: 30px;
-        padding: 10px 14px;
-        color: white;
-        margin-bottom: 10px;
-        font-size: 0.9rem;
-        outline: none;
-    }
-    .contact-form button {
-        background: #F59E0B;
-        border: none;
-        border-radius: 30px;
-        padding: 8px 16px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        transition: 0.2s;
-    }
-    .instructor-thankyou {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: rgba(30,32,38,0.9);
-        border-radius: 20px;
-        padding: 12px;
-        margin-top: 8px;
-    }
-    .instructor-thankyou img {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #F59E0B;
-    }
-    .thinking .message-content {
-        border-color: #888;
-    }
     .thinking-dots span {
         display: inline-block;
         width: 6px;
@@ -826,7 +731,7 @@
     }
     .chat-input {
         padding: 12px;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0,0,0,0.6);
         border-top: 1px solid rgba(245,158,11,0.3);
         display: flex;
         gap: 10px;
@@ -853,6 +758,10 @@
         cursor: pointer;
         transition: 0.2s;
     }
+    .chat-input button:hover {
+        background: #e68a00;
+        transform: scale(1.02);
+    }
     .chat-messages::-webkit-scrollbar {
         width: 5px;
     }
@@ -878,7 +787,7 @@
     <div class="chat-header" id="chatHeader">
         <div class="chat-header-left">
             <div class="instructor-avatar">
-                <img src="https://via.placeholder.com/80x80?text=Instructor" alt="Instructor">
+                <img src="https://via.placeholder.com/80x80?text=VR" alt="Instructor">
                 <div class="drone-icon-small"><i class="fas fa-drone"></i></div>
             </div>
             <div class="header-text">
@@ -898,47 +807,16 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <script>
 (function() {
-    // ==================== CONFIGURATION ====================
-    const instructor = {
-        name: "Virat",
-        photo: "https://via.placeholder.com/80x80?text=Instructor"
-    };
+    // ========== CONFIGURATION ==========
+    const ADMIN_WHATSAPP = "918889122261";          // Your WhatsApp number (without +)
+    const GOOGLE_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL"; // Replace with your Web App URL
+    const instructorName = "Virat";
 
-    const offers = {
-        courses: {
-            title: "🎓 Pilot Training Courses",
-            description: "DGCA certified • 95% placement rate",
-            subOptions: [
-                { label: "Small RPC", price: "₹30,000", duration: "5 days", nextBatch: "5th April", benefit: "Start your career in weeks!" },
-                { label: "Medium RPC", price: "₹41,300", duration: "5 days / 2-day upgrade", nextBatch: "12th April", benefit: "Fly up to 50kg drones" },
-                { label: "Kisan Drone Operator", price: "Contact for fee", duration: "270 hours", nextBatch: "15th April", benefit: "Subsidies available for farmers" },
-                { label: "Advanced Agriculture", price: "₹45,000", duration: "5 days", nextBatch: "20th April", benefit: "Multispectral sensors & VRT" }
-            ],
-            simulatorOffer: "Try our flight simulator and earn a discount code for any course!"
-        },
-        partnership: {
-            title: "🤝 Partnership (Drone Lab for Schools/Colleges)",
-            description: "Complete STEM lab setup • Start from ₹2.5 Lakhs",
-            subOptions: [
-                { label: "Basic Lab", price: "₹2.5 Lakh", includes: "2 drones, curriculum, teacher training", benefit: "Perfect for starting STEM" },
-                { label: "Advanced Lab", price: "₹5 Lakh", includes: "5 drones, mapping software, 2-year support", benefit: "Full-fledged drone lab" }
-            ],
-            proof: "Already partnered with 15+ institutions across MP & Maharashtra."
-        },
-        workshops: {
-            title: "🔧 Workshops (Attend or Conduct)",
-            description: "Hands‑on, 1‑day or 2‑day sessions",
-            subOptions: [
-                { label: "Attend a Workshop", price: "₹1,999", nextDate: "5th April (Indore)", learn: "Fly a drone, basic photography", benefit: "Certificate of participation" },
-                { label: "Conduct a Workshop", price: "Custom", details: "Become a certified trainer, earn per workshop", benefit: "Income & recognition" }
-            ],
-            proof: "Over 500 students attended last year, rated 4.9/5."
-        }
-    };
-
-    // ==================== DOM Elements ====================
+    // DOM elements
     const chat = document.getElementById('iqdroneChat');
     const header = document.getElementById('chatHeader');
     const minimizeBtn = document.getElementById('minimizeChat');
@@ -946,8 +824,11 @@
     const input = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendChat');
     let expanded = false;
+    let awaitingCallback = false;   // waiting for name+phone for callback
+    let selectedOption = '';
+    let callbackName = '', callbackPhone = '';
 
-    // ==================== Helper Functions ====================
+    // Helper: escape HTML
     function escapeHTML(str) {
         return str.replace(/[&<>]/g, function(m) {
             if (m === '&') return '&amp;';
@@ -961,7 +842,20 @@
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
-    // Add a bot message with optional quick replies (buttons) – buttons are inside the same bubble
+    // Send data to Google Sheets
+    function sendToGoogleSheet(data) {
+        if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL") {
+            console.warn("Google Sheets URL not configured");
+            return;
+        }
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).catch(err => console.error("Google Sheet error:", err));
+    }
+
     function addBotMessage(text, quickReplies = null) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'message bot';
@@ -979,33 +873,12 @@
 
         if (quickReplies && quickReplies.length) {
             msgDiv.querySelectorAll('.quick-reply-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => handleQuickReply(btn.dataset.value));
+                btn.addEventListener('click', () => handleQuickReply(btn.dataset.value));
             });
         }
-        return msgDiv; // return for later removal if needed
-    }
-
-    // Add a bot message that contains only quick‑reply buttons (no text)
-    function addButtonOnlyMessage(quickReplies) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'message bot';
-        let html = `<div class="message-content">`;
-        html += `<div class="quick-replies">`;
-        quickReplies.forEach(qr => {
-            html += `<span class="quick-reply-btn" data-value="${qr.value}">${qr.label}</span>`;
-        });
-        html += `</div></div>`;
-        msgDiv.innerHTML = html;
-        messagesDiv.appendChild(msgDiv);
-        scrollToBottom();
-
-        msgDiv.querySelectorAll('.quick-reply-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => handleQuickReply(btn.dataset.value));
-        });
         return msgDiv;
     }
 
-    // Add user message
     function addUserMessage(text) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'message user';
@@ -1028,55 +901,8 @@
         if (thinking) thinking.remove();
     }
 
-    // Remove the last 2 bot messages (used when "Back" is clicked)
-    function removeLastBotMessages(count = 2) {
-        const allMessages = messagesDiv.querySelectorAll('.message');
-        let removed = 0;
-        for (let i = allMessages.length - 1; i >= 0 && removed < count; i--) {
-            if (allMessages[i].classList.contains('bot')) {
-                allMessages[i].remove();
-                removed++;
-            }
-        }
-    }
-
-    // ==================== Main Menu ====================
-    function showMainOptions() {
-        const mainCardsHtml = `
-            <div class="option-cards">
-                <div class="option-card" data-opt="courses">
-                    <h4>🎓 Pilot Training Courses</h4>
-                    <p>DGCA certified • 95% placement rate</p>
-                </div>
-                <div class="option-card" data-opt="partnership">
-                    <h4>🤝 Partnership (Drone Lab)</h4>
-                    <p>Complete STEM lab setup • Start from ₹2.5 Lakhs</p>
-                </div>
-                <div class="option-card" data-opt="workshops">
-                    <h4>🔧 Workshops (Attend or Conduct)</h4>
-                    <p>Hands‑on, 1‑day or 2‑day sessions</p>
-                </div>
-            </div>
-        `;
-        addBotMessage('', null, mainCardsHtml);
-        setTimeout(() => {
-            document.querySelectorAll('.option-card').forEach(card => {
-                card.addEventListener('click', () => handleMainOption(card.dataset.opt));
-            });
-        }, 50);
-    }
-
-    // Override addBotMessage to accept custom HTML (for the cards)
-    function addBotMessageWithHtml(customHtml) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'message bot';
-        msgDiv.innerHTML = `<div class="message-content">${customHtml}</div>`;
-        messagesDiv.appendChild(msgDiv);
-        scrollToBottom();
-    }
-    // Redefine addBotMessage to handle the card case cleanly
-    // We'll just use a separate function for cards
-    function addCardMenu() {
+    // Main menu with three options
+    function showMainMenu() {
         const cardsHtml = `
             <div class="option-cards">
                 <div class="option-card" data-opt="courses">
@@ -1102,222 +928,107 @@
         msgDiv.querySelectorAll('.option-card').forEach(card => {
             card.addEventListener('click', () => handleMainOption(card.dataset.opt));
         });
-        return msgDiv;
     }
 
-    // Store reference to the card menu message (optional)
-    let cardMenuMessage = null;
-
-    function showMainMenu() {
-        if (cardMenuMessage) cardMenuMessage.remove();
-        cardMenuMessage = addCardMenu();
-    }
-
-    // ==================== Sub‑menus ====================
+    // When user clicks an option
     function handleMainOption(opt) {
-        addUserMessage(opt === 'courses' ? 'Pilot Training Courses' : (opt === 'partnership' ? 'Partnership' : 'Workshops'));
+        let displayName = '';
+        if (opt === 'courses') displayName = 'Pilot Training Courses';
+        else if (opt === 'partnership') displayName = 'Partnership (Drone Lab)';
+        else if (opt === 'workshops') displayName = 'Workshops';
+        addUserMessage(displayName);
         showThinking();
         setTimeout(() => {
             removeThinking();
-            if (opt === 'courses') showCourseOptions();
-            else if (opt === 'partnership') showPartnershipOptions();
-            else if (opt === 'workshops') showWorkshopOptions();
+            selectedOption = opt;
+            // Present two choices: WhatsApp or Callback
+            addBotMessage(`How would you like to proceed?`, [
+                { value: "whatsapp", label: "💬 Chat on WhatsApp" },
+                { value: "callback", label: "📞 Request Callback" }
+            ]);
         }, 500);
     }
 
-    function showCourseOptions() {
-        let msg = "We offer several training paths:\n\n";
-        offers.courses.subOptions.forEach(c => {
-            msg += `• ${c.label}: ${c.price}, ${c.duration} • ${c.benefit}\n`;
-        });
-        msg += `\n🎮 **${offers.courses.simulatorOffer}**`;
-        // First bot message: details
-        addBotMessage(msg);
-        // Second bot message: quick‑reply buttons
-        addButtonOnlyMessage([
-            { value: "simulator", label: "🎮 Try Simulator" },
-            { value: "more_courses", label: "Tell me more" },
-            { value: "back", label: "← Back" }
-        ]);
+    // Direct WhatsApp – opens chat immediately (no data stored)
+    function openWhatsAppDirect() {
+        const message = `Hello iQdrone, I'm interested in *${selectedOption}*.`;
+        const url = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+        addBotMessage(`✅ WhatsApp opened! You can now chat with our advisor.`);
+        addBotMessage(`Type \`menu\` to go back to the main menu.`);
     }
 
-    function showPartnershipOptions() {
-        let msg = `${offers.partnership.title}\n${offers.partnership.description}\n\n`;
-        offers.partnership.subOptions.forEach(p => {
-            msg += `**${p.label}** – ${p.price}\n• Includes: ${p.includes}\n• ${p.benefit}\n\n`;
-        });
-        msg += `📢 ${offers.partnership.proof}`;
-        addBotMessage(msg);
-        addButtonOnlyMessage([
-            { value: "partnership_details", label: "Send proposal" },
-            { value: "back", label: "← Back" }
-        ]);
+    // Start callback flow: ask for name and phone
+    function startCallbackFlow() {
+        awaitingCallback = true;
+        addBotMessage(`Please share your **Name** and **WhatsApp number** so we can call you back.`);
+        addBotMessage(`Type like this: \`Rahul 9876543210\``);
     }
 
-    function showWorkshopOptions() {
-        let msg = `${offers.workshops.title}\n${offers.workshops.description}\n\n`;
-        offers.workshops.subOptions.forEach(w => {
-            if (w.label === "Attend a Workshop") {
-                msg += `**Attend** – ${w.price} | Next: ${w.nextDate}\nLearn: ${w.learn} • ${w.benefit}\n\n`;
-            } else {
-                msg += `**Conduct a Workshop** – ${w.price}\n${w.details} • ${w.benefit}\n\n`;
-            }
-        });
-        msg += `📊 ${offers.workshops.proof}`;
-        addBotMessage(msg);
-        addButtonOnlyMessage([
-            { value: "workshop_attend", label: "Book a seat" },
-            { value: "workshop_conduct", label: "Become trainer" },
-            { value: "back", label: "← Back" }
-        ]);
-    }
-
-    // ==================== Lead Generation ====================
-    function askForContact(courseName = null) {
-        const incentive = courseName ? `Send me your WhatsApp number and I'll share the full details for ${courseName}.` : "Share your number and I'll send the information.";
-        addBotMessage(`📱 ${incentive}`);
-        addButtonOnlyMessage([
-            { value: "contact_form", label: "Share number" },
-            { value: "back", label: "Not now" }
-        ]);
-    }
-
-    function showContactForm() {
-        const savedName = localStorage.getItem('iqdrone_name') || '';
-        const savedPhone = localStorage.getItem('iqdrone_phone') || '';
-        const formHtml = `
-            <div class="contact-form">
-                <input type="text" id="chatName" placeholder="Your Name" value="${escapeHTML(savedName)}">
-                <input type="tel" id="chatPhone" placeholder="WhatsApp Number" value="${escapeHTML(savedPhone)}">
-                <button id="submitContact">SUBMIT</button>
-            </div>
-        `;
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'message bot';
-        msgDiv.innerHTML = `<div class="message-content">${formHtml}</div>`;
-        messagesDiv.appendChild(msgDiv);
-        scrollToBottom();
-
-        const submitBtn = msgDiv.querySelector('#submitContact');
-        if (submitBtn) {
-            submitBtn.addEventListener('click', () => {
-                const name = msgDiv.querySelector('#chatName').value.trim();
-                const phone = msgDiv.querySelector('#chatPhone').value.trim();
-                if (name && phone) {
-                    localStorage.setItem('iqdrone_name', name);
-                    localStorage.setItem('iqdrone_phone', phone);
-                    showThankYou(name);
-                } else {
-                    alert('Please enter both name and mobile number.');
-                }
-            });
+    // Process name+phone for callback
+    function processCallbackInput(text) {
+        const parts = text.trim().split(/\s+/);
+        if (parts.length < 2) {
+            addBotMessage("Please provide both name and phone number. Example: `Amit 9876543210`");
+            return false;
         }
+        const phone = parts[parts.length-1];
+        const name = parts.slice(0, -1).join(' ');
+        const phoneRegex = /^[6-9]\d{9}$/;
+        if (!phoneRegex.test(phone)) {
+            addBotMessage("Invalid phone number. Please enter a valid 10-digit Indian mobile number.");
+            return false;
+        }
+        callbackName = name;
+        callbackPhone = phone;
+
+        // Store callback request in Google Sheet
+        const callbackData = {
+            formType: "callback-request",
+            name: name,
+            phone: phone,
+            interest: selectedOption,
+            pageUrl: window.location.href,
+            timestamp: new Date().toISOString()
+        };
+        sendToGoogleSheet(callbackData);
+
+        awaitingCallback = false;
+        addBotMessage(`🙏 Thank you ${name}! Our team will call you back on ${phone} within 24 hours.`);
+        addBotMessage(`Type \`menu\` to explore other options.`);
+        return true;
     }
 
-    function showThankYou(name) {
-        const thankyouHtml = `
-            <div class="instructor-thankyou">
-                <img src="${instructor.photo}" alt="Instructor">
-                <div>
-                    <strong>✅ Thanks ${name}!</strong><br>
-                    ${instructor.name} will connect with you on WhatsApp within 4 hours.<br>
-                    <small>✨ You'll also receive the details and any discount offers.</small>
-                </div>
-            </div>
-        `;
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'message bot';
-        msgDiv.innerHTML = `<div class="message-content">${thankyouHtml}</div>`;
-        messagesDiv.appendChild(msgDiv);
-        scrollToBottom();
-
-        // After 2 seconds, offer to go back to main menu
-        setTimeout(() => {
-            addButtonOnlyMessage([{ value: "main_menu", label: "Show main menu" }]);
-        }, 2000);
-    }
-
-    // ==================== Quick Reply Handler ====================
+    // Handle quick replies (WhatsApp / Callback)
     function handleQuickReply(value) {
-        if (value === 'back') {
-            // Remove the last 2 bot messages (details + buttons)
-            removeLastBotMessages(2);
-            // Show the main menu again
+        if (value === 'whatsapp') {
+            openWhatsAppDirect();
+        } else if (value === 'callback') {
+            startCallbackFlow();
+        } else if (value === 'menu') {
             showMainMenu();
-            return;
         }
-        if (value === 'main_menu') {
-            // Remove all bot messages? For simplicity, we'll just remove last 2 and show menu
-            removeLastBotMessages(2);
-            showMainMenu();
-            return;
-        }
-        if (value === 'simulator') {
-            window.open('index.html#simulator', '_blank');
-            addBotMessage("🎮 The simulator will open in a new tab. Complete the mission to get your discount code!");
-            addButtonOnlyMessage([{ value: "back", label: "← Back" }]);
-            return;
-        }
-        if (value === 'more_courses') {
-            addBotMessage("Would you like to see our full course catalog or receive the brochure?");
-            addButtonOnlyMessage([
-                { value: "catalog", label: "Show all courses" },
-                { value: "ask_contact", label: "Send me brochure" },
-                { value: "back", label: "← Back" }
-            ]);
-            return;
-        }
-        if (value === 'catalog') {
-            window.open('courses.html', '_blank');
-            addBotMessage("You can explore all courses on our website. Let me know if you need any help!");
-            addButtonOnlyMessage([{ value: "back", label: "Back to menu" }]);
-            return;
-        }
-        if (value === 'ask_contact') {
-            askForContact();
-            return;
-        }
-        if (value === 'contact_form') {
-            showContactForm();
-            return;
-        }
-        if (value === 'partnership_details') {
-            askForContact("Partnership Proposal");
-            return;
-        }
-        if (value === 'workshop_attend') {
-            askForContact("Workshop Booking");
-            return;
-        }
-        if (value === 'workshop_conduct') {
-            askForContact("Trainer Program");
-            return;
-        }
-        // fallback
-        addBotMessage("I'm here to help! Please choose one of the options below.");
-        addButtonOnlyMessage([{ value: "main_menu", label: "Show main menu" }]);
     }
 
-    // ==================== Free‑text Input ====================
+    // Process free text (when not awaiting callback)
+    function processFreeText(text) {
+        const lower = text.toLowerCase().trim();
+        if (lower === 'menu') {
+            showMainMenu();
+            return;
+        }
+        addBotMessage("Please select an option from the menu below.");
+        showMainMenu();
+    }
+
     function processUserInput(text) {
-        const lower = text.toLowerCase();
-        if (lower.includes('pilot') || lower.includes('course') || lower.includes('training')) {
-            handleMainOption('courses');
-        } else if (lower.includes('partner') || lower.includes('lab') || lower.includes('school')) {
-            handleMainOption('partnership');
-        } else if (lower.includes('workshop')) {
-            handleMainOption('workshops');
-        } else if (lower.includes('simulator')) {
-            handleQuickReply('simulator');
-        } else if (lower.includes('contact') || lower.includes('number') || lower.includes('whatsapp')) {
-            askForContact();
+        if (awaitingCallback) {
+            processCallbackInput(text);
         } else {
-            addBotMessage("Sorry, I didn't catch that. Please select one of the main options:");
-            addButtonOnlyMessage([{ value: "main_menu", label: "Show main menu" }]);
+            processFreeText(text);
         }
     }
 
-    // ==================== Send Message ====================
     function sendMessage() {
         const text = input.value.trim();
         if (!text) return;
@@ -1336,12 +1047,9 @@
         }, 500);
     }
 
-    // ==================== Initialisation ====================
     function initChat() {
-        addBotMessage(`Hi! I'm ${instructor.name}, your guide at iQdrone Academy. How can I help you today?`);
-        setTimeout(() => {
-            showMainMenu();
-        }, 500);
+        addBotMessage(`Hi! I'm ${instructorName}, your guide at iQdrone Academy. How can I help you today?`);
+        setTimeout(() => showMainMenu(), 800);
         setTimeout(() => {
             if (!expanded && !chat.classList.contains('expanded')) {
                 chat.classList.add('expanded');
@@ -1368,8 +1076,8 @@
 
     initChat();
 })();
-</script>
-<!-- ===== END IQDRONE ASSISTANT ===== -->
+</script>   -->
+
 <!-- Cookie Consent Banner -->
 <div id="cookie-banner" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 500px; background: var(--dark-gray); border: 2px solid var(--saffron); border-radius: 12px; padding: 15px 20px; z-index: 10000; display: none; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
     <p style="color: white; margin: 0; font-size: 0.9rem; line-height: 1.4;">

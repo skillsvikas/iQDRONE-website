@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>iQDRONE | Post a Job</title>
+    <style>
+        /* Your existing styles – keep as is */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --saffron: #F59E0B; --bg: #0f172a; --card: #1e293b; --blue: #38bdf8; --danger: #ef4444; --success: #10b981; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; min-height: 100vh; }
+        .nav-header { background: #020617; width: 100%; padding: 14px 20px; border-bottom: 2px solid var(--blue); display: flex; justify-content: center; gap: 24px; margin-bottom: 30px; flex-wrap: wrap; }
+        .nav-header a { color: #94a3b8; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .nav-header a:hover { color: var(--blue); }
+        .logo-section { text-align: center; margin-bottom: 20px; }
+        .logo-section img { height: 60px; filter: drop-shadow(0 0 10px var(--blue)); }
+        .job-card { background: var(--card); padding: 30px 28px; border-radius: 28px; border: 1px solid var(--saffron); width: 100%; max-width: 550px; box-shadow: 0 20px 35px rgba(0,0,0,0.5); }
+        h2 { text-align: center; color: var(--saffron); margin-bottom: 8px; font-size: 1.8rem; }
+        .sub { text-align: center; color: #94a3b8; margin-bottom: 25px; font-size: 0.85rem; }
+        .form-group { margin-bottom: 18px; }
+        label { font-size: 0.75rem; font-weight: 600; color: #94a3b8; display: block; margin-bottom: 5px; }
+        input, textarea, select { width: 100%; padding: 12px 14px; border-radius: 14px; border: 1.5px solid #334155; background: #0f172a; color: white; font-family: inherit; font-size: 0.95rem; transition: 0.2s; }
+        input:focus, textarea:focus { border-color: var(--blue); outline: none; }
+        textarea { resize: vertical; min-height: 90px; }
+        .btn-submit { width: 100%; background: var(--saffron); color: black; padding: 14px; border: none; border-radius: 40px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.25s; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-submit:hover { background: #e68a00; transform: translateY(-2px); }
+        .helper { font-size: 0.7rem; color: #64748b; text-align: center; margin-top: 15px; }
+        @media (max-width: 550px) { .job-card { padding: 22px 18px; } .nav-header { gap: 16px; } }
+    </style>
+</head>
+<body>
+
+<nav class="nav-header">
+    <a href="index.html">HOME</a>
+    <a href="courses.html">COURSES</a>
+    <a href="drone-jobs.html">JOBS</a>
+    <a href="enroll.html">ENROLL</a>
+</nav>
+
+<div class="logo-section">
+    <img src="images/IQdrone-logo.webp" alt="iQDRONE Logo" onerror="this.src='https://placehold.co/200x60?text=iQDRONE'">
+</div>
+
+<div class="job-card">
+    <h2>✈ Post a Job</h2>
+    <div class="sub">Fill the details – we'll publish it within 24h</div>
+
+    <form id="jobForm">
+        <div class="form-group">
+            <label>Company Name *</label>
+            <input type="text" id="cName" name="company" required placeholder="e.g. SkyWorks Ltd.">
+        </div>
+        <div class="form-group">
+            <label>Job Title *</label>
+            <input type="text" id="jTitle" name="jobTitle" required placeholder="e.g. Drone Pilot, Technician">
+        </div>
+        <div class="form-group">
+            <label>Location *</label>
+            <input type="text" id="loc" name="location" required placeholder="e.g. Mumbai, Remote">
+        </div>
+        <div class="form-group">
+            <label>Monthly Salary (₹) *</label>
+            <input type="text" id="sal" name="salary" required placeholder="e.g. 25000 - 40000">
+        </div>
+        <div class="form-group">
+            <label>Requirements / Job Description *</label>
+            <textarea id="req" name="requirements" required placeholder="e.g. DGCA License, 2+ years experience, own drone preferred..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>Your WhatsApp Number (for contact) *</label>
+            <input type="tel" id="contactNo" name="contact" required placeholder="e.g. 9876543210">
+        </div>
+        <button type="submit" class="btn-submit">
+            <i class="fab fa-whatsapp"></i> SUBMIT & NOTIFY ADMIN
+        </button>
+    </form>
+    <div class="helper">📢 The job will be reviewed and posted on our portal. Fake entries will be ignored.</div>
+</div>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+    // Your Google Apps Script URL (unified)
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzVxIRXoV1eU6m68gZR_SKkNB_Pq63TReDPBuXTwNXPIKEr1wNR8I9fPc8qX9Gu5O_K/exec";
+    const ADMIN_WHATSAPP = "918889122261";
+
+    document.getElementById('jobForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Get values
+        const company = document.getElementById('cName').value.trim();
+        const title = document.getElementById('jTitle').value.trim();
+        const location = document.getElementById('loc').value.trim();
+        const salary = document.getElementById('sal').value.trim();
+        const requirements = document.getElementById('req').value.trim();
+        const contact = document.getElementById('contactNo').value.trim();
+
+        // Validation
+        if (!company || !title || !location || !salary || !requirements || !contact) {
+            alert("❌ Please fill all fields.");
+            return;
+        }
+        const phoneRegex = /^[6-9]\d{9}$/;
+        if (!phoneRegex.test(contact)) {
+            alert("❌ Please enter a valid 10-digit Indian WhatsApp number.");
+            return;
+        }
+
+        const submitBtn = document.querySelector('#jobForm button[type="submit"]');
+        const originalText = submitBtn.innerText;
+        submitBtn.disabled = true;
+        submitBtn.innerText = "SUBMITTING...";
+
+        // Prepare data – ensure formType is exactly "job-posting"
+        const data = {
+            formType: "job-posting",
+            company: company,
+            jobTitle: title,
+            location: location,
+            salary: salary,
+            requirements: requirements,
+            contact: contact
+        };
+
+        try {
+            // Send to Google Sheets
+            console.log("Sending data:", data);
+alert("formType: " + data.formType);
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            alert("✅ Job posted successfully! Data saved to Google Sheets.");
+            document.getElementById('jobForm').reset();
+
+            // Open WhatsApp with job details
+            const message = `🏢 *NEW JOB POSTING | iQDRONE*
+━━━━━━━━━━━━━━━━━━━
+*Company:* ${company}
+*Job Title:* ${title}
+*Location:* ${location}
+*Salary:* ₹ ${salary}
+*Requirements:* ${requirements}
+━━━━━━━━━━━━━━━━━━━
+*Employer Contact:* ${contact}
+━━━━━━━━━━━━━━━━━━━
+⏳ Action: Review and publish on portal.`;
+            const waLink = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+            window.open(waLink, '_blank');
+
+        } catch (err) {
+            console.error(err);
+            alert("❌ Submission failed. Please try again.");
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = originalText;
+        }
+    });
+</script>
+</body>
+</html>
