@@ -1,5 +1,5 @@
 // common-form.js – Universal handler for all iQdrone forms
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhen3FPGEUswWjWdC80ZReS8NXnLBp9gm7Su_uZf-dueaSQW8-BP5Rz155TnVT0rbT/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbynqlTF7C3KqIFA1iyzHZL921LkomOXKzcDD5Vm1Zb3a7oc2rXtnlJQiQSKGl60ibMK/exec";
 
 async function submitForm(formElement, extraData = {}) {
   const formData = new FormData(formElement);
